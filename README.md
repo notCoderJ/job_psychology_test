@@ -1,70 +1,83 @@
-# Getting Started with Create React App
+# 개인 프로젝트: 직업 심리 검사
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> 잘못된 부분이나 잘못 사용한 용어가 있다면 알려주시면 감사하겠습니다.🙏🏼
 
-## Available Scripts
+해당 서비스는 [직업심리검사 API](https://www.career.go.kr/cnet/front/openapi/openApiTestCenter.do)를 통해 사용자의 직업 적합도를 확인할 수 있는 웹 서비스로 사용자의 이름, 나이(?), 성별을 입력받고 검사를 진행하면 사용자와 성향이 맞는 직업을 추천해주고, 사용자가 자신의 직업 가치관과 가장 적합도가 높은 직업을 탐색할 수 있도록 도움을 주는 검사 결과를 보여줍니다.
 
-In the project directory, you can run:
+<br/>
 
-### `yarn start`
+## 💦 사용 기술
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+추가 예정...
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<br/>
 
-### `yarn test`
+## 💦 구현 사항
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `검사자 설정 페이지`
 
-### `yarn build`
+- 필수
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  - [x] 검사자는 이름 입력(input: text) 및 성별(input: checkbox) 체크가 가능
+  - [x] 이름이나 성별을 기입하지 않거나 선택하지 않으면 검사 시작 버튼 비활성화
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- 선택
+  - [ ] 이름이 올바르지 않은 경우 안내 메세지를 출력 (숫자나 특수문자를 포함하는지 검사)
+  - [ ] 성별을 선택하지 않은 경우 안내 메세지를 출력
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `검사 예시 페이지`
 
-### `yarn eject`
+- 필수
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  - [ ] 시작하기 전 앞으로의 진행 방식을 설명
+  - [ ] 진행 방식에 대한 검사 예제 한 문항을 화면에 표시
+  - [ ] 검사 시작 버튼을 구현
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- 선택
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  - [x] 검사 예제 문항을 진행하지 않으면 검사 시작 버튼 비활성화
+  - [ ] 검사 예시 페이지부터는 진행 표시줄(Progress bar)을 포함하며, 검사 예시 페이지는 0%로 측정
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### `검사 진행 페이지`
 
-## Learn More
+- 필수
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  - [ ] 페이지 당 5개의 문항 출력
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  - [x] 페이지 내 모든 문항을 진행하기 전까지는 "다음" 버튼 비활성화
 
-### Code Splitting
+- 선택
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+  - [ ] 각 문항을 선택할 때마다 진행 표시줄과 퍼센트(%) 갱신
+  - [ ] "이전" 버튼을 클릭했을 때, 이전 페이지 문항에서 선택한 값 유지
 
-### Analyzing the Bundle Size
+### `검사 완료 페이지`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- 필수
 
-### Making a Progressive Web App
+  - [ ] 검사 완료 문구를 포함하며, 검사결과에 대한 간단한 문장 포함  
+         ex) 사용자는 올빼미 성향이므로 개발자 직업에 적합합니다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### `검사 결과 페이지`
 
-### Advanced Configuration
+- 필수
+  - [ ] 유저의 기본 정보 포함 (이름, 성별, 검사일)
+  - [ ] 직업 가치관 결과에 대하여 항목별로 수치를 표기 (ex. 막대 그래프)
+  - [ ] 가치관과 관련 높은 직업을 결과에 따라 분류하여 표기
+  - [ ] "다시 검사하기" 버튼 클릭 시, 진행했던 항목에 대한 모든 기록 초기화
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+<br/>
 
-### Deployment
+## 💦 현재 소스 디렉토리 구조(미완성)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- src  
+   |-- actions : 검사 진행에 필요한 state에 대한 action과 action creator를 정의  
+   |-- components  
+   | &nbsp; &nbsp; |-- exam : 검사 진행 페이지를 구성하는 컴포넌트들을 정의  
+   | &nbsp; &nbsp; |-- completed : 검사 완료 페이지를 구성하는 컴포넌트들을 정의  
+   | &nbsp; &nbsp; |-- result : 검사 결과 페이지를 구성하는 컴포넌트들을 정의  
+   |-- context : 검사 진행 페이지에서 사용할 Context Provider와 Hook 정의  
+   |-- pages : 검사 진행, 완료, 결과 페이지에 대한 컴포넌트를 정의  
+  |-- reducer : 검사 진행 페이지에서 사용할 reducer를 정의  
+  |-- utils : 비동기 처리를 위한 api(문항, 결과 요청 등) 및 상수 정의  
+  |-- sample : 검사 예시, 결과 예시 등을 정의
