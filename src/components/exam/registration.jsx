@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { usePsyExamContext } from '../../context/psyexam_context';
+import { GENDER_STR } from '../../utils/constants/constants';
 
 const UserRegister = () => {
     const { state, saveName, saveGender } = usePsyExamContext();
     const { name, gender } = state;
-    const male = useRef(null);
-    const female = useRef(null);
 
     const handleChangeName = useCallback((e) => {
         const newName = e.target.value;
@@ -16,9 +15,9 @@ const UserRegister = () => {
     }, [saveName]);
 
     //TEST
-    // useEffect(() => {
-        // console.log(name, gender);
-    // }, [name, gender]);
+    useEffect(() => {
+        console.log(name, gender);
+    }, [name, gender]);
 
     return (
         <form>
@@ -33,23 +32,21 @@ const UserRegister = () => {
             성별
             <label htmlFor="male">남성
                 <input
-                    ref={male}
                     id="male"
                     name="gender"
                     value="100323"
                     type="radio"
                     onClick={(e) => saveGender(e.target.value)}
-                    defaultChecked={gender === male} />
+                    defaultChecked={GENDER_STR[gender] === "남성"} />
             </label>
             <label htmlFor="female">여성
                 <input
-                    ref={female}
                     id="female"
                     name="gender"
                     value="100324"
                     type="radio"
                     onClick={(e) => saveGender(e.target.value)}
-                    defaultChecked={gender === female} />
+                    defaultChecked={GENDER_STR[gender] === "여성"} />
             </label>
         </form>
     );

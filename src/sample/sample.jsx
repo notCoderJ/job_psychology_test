@@ -1,13 +1,14 @@
+
+export const SAMPLE_DESCRIPTION = `직업과 관련된 두개의 가치 중에서 자기에게 더 중요한 가치에 표시하세요. 가치의 뜻을 잘모르겠다면 문항 아래에 있는 가치의 설명을 확인해보세요.`;
 export const SAMPLE_QUESTION = {
-    "question": `직업과 관련된 두개의 가치 중에서 자기에게 더 중요한 가치에 표시하세요.
-                가치의 뜻을 잘모르겠다면 문항 아래에 있는 가치의 설명을 확인해보세요.`,
+    "question": `으어어어어어어어어`,
     "answer01": "창의성",
     "answer02": "도전성",
-    "answer03": "자율성",
+    "answer03": null,
     "answer04": null,
     "answerScore01": "1",
     "answerScore02": "2",
-    "answerScore03": "3",
+    "answerScore03": null,
     "answerScore04": null,
     "tip1Score": "2",
     "tip2Score": "6",

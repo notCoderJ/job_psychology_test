@@ -22,20 +22,20 @@ const Container = styled.section`
 
 const Header = styled.header`
     border: solid black 1px;
-    height: 150px;
+    height: 100px;
 `;
 
 const Main = styled.header`
     border: solid black 1px;
-    height: 400px;
+    height: 550px;
 `;
 
 const Footer = styled.header`
     display: flex;
+    position: relative;
     justify-content: space-around;
     align-items: center;
     border: solid black 1px;
-
     height: 150px;
 `;
 

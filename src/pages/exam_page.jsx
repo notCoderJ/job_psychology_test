@@ -61,9 +61,9 @@ const Exam = () => {
 
     //TEST CODE
     useEffect(() => {
-        console.log(questions);
-        console.log(currPageIndex);
-        console.log(visibleNumbers);
+        // console.log(questions);
+        // console.log(currPageIndex);
+        // console.log(visibleNumbers);
     }, [currPageIndex, state.questions])
 
     return (

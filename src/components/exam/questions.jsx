@@ -1,50 +1,66 @@
+import { useCallback, useEffect, useMemo } from 'react';
 import { usePsyExamContext } from '../../context/psyexam_context';
+import { SAMPLE_DESCRIPTION } from '../../sample/sample';
 
-const Question = () => {
+const Question = ({ number }) => {
     const { state, saveAnswers } = usePsyExamContext();
-    // const 
+    const { questions, answers } = state;
+    const optionRgx = /^answerScore[0-9]*/;
 
-    return <></>;
+    const questionItem = useMemo(() => questions[number], []);
+    const answer = useMemo(() => answers[number], []);
+    const optionCount = useMemo(() => {
+        return Object
+                .keys(questionItem)
+                .filter((title) => title.search(optionRgx) !== -1 && questionItem[title])
+                .length;
+    }, []);
+
+    const prefix = useCallback((num) => num < 10 ? `0${num}` : `${num}`, []);
+
+    useEffect(() => {
+        console.log("mount", number);
+        console.log(answer);
+
+        return () => console.log("unmount", number);
+    }, []);
+
+    return (
+        <fieldset>
+            <legend>{questionItem.question.split('<br/>').map((line) => <>{line}<br/></>)}</legend>
+            {Array(optionCount)
+                .fill("answer")
+                .map((ans, idx) => {
+                    const name = `qitemNo${prefix(number)}-option`
+                    const id = `${name}${prefix(idx + 1)}`;
+                    const score = questionItem[`${ans}Score${prefix(idx + 1)}`]
+                    const option = questionItem[`${ans}${prefix(idx + 1)}`]
+
+                    return (
+                        <label
+                            htmlFor={id}
+                            key={id}
+                        >{option}
+                            <input
+                                id={id}
+                                key={id}
+                                name={name}
+                                type="radio"
+                                value={score}
+                                defaultChecked={answer === score}
+                                onClick={(e) => saveAnswers(number, e.target.value)}
+                            >
+                            </input>
+                        </label>
+                    );
+                })
+            }
+        </fieldset>
+    );//TODO: key redefine
 }
 
 const Questions = ({ visibleNumbers }) => {
-    return (
-        <ul>
-            <Question />
-        </ul>
-    )
-}
-
-// visibleQuestions.map((_, idx) => <Question key={idx} />)
-// {
-//     "question": "힘이 드는 동작을 잘 할 수 있다.",
-//     "answer01": "매우낮음",
-//     "answer02": "낮음",
-//     "answer03": "약간낮음",
-//     "answer04": "보통",
-//     "answer05": "약간높음",
-//     "answer06": "높음",
-//     "answer07": "매우높음",
-//     "answer08": null,
-//     "answer09": null,
-//     "answer10": null,
-//     "answerScore01": "1",
-//     "answerScore02": "2",
-//     "answerScore03": "3",
-//     "answerScore04": "4",
-//     "answerScore05": "5",
-//     "answerScore06": "6",
-//     "answerScore07": "7",
-//     "answerScore08": null,
-//     "answerScore09": null,
-//     "answerScore10": null,
-//     "tip1Score": "2",
-//     "tip2Score": "6",
-//     "tip3Score": null,
-//     "tip1Desc": "무릎 대고 팔굽혀펴기를 5회 이상 하기 어렵다. ",
-//     "tip2Desc": "팔굽혀 펴기를 쉬지 않고 (남자: 50, 여자:20)회 이상 할 수 있다.",
-//     "tip3Desc": null,
-//     "qitemNo": 2
-// }
+    return <form>{visibleNumbers.map((number) => <Question key={number} number={number} />)}</form>;
+} //TODO: key redefine
 
 export default Questions;
