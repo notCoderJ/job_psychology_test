@@ -1,26 +1,19 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import { usePsyExamContext } from '../../context/psyexam_context';
-import { SAMPLE_DESCRIPTION } from '../../sample/sample';
+import { useCallback, useEffect } from 'react';
+import { connect } from 'react-redux';
+import actionCreators from '../../actions';
 
-const Question = ({ number }) => {
-    const { state, saveAnswers } = usePsyExamContext();
-    const { questions, answers } = state;
-    const optionRgx = /^answerScore[0-9]*/;
+// const name = `qitemNo${prefix(number)}-option`
+// const id = `${name}${prefix(idx + 1)}`;
+// const score = questionItem[`${ans}Score${prefix(idx + 1)}`]
+// const option = questionItem[`${ans}${prefix(idx + 1)}`]
 
-    const questionItem = useMemo(() => questions[number], []);
-    const answer = useMemo(() => answers[number], []);
-    const optionCount = useMemo(() => {
-        return Object
-                .keys(questionItem)
-                .filter((title) => title.search(optionRgx) !== -1 && questionItem[title])
-                .length;
-    }, []);
-
+const Question = ({ number, questionItem, answerOptions, answer, saveAnswers }) => {
     const prefix = useCallback((num) => num < 10 ? `0${num}` : `${num}`, []);
 
+    // TEST CODE
     useEffect(() => {
         console.log("mount", number);
-        console.log(answer);
+        // console.log(answer);
 
         return () => console.log("unmount", number);
     }, []);
@@ -28,26 +21,23 @@ const Question = ({ number }) => {
     return (
         <fieldset>
             <legend>{questionItem.question.split('<br/>').map((line) => <>{line}<br/></>)}</legend>
-            {Array(optionCount)
-                .fill("answer")
-                .map((ans, idx) => {
+            {answerOptions
+                .map((ansOpt, idx) => {
                     const name = `qitemNo${prefix(number)}-option`
                     const id = `${name}${prefix(idx + 1)}`;
-                    const score = questionItem[`${ans}Score${prefix(idx + 1)}`]
-                    const option = questionItem[`${ans}${prefix(idx + 1)}`]
 
                     return (
                         <label
                             htmlFor={id}
                             key={id}
-                        >{option}
+                        >{ansOpt[0]}
                             <input
                                 id={id}
                                 key={id}
                                 name={name}
                                 type="radio"
-                                value={score}
-                                defaultChecked={answer === score}
+                                value={ansOpt[1]}
+                                defaultChecked={answer === ansOpt[1]}
                                 onClick={(e) => saveAnswers(number, e.target.value)}
                             >
                             </input>
@@ -59,8 +49,25 @@ const Question = ({ number }) => {
     );//TODO: key redefine
 }
 
+const mapStatToProps = (state, ownProps) => {
+    const { questions, answers } = state;
+    const questionItem = questions[ownProps.number];
+    const { answerOptions } = questionItem;
+    const answer = answers[ownProps.number];
+
+    return { questionItem, answerOptions, answer }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        saveAnswers: (qitemNo, answerScore) => dispatch(actionCreators.saveAnswers(qitemNo, answerScore)),
+    };
+}
+
+const QuestionWrapper = connect(mapStatToProps, mapDispatchToProps)(Question);
+
 const Questions = ({ visibleNumbers }) => {
-    return <form>{visibleNumbers.map((number) => <Question key={number} number={number} />)}</form>;
+    return <form>{visibleNumbers.map((number) => <QuestionWrapper key={number} number={number} />)}</form>;
 } //TODO: key redefine
 
 export default Questions;

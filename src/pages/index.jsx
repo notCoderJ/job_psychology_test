@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Questions from '../components/exam/questions';
 import UserRegister from '../components/exam/registration';
-import { usePsyExamContext } from '../context/psyexam_context';
 import PageLayOut from './page_layout';
 import styled from 'styled-components';
-import { test_fetch } from '../utils/apis/exam';
+import { test_fetch } from '../api';
+import { connect } from 'react-redux';
+import actionCreators from '../actions';
 
 
-const Exam = () => {
-    const { state, loadQuestions } = usePsyExamContext();
-    const { name, gender, questions, answers } = state;
+const Exam = ({ userName, gender, questions, answers, loadQuestions }) => {
     const [currPageIndex, setCurrPageIndex] = useState(-1);
     const lastPageIndex = useMemo(() => Math.ceil((questions.length - 1) / 5), [questions]);
 
@@ -20,6 +19,7 @@ const Exam = () => {
         return true;
     }, [questions]);
 
+    // 흐으으으음... 깔끔해보이지가 않네;;
     const visibleNumbers = useMemo(() => {
         if (currPageIndex <= 0) {
             return [0]
@@ -31,6 +31,7 @@ const Exam = () => {
                 .fill()
                 .map((_, offset) => start + offset);
     }, [currPageIndex]);
+    //
 
     const isNextDisabled = useMemo(() => {
         if (!isQuestionsLoaded) {
@@ -38,15 +39,15 @@ const Exam = () => {
         }
 
         if (currPageIndex < 0) {
-            return !name || !gender
-        } else {
-            return visibleNumbers
-                    .filter((idx) => !answers[idx])
-                    .length !== 0;
+            return !userName || !gender
         }
-    }, [name, gender, answers, currPageIndex, isQuestionsLoaded]);
 
-    const handlePrev = useCallback(() => setCurrPageIndex((current) => current > 0 ? current - 1 : 0), []);
+        return visibleNumbers
+                .filter((idx) => !answers[idx])
+                .length !== 0;
+    }, [userName, gender, answers, currPageIndex, isQuestionsLoaded]);
+
+    const handlePrev = useCallback(() => setCurrPageIndex((current) => current >= 0 ? current - 1 : 0), []);
     const handleNext = useCallback(() => {
         setCurrPageIndex((current) => current < lastPageIndex ? current + 1 : lastPageIndex);
     }, [lastPageIndex]);
@@ -64,16 +65,15 @@ const Exam = () => {
         // console.log(questions);
         // console.log(currPageIndex);
         // console.log(visibleNumbers);
-    }, [currPageIndex, state.questions])
+    }, [currPageIndex, questions])
 
     return (
         <PageLayOut
             header="nonono"
-            // TODO: currPageIndex 값에 따라 컴포넌트 스위칭(2)
             main={currPageIndex < 0 ? <UserRegister /> : <Questions visibleNumbers={visibleNumbers} />}
             footer={
                 <>
-                    {currPageIndex > 0 && <TestBtn onClick={handlePrev}>버어어어튼1</TestBtn>}
+                    {currPageIndex >= 0 && <TestBtn onClick={handlePrev}>버어어어튼1</TestBtn>}
                     <TestBtn 
                         disabled={isNextDisabled}
                         onClick={handleNext}>
@@ -90,4 +90,15 @@ const TestBtn = styled.button`
     height: 50px;
 `;
 
-export default Exam;
+const mapStateToProps = (state) => {
+    const { name: userName, gender, questions, answers } = state;
+    return { userName, gender, questions, answers }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadQuestions: (questions) => dispatch(actionCreators.loadQuestions(questions))
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Exam);
