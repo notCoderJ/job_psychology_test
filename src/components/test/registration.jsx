@@ -1,10 +1,23 @@
 import React, { useCallback, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import actionCreators from '../../actions';
-import { GENDER_STR } from '../../utils/constants';
+import actionCreators from '../../store/actions';
+import { GENDER_TO_STRING } from '../../constants';
 
-const UserRegister = ({ userName, gender, saveName, saveGender }) => {
+const UserRegister = () => {
+  const dispatch = useDispatch();
+  const { name: userName, gender: userGender } = useSelector((state) => state);
+
+  const saveName = useCallback(
+    (name) => dispatch(actionCreators.saveName(name)),
+    [],
+  );
+
+  const saveGender = useCallback(
+    (gender) => dispatch(actionCreators.saveGender(gender)),
+    [],
+  );
+
   const handleChangeName = useCallback(
     (e) => {
       // TODO: 이름 예외처리
@@ -17,8 +30,8 @@ const UserRegister = ({ userName, gender, saveName, saveGender }) => {
 
   // TEST
   useEffect(() => {
-    console.log(userName, gender);
-  }, [userName, gender]);
+    console.log(userName, userGender);
+  }, [userName, userGender]);
 
   return (
     <StyledUserRegister>
@@ -45,7 +58,7 @@ const UserRegister = ({ userName, gender, saveName, saveGender }) => {
             value="100323"
             type="radio"
             onClick={(e) => saveGender(e.target.value)}
-            defaultChecked={GENDER_STR[gender] === '남성'}
+            defaultChecked={GENDER_TO_STRING[userGender] === '남성'}
           />
           남성
         </label>
@@ -56,7 +69,7 @@ const UserRegister = ({ userName, gender, saveName, saveGender }) => {
             value="100324"
             type="radio"
             onClick={(e) => saveGender(e.target.value)}
-            defaultChecked={GENDER_STR[gender] === '여성'}
+            defaultChecked={GENDER_TO_STRING[userGender] === '여성'}
           />
           여성
         </label>
@@ -126,13 +139,4 @@ const StyledContainer = styled.div`
   }
 `;
 
-const mapStatToProps = (state) => {
-  const { name: userName, gender } = state;
-  return { userName, gender };
-};
-const mapDispatchToProps = (dispatch) => ({
-  saveName: (name) => dispatch(actionCreators.saveName(name)),
-  saveGender: (gender) => dispatch(actionCreators.saveGender(gender)),
-});
-
-export default connect(mapStatToProps, mapDispatchToProps)(UserRegister);
+export default UserRegister;

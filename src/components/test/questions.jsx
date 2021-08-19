@@ -1,16 +1,28 @@
 import React, { useCallback, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import actionCreators from '../../actions';
+import actionCreators from '../../store/actions';
 
-const Question = ({
-  number,
-  questionItem,
-  answerOptions,
-  answer,
-  saveAnswers,
-}) => {
-  const prefix = useCallback((num) => (num < 10 ? `0${num}` : `${num}`), []);
+const Question = ({ number }) => {
+  const dispatch = useDispatch();
+  const { questionItem, defaultAnswerOptions, answer } = useSelector(
+    (state) => ({
+      questionItem: state.questions[number],
+      defaultAnswerOptions: state.questions[number]?.defaultAnswerOptions,
+      answer: state.answers[number],
+    }),
+  );
+
+  const saveAnswers = useCallback(
+    (questionNumber, answerScore) =>
+      dispatch(actionCreators.saveAnswers(questionNumber, answerScore)),
+    [],
+  );
+
+  const prefixNumber = useCallback(
+    (num) => (num < 10 ? `0${num}` : `${num}`),
+    [],
+  );
 
   // TEST CODE
   useEffect(() => {
@@ -26,9 +38,9 @@ const Question = ({
         <span>{questionItem.question}</span>
       </StyledDescription>
       <StyledAnswerContainer>
-        {answerOptions.map((ansOpt, idx) => {
-          const name = `qitemNo${prefix(number)}-option`;
-          const id = `${name}${prefix(idx + 1)}`;
+        {defaultAnswerOptions.map((answerOption, index) => {
+          const name = `qitemNo${prefixNumber(number)}-option`;
+          const id = `${name}${prefixNumber(index + 1)}`;
 
           return (
             <label htmlFor={id} key={id}>
@@ -37,11 +49,11 @@ const Question = ({
                 key={id}
                 name={name}
                 type="radio"
-                value={ansOpt[1]}
-                defaultChecked={answer === ansOpt[1]}
+                value={answerOption[1]}
+                defaultChecked={answer === answerOption[1]}
                 onClick={(e) => saveAnswers(number, e.target.value)}
               />
-              {ansOpt[0]}
+              {answerOption[0]}
             </label>
           );
         })}
@@ -134,26 +146,10 @@ const StyledAnswerContainer = styled.p`
   }
 `;
 
-const mapStatToProps = (state, ownProps) => {
-  const { questions, answers } = state;
-  const questionItem = questions[ownProps.number];
-  const { answerOptions } = questionItem;
-  const answer = answers[ownProps.number];
-
-  return { questionItem, answerOptions, answer };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  saveAnswers: (qitemNo, answerScore) =>
-    dispatch(actionCreators.saveAnswers(qitemNo, answerScore)),
-});
-
-const QuestionWrapper = connect(mapStatToProps, mapDispatchToProps)(Question);
-
-const Questions = ({ visibleNumbers }) => (
-  <StyledQuestions sample={visibleNumbers?.length === 1}>
-    {visibleNumbers.map((number) => (
-      <QuestionWrapper key={number} number={number} />
+const Questions = ({ visibleQuestionNumbers }) => (
+  <StyledQuestions sample={visibleQuestionNumbers?.length === 1}>
+    {visibleQuestionNumbers.map((number) => (
+      <Question key={number} number={number} />
     ))}
   </StyledQuestions>
 ); // TODO: key redefine

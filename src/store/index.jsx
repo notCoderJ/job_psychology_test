@@ -1,8 +1,8 @@
 import { createStore } from 'redux';
 import { QUESTION_SEQ } from '../api';
-import reducer from '../reducer';
-import { SAMPLE_QUESTION } from '../sample';
-import { TARGET_SEQ } from '../utils/constants';
+import reducer from './reducer';
+import { SAMPLE_QUESTION, TARGET_SEQ } from '../constants';
+// import { createSlice } from '@reduxjs/toolkit';
 
 // TODO: questrnSeq, trgetSe값 변경가능하게 추가하자!(현재 임시)
 const initialState = {
@@ -10,10 +10,14 @@ const initialState = {
   gender: '',
   grade: '',
   email: '',
-  questrnSeq: QUESTION_SEQ,
-  trgetSe: TARGET_SEQ['일반'],
-  startDtm: new Date().getTime(),
+  targetSeq: TARGET_SEQ['일반'],
+
+  isLoaded: false,
+  lastPageIndex: 0,
+  questionSeq: QUESTION_SEQ,
   questions: [SAMPLE_QUESTION],
+  startDate: new Date().getTime(),
+
   answers: [],
   isDark: true,
 };

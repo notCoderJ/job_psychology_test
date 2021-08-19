@@ -32,9 +32,9 @@ actionCreators.saveGender = (gender) => ({
   payload: { gender },
 });
 
-actionCreators.saveAnswers = (qitemNo, answerScore) => ({
+actionCreators.saveAnswers = (questionNumber, answerScore) => ({
   type: SAVE_ANSWERS,
-  payload: { qitemNo, answerScore },
+  payload: { questionNumber, answerScore },
 });
 
 export default actionCreators;

@@ -1,50 +1,59 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Questions from '../components/test/questions';
 import UserRegister from '../components/test/registration';
-import PageLayOut from './page_layout';
+import PageLayOut from './pageLayout';
 import { getQuestions, getResult } from '../api';
-import actionCreators from '../actions';
+import actionCreators from '../store/actions';
 import Button from '../components/common/button';
+import { MAX_COUNT_IN_PAGE } from '../constants';
 
-const PsyTest = ({
-  questrnSeq,
-  questions,
-  trgetSe,
-  userName,
-  gender,
-  grade,
-  startDtm,
-  answers,
-  loadQuestions,
-}) => {
+const PsyTest = () => {
   const [currPageIndex, setCurrPageIndex] = useState(-1);
-  const lastPageIndex = useMemo(
-    () => Math.ceil((questions.length - 1) / 5),
-    [questions],
+  const dispatch = useDispatch();
+  const {
+    isLoaded,
+    lastPageIndex,
+    questionSeq,
+    questions,
+    targetSeq,
+    name: userName,
+    gender,
+    grade,
+    startDate,
+    answers,
+  } = useSelector((state) => state);
+
+  const loadQuestions = useCallback(
+    (responseData) => dispatch(actionCreators.loadQuestions(responseData)),
+    [],
   );
 
-  // TODO: fetch questions(temporary)
+  // useEffect는 race 컨티션을 방지하기 위해서 동기 콜백을 전달받기 때문에
+  // 비동기 함수를 사용하려면 내부에 정의하고 사용해야 합니다.
   useEffect(() => {
-    getQuestions().then(loadQuestions).catch(console.error);
+    (async () => {
+      try {
+        loadQuestions(await getQuestions());
+        console.log(isLoaded);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
   }, []);
 
-  const isQuestionsLoaded = useMemo(() => {
-    if (questions.length === 1) {
-      return false;
-    }
-    return true;
-  }, [questions]);
-
   // 음... 개선 방법이 없을까...
-  const visibleNumbers = useMemo(() => {
+  const visibleQuestionNumbers = useMemo(() => {
     if (currPageIndex <= 0) {
       return [0];
     }
 
-    const start = (currPageIndex - 1) * 5 + 1;
-    const end = Math.min(currPageIndex * 5 + 1, questions.length);
+    const start = (currPageIndex - 1) * MAX_COUNT_IN_PAGE + 1;
+    const end = Math.min(
+      currPageIndex * MAX_COUNT_IN_PAGE + 1,
+      questions.length,
+    );
     return Array(end - start)
       .fill()
       .map((_, offset) => start + offset);
@@ -52,7 +61,7 @@ const PsyTest = ({
   //
 
   const isNextDisabled = useMemo(() => {
-    if (!isQuestionsLoaded) {
+    if (!isLoaded) {
       return true;
     }
 
@@ -60,14 +69,14 @@ const PsyTest = ({
       return !userName || !gender;
     }
 
-    return visibleNumbers.filter((idx) => !answers[idx]).length !== 0;
+    return visibleQuestionNumbers.filter((idx) => !answers[idx]).length !== 0;
   }, [
     userName,
     gender,
     answers,
     currPageIndex,
-    visibleNumbers,
-    isQuestionsLoaded,
+    visibleQuestionNumbers,
+    isLoaded,
   ]);
 
   const handlePrev = useCallback(
@@ -83,12 +92,12 @@ const PsyTest = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     const testData = {
-      questrnSeq,
-      trgetSe,
+      questrnSeq: questionSeq,
+      trgetSe: targetSeq,
       name: userName,
       gender,
       grade,
-      startDtm: startDtm.toString(),
+      startDtm: startDate.toString(),
     };
 
     console.log('not yet');
@@ -122,11 +131,15 @@ const PsyTest = ({
                   설명을 확인해보세요.
                 </span>
               )}
-              <Questions visibleNumbers={visibleNumbers} />
+              <Questions visibleQuestionNumbers={visibleQuestionNumbers} />
             </>
           )}
           <StyledButtonWrapper isTesting={currPageIndex > 0}>
-            {currPageIndex > 0 && <Button onClick={handlePrev}>이전</Button>}
+            {currPageIndex > 0 && (
+              <Button type="button" onClick={handlePrev}>
+                이전
+              </Button>
+            )}
             <Button
               type={currPageIndex !== lastPageIndex ? 'button' : 'submit'}
               disabled={isNextDisabled}
@@ -172,32 +185,4 @@ const StyledButtonWrapper = styled.div`
   margin: 7vh 15% 12vh 15%;
 `;
 
-const mapStateToProps = (state) => {
-  const {
-    questrnSeq,
-    questions,
-    trgetSe,
-    name: userName,
-    gender,
-    grade,
-    startDtm,
-    answers,
-  } = state;
-  return {
-    questrnSeq,
-    questions,
-    trgetSe,
-    userName,
-    gender,
-    grade,
-    startDtm,
-    answers,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  loadQuestions: (questions) =>
-    dispatch(actionCreators.loadQuestions(questions)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PsyTest);
+export default PsyTest;

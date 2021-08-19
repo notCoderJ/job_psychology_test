@@ -1,3 +1,14 @@
+export const MAX_COUNT_IN_PAGE = 5;
+
+export const SAMPLE_QUESTION = {
+  questionNumber: 0,
+  question: `으어어어어어어어어`,
+  defaultAnswerOptions: [
+    ['창의성', '1'],
+    ['도전성', '2'],
+  ],
+};
+
 /*
   중: 14 ~ 16세 청소년
   고: 17 ~ 19세 청소년
@@ -13,4 +24,4 @@ export const TARGET_SEQ = {
   100215: '교사(상담)',
 };
 
-export const GENDER_STR = { 100323: '남성', 100324: '여성' };
+export const GENDER_TO_STRING = { 100323: '남성', 100324: '여성' };

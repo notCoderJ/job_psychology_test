@@ -67,19 +67,45 @@
 
 <br/>
 
-## 💦 현단계 src 디렉토리 구조(미완성)
+## 💦 현단계 src 디렉토리 구조 (Update: 21.08.20)
 
 - src  
-   |-- actions : 검사 진행에 필요한 state에 대한 action과 action creator를 정의  
    |-- api : 비동기 처리를 위한 api(문항, 결과 요청 등)  
    |-- components  
    | &nbsp; &nbsp; |-- common : 공통으로 사용할 컴포넌트들을 정의  
-  | &nbsp; &nbsp; |-- test : 검사 진행 페이지를 구성하는 컴포넌트들을 정의  
    | &nbsp; &nbsp; |-- completed : 검사 완료 페이지를 구성하는 컴포넌트들을 정의  
    | &nbsp; &nbsp; |-- result : 검사 결과 페이지를 구성하는 컴포넌트들을 정의  
-   |-- context : 검사 진행 페이지에서 사용할 Context Provider와 Hook 정의  
+   | &nbsp; &nbsp; |-- test : 검사 진행 페이지를 구성하는 컴포넌트들을 정의  
+   |-- constants : 검사 예시 문항, 결과 예시 등 App 전역에서 사용할 상수를 정의  
    |-- pages : 검사 진행, 완료, 결과 페이지에 대한 컴포넌트를 정의  
-  |-- reducer : 검사 진행 페이지에서 사용할 reducer를 정의  
-  |-- sample : 검사 예시 문항, 결과 예시 등을 정의  
   |-- store : 검사 결과 요청에 필요한 데이터를 저장할 store를 정의  
-  |-- utils : 사용할 함수나 상수를 정의
+  | &nbsp; &nbsp; |-- actions : 검사 진행에 필요한 state에 대한 action과 action creator를 정의  
+  | &nbsp; &nbsp; |-- reducer : 검사 진행 페이지에서 사용할 reducer를 정의  
+  |-- utils : 사용할 함수 등을 정의
+
+## 👀 코드 리뷰
+
+<details>
+<summary>2021.08.19</summary>
+
+🛠 `개선 완료`
+
+- [x] action, reducer, store 등이 흩어져있는데, store 폴더에 몰아 넣기
+- [x] 파일명 camelCase로 변경하기
+- [x] useEffect 훅에서 questions을 가져올 때 async로 비동기 처리하기
+- [x] Page Index와 같은 상수 값을 명시적으로 상수 선언하여 사용하기
+- [x] Question loading 검사 로직을 loading 검사 redux를 만들어 개선하기
+- [x] 코드 내 idx, answers[1] 등의 불명확한 변수명을 처음보는 사람도 알아볼 수 있게 명확하게 변경하기
+- [x] connect method로 store와 컴포넌트를 연결하는 구조를 useDispatch와 useSelector를 사용하는 방식으로 변경하기  
+       &nbsp; &nbsp; &nbsp; (이 방법이 함수형 컴포넌트에 더 적합하고 최신 방법임)
+- [x] 이전 버튼 클릭 시 submit 되던 버그 수정🐞  
+       &nbsp; &nbsp; &nbsp; (form에 포함되는 버튼인데, type을 별도로 지정하지 않아서 "submit"으로 자동 할당되었음)
+
+♻ `추후 개선 사항`
+
+- [ ] store의 initialState를 연관성있는 것끼리 쪼개고 각각의 reducer를 만들어 합치는 형식으로 변경하기
+- [ ] redux-toolkit을 이용하여 현재 action - reducer - store 구조를 더 간결하게 리펙토링하기
+- [ ] styled component에서 반응형은 [mixin 함수](https://tobbelindstrom.com/blog/how-to-create-a-breakpoint-mixin-with-styled-components/)를 만들어서 활용해보기
+- [ ] [redux-saga](https://react.vlpt.us/redux-middleware/10-redux-saga.html) 도입해보기
+
+</details>
