@@ -1,15 +1,14 @@
-import React from "react";
-import "./app.css";
+import React from 'react';
+import './app.css';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from 'react-router-dom';
-import Exam from './pages';
 import { Provider } from 'react-redux';
+import PsyTest from './pages';
 import store from './store';
-
 
 function App() {
   return (
@@ -17,7 +16,7 @@ function App() {
       <Switch>
         <Route path="/exam">
           <Provider store={store}>
-            <Exam />
+            <PsyTest />
           </Provider>
         </Route>
         <Route path="/completed/:seq">

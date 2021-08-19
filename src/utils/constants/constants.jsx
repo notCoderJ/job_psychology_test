@@ -1,1 +1,0 @@
-export const GENDER_STR = { 100323: "남성", 100324: "여성" };
