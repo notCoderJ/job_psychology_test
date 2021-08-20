@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import Questions from '../components/test/questions';
 import UserRegister from '../components/test/registration';
 import PageLayOut from './pageLayout';
-import { getQuestions, getResult } from '../api';
+import api from '../api';
 import actionCreators from '../store/actions';
-import Button from '../components/common/button';
-import { MAX_COUNT_IN_PAGE } from '../constants';
+import { Button, ProgressBar } from '../components/common';
+import { MAX_COUNT_IN_PAGE, RESULT_REQUEST_ANSWER_FORM } from '../constants';
 
-const PsyTest = () => {
+const PsyTestPage = () => {
+  const history = useHistory();
   const [currPageIndex, setCurrPageIndex] = useState(-1);
   const dispatch = useDispatch();
   const {
@@ -35,8 +37,7 @@ const PsyTest = () => {
   useEffect(() => {
     (async () => {
       try {
-        loadQuestions(await getQuestions());
-        console.log(isLoaded);
+        loadQuestions(await api.getQuestions());
       } catch (err) {
         console.error(err);
       }
@@ -69,7 +70,11 @@ const PsyTest = () => {
       return !userName || !gender;
     }
 
-    return visibleQuestionNumbers.filter((idx) => !answers[idx]).length !== 0;
+    return (
+      visibleQuestionNumbers.filter(
+        (questionNumber) => !answers[questionNumber],
+      ).length !== 0
+    );
   }, [
     userName,
     gender,
@@ -91,21 +96,39 @@ const PsyTest = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const testData = {
-      questrnSeq: questionSeq,
+
+    const { prefix, infix, postfix } = RESULT_REQUEST_ANSWER_FORM[questionSeq]; // TODO: Parsing answers
+    const requestAnswerForm = answers
+      .slice(1)
+      .map(
+        (answer, questionNumber) =>
+          `${prefix}${questionNumber + 1}${infix}${answer}${postfix}`,
+      )
+      .join('');
+
+    const sendData = {
+      qestrnSeq: questionSeq,
       trgetSe: targetSeq,
       name: userName,
       gender,
       grade,
-      startDtm: startDate.toString(),
+      startDtm: startDate,
+      answers: requestAnswerForm,
     };
+    console.log(sendData);
 
-    console.log('not yet');
-    console.log('이거슨 파싱할 데이터');
-    console.log(JSON.stringify(testData));
-    console.log(answers);
-    console.log('여까지');
-    getResult();
+    // 🤔 에러 처리 방향을 어떻게 하는 것이 좋을 것인가...
+    (async () => {
+      try {
+        const res = await api.getResultURL(sendData);
+        const paramsString = new URL(res.url).search;
+        const params = new URLSearchParams(paramsString);
+
+        history.push(`/completed/${params.get('seq')}`);
+      } catch (err) {
+        throw new Error(err);
+      }
+    })();
   };
 
   // TEST CODE
@@ -117,9 +140,9 @@ const PsyTest = () => {
 
   return (
     <PageLayOut
-      header="Imagine a progress bar"
+      header={currPageIndex >= 0 && <ProgressBar />}
       main={
-        <StyledPsyTest onSubmit={handleSubmit}>
+        <StyledPsyTestContainer onSubmit={handleSubmit}>
           {currPageIndex < 0 ? (
             <UserRegister />
           ) : (
@@ -134,7 +157,7 @@ const PsyTest = () => {
               <Questions visibleQuestionNumbers={visibleQuestionNumbers} />
             </>
           )}
-          <StyledButtonWrapper isTesting={currPageIndex > 0}>
+          <StyledButtonContainer isTesting={currPageIndex > 0}>
             {currPageIndex > 0 && (
               <Button type="button" onClick={handlePrev}>
                 이전
@@ -151,14 +174,14 @@ const PsyTest = () => {
                 ? '다음'
                 : '제출'}
             </Button>
-          </StyledButtonWrapper>
-        </StyledPsyTest>
+          </StyledButtonContainer>
+        </StyledPsyTestContainer>
       }
     />
   );
 };
 
-const StyledPsyTest = styled.form`
+const StyledPsyTestContainer = styled.form`
   color: #ffedfe;
 
   > span.sample-description {
@@ -174,7 +197,7 @@ const StyledPsyTest = styled.form`
   }
 `;
 
-const StyledButtonWrapper = styled.div`
+const StyledButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   ${(props) =>
@@ -185,4 +208,4 @@ const StyledButtonWrapper = styled.div`
   margin: 7vh 15% 12vh 15%;
 `;
 
-export default PsyTest;
+export default PsyTestPage;

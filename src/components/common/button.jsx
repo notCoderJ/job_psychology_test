@@ -15,40 +15,40 @@ const StyledButton = styled.button`
       cursor: not-allowed;
       opacity: 0.4;
     `};
-  border-style: none;
-  border-radius: 10px;
-  background-color: #9554f7;
+  border-radius: 10px; /////////////////////////////////////이거거거ㅓ거거
+  background-color: transparent;
   color: #ffedfe;
   font-size: 1.2rem;
   font-weight: bold;
+  border: solid 0.15rem #ffedfe;
   padding: 1rem 2.5rem;
-  letter-spacing: 1px;
+  letter-spacing: 1px; //////////////////////////////////이거거거ㅓ거거
   transition: all 0.1s ease-in-out;
-  /* box-shadow: 1px 1px 3px 1px rgba(30, 18, 46, 0.9); */ // light
-  box-shadow: 1px 1px 3px 1px rgba(197, 161, 229, 0.57); // dark
   /* margin: 20px 20px; // 임시 */
 
   :hover {
     ${(props) =>
       !props.disabled &&
       css`
-        box-shadow: 0px 0px 10px 1px rgba(248, 227, 252, 0.57); // dark
-        /* transform: scale(1.03); */ // light
+        background-color: #9554f7;
+        color: #ffedfe;
       `}
   }
 
   :active {
-    box-shadow: none;
     opacity: 0.8;
-    /* box-shadow: inset 1px 1px 3px 1px rgba(30, 18, 46, 0.9); */ // light
-    box-shadow: inset 1px 1px 3px 1px rgba(197, 161, 229, 0.57); // dark
+    box-shadow: inset 2px 2px 3px 2px rgba(30, 18, 46, 0.9);
   }
 
   @media screen and (max-width: 480px) {
+    // TODO: 모바일용 색조절...
     & {
       font-size: 1rem;
-      padding: 0.8rem 1.3rem;
-      // TODO: 버튼 변경되도록
+      padding: 0.7rem 1.2rem;
+    }
+
+    :active {
+      box-shadow: inset 1px 1px 3px 1px rgba(30, 18, 46, 0.9);
     }
   }
 `;

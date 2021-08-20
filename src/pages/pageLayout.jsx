@@ -3,7 +3,10 @@ import styled from 'styled-components';
 
 const PageLayOut = ({ header, main }) => (
   <Container>
-    <Header>{header}</Header>
+    <Header>
+      {/* <DesignBar /> */}
+      {header}
+    </Header>
     <Main>{main}</Main>
     <Footer />
   </Container>
@@ -35,19 +38,19 @@ const Container = styled.section`
 `;
 
 const Header = styled.header`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 20vh;
-  line-height: 20vh; // 임시 시작
-  color: #fffdfa; //
-  font-weight: bold; //
-  font-size: 3rem;
+
   @media screen and (max-width: 480px) {
     & {
-      font-size: 1.5rem;
+      min-height: 18vh;
     }
-  } // 여기까지
-
-  /* border: solid white 1px; */
+  }
 `;
+
+// const DesignBar = styled.div``;
 
 const Main = styled.main`
   height: fit-content;

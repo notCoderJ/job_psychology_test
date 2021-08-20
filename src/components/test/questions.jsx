@@ -65,8 +65,8 @@ const Question = ({ number }) => {
 // TODO : 반응형 사이즈 추가 예정 : 768px, 1024px
 
 const StyledQuestion = styled.fieldset`
-  border: solid #fffdfa 2px;
-  border-radius: 5px;
+  border: solid #fffdfa 2px; //////////////////////////////////이거거거ㅓ거거
+  border-radius: 5px; //////////////////////////////////이거거거ㅓ거거
   color: #fffdfa;
 
   @media screen and (max-width: 480px) {
@@ -84,12 +84,12 @@ const StyledDescription = styled.legend`
   text-align: center; // TODO: 2줄이상일 때는 양쪽 정렬하게 변경해보기!
   padding: 0.8rem 1.6rem;
   margin: auto;
-  border-radius: 10px;
+  border-radius: 10px; //////////////////////////////////이거거거ㅓ거거
 
   @media screen and (max-width: 480px) {
     & {
       width: 87%;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       padding: 0.5rem 0.6rem;
     }
   } ;
@@ -99,12 +99,12 @@ const StyledAnswerContainer = styled.p`
   display: flex;
   justify-content: space-between;
   font-size: 1.3rem;
-  padding: 2rem 23%;
+  margin: 2rem 18%;
 
   @media screen and (max-width: 480px) {
     & {
-      font-size: 1rem;
-      padding: 1.5rem 8%;
+      font-size: 0.9rem;
+      margin: 1.3rem 5%;
     }
   }
 
@@ -113,6 +113,13 @@ const StyledAnswerContainer = styled.p`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    padding: 0.5rem 0.5rem;
+
+    @media screen and (max-width: 480px) {
+      & {
+        padding: 0.3rem 0.3rem;
+      }
+    }
 
     > input {
       -webkit-appearance: none;
@@ -122,13 +129,13 @@ const StyledAnswerContainer = styled.p`
       width: 1rem;
       height: 1rem;
       margin-right: 0.5rem;
-      border: 2px solid #ccc;
+      border: 2px solid #ccc; //////////////////////////////////이거거거ㅓ거거
       border-radius: 50%;
       transition: 0.1s all ease-in-out;
       cursor: pointer;
 
       :checked {
-        border: 5px solid #9554f7;
+        border: 5px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
       }
 
       @media screen and (max-width: 480px) {
@@ -139,7 +146,7 @@ const StyledAnswerContainer = styled.p`
         }
 
         :checked {
-          border: 3.5px solid #9554f7;
+          border: 3.5px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
         }
       }
     }

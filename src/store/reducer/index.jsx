@@ -66,7 +66,13 @@ const reducer = (state, action) => {
       const { questionNumber, answerScore } = action.payload;
       const newAnswer = [...state.answers];
       newAnswer[questionNumber] = answerScore;
-      return { ...state, answers: newAnswer };
+      return {
+        ...state,
+        answerCount: state.answers[questionNumber]
+          ? state.answerCount
+          : state.answerCount + 1,
+        answers: newAnswer,
+      };
 
     default:
       return state;

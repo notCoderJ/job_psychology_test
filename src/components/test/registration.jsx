@@ -34,28 +34,27 @@ const UserRegister = () => {
   }, [userName, userGender]);
 
   return (
-    <StyledUserRegister>
+    <StyledUserRegisterContainer>
       <legend>사용자 등록</legend>
-      <StyledContainer>
-        <h4>이름</h4>
-        <label htmlFor="user_name">
+      <StyledItemContainer>
+        <span>이름</span>
+        <label className="user-name" htmlFor="user-name">
           <input
-            id="user_name"
-            name="user_name"
+            id="user-name"
+            name="user-name"
             defaultValue={userName}
             type="text"
-            placeholder="이름을 입력해주세요."
             onChange={handleChangeName}
           />
         </label>
-      </StyledContainer>
-      <StyledContainer>
-        <h4>성별</h4>
+      </StyledItemContainer>
+      <StyledItemContainer>
+        <span>성별</span>
         <label className="gender" htmlFor="male">
           <input
             id="male"
             name="gender"
-            value="100323"
+            value={100323}
             type="radio"
             onClick={(e) => saveGender(e.target.value)}
             defaultChecked={GENDER_TO_STRING[userGender] === '남성'}
@@ -66,19 +65,19 @@ const UserRegister = () => {
           <input
             id="female"
             name="gender"
-            value="100324"
+            value={100324}
             type="radio"
             onClick={(e) => saveGender(e.target.value)}
             defaultChecked={GENDER_TO_STRING[userGender] === '여성'}
           />
           여성
         </label>
-      </StyledContainer>
-    </StyledUserRegister>
+      </StyledItemContainer>
+    </StyledUserRegisterContainer>
   );
 };
 
-const StyledUserRegister = styled.fieldset`
+const StyledUserRegisterContainer = styled.fieldset`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -93,14 +92,24 @@ const StyledUserRegister = styled.fieldset`
   }
 `;
 
-const StyledContainer = styled.div`
+const StyledItemContainer = styled.p`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 
-  > h4 {
+  > span {
+    ////////////////////////////////여기기기기기
     align-self: flex-start;
     margin-left: 20%;
+  }
+
+  //// TODO: 아직...
+  > label.user-name {
+    > input {
+      :focus {
+        box-shadow: 0px 0px 10px 2px #fffdfa;
+      }
+    }
   }
 
   > label.gender {
@@ -116,12 +125,12 @@ const StyledContainer = styled.div`
       width: 0.8rem;
       height: 0.8rem;
       margin-right: 0.4rem;
-      border: 2px solid #ccc;
+      border: 2px solid #ccc; //////////////////////////////////이거거거ㅓ거거
       border-radius: 50%;
       transition: 0.1s all ease-in-out;
 
       :checked {
-        border: 4px solid #9554f7;
+        border: 4px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
       }
 
       @media screen and (max-width: 480px) {
@@ -132,7 +141,7 @@ const StyledContainer = styled.div`
         }
 
         :checked {
-          border: 3.5px solid #9554f7;
+          border: 3.5px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
         }
       }
     }
