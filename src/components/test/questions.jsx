@@ -1,22 +1,21 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import actionCreators from '../../store/actions';
+import { actionCreator } from '../../store/reducer';
+import selector from '../../store/selector';
 
 const Question = ({ number }) => {
   const dispatch = useDispatch();
-  const { questionItem, defaultAnswerOptions, answer } = useSelector(
-    (state) => ({
-      questionItem: state.questions[number],
-      defaultAnswerOptions: state.questions[number]?.defaultAnswerOptions,
-      answer: state.answers[number],
-    }),
-  );
+  const {
+    description: questionDescription,
+    defaultAnswerOptions,
+    answer,
+  } = useSelector(selector.getQeustionInfo(number));
 
-  const saveAnswers = useCallback(
+  const saveAnswer = useCallback(
     (questionNumber, answerScore) =>
-      dispatch(actionCreators.saveAnswers(questionNumber, answerScore)),
-    [],
+      dispatch(actionCreator.saveAnswer({ questionNumber, answerScore })),
+    [dispatch],
   );
 
   const prefixNumber = useCallback(
@@ -24,22 +23,24 @@ const Question = ({ number }) => {
     [],
   );
 
-  // TEST CODE
-  useEffect(() => {
-    console.log('mount', number);
-    // console.log(answer);
-
-    return () => console.log('unmount', number);
-  }, []);
+  const handleCheckAnswer = useCallback(
+    (e) => {
+      if (e.target.value === answer) {
+        return;
+      }
+      saveAnswer(number, e.target.value);
+    },
+    [answer, saveAnswer, number],
+  );
 
   return (
     <StyledQuestion>
       <StyledDescription>
-        <span>{questionItem.question}</span>
+        <span>{questionDescription}</span>
       </StyledDescription>
       <StyledAnswerContainer>
         {defaultAnswerOptions.map((answerOption, index) => {
-          const name = `qitemNo${prefixNumber(number)}-option`;
+          const name = `question${prefixNumber(number)}-answer-option`;
           const id = `${name}${prefixNumber(index + 1)}`;
 
           return (
@@ -49,11 +50,11 @@ const Question = ({ number }) => {
                 key={id}
                 name={name}
                 type="radio"
-                value={answerOption[1]}
-                defaultChecked={answer === answerOption[1]}
-                onClick={(e) => saveAnswers(number, e.target.value)}
+                value={answerOption.score}
+                defaultChecked={answer === answerOption.score}
+                onClick={handleCheckAnswer}
               />
-              {answerOption[0]}
+              {answerOption.description}
             </label>
           );
         })}
@@ -153,13 +154,19 @@ const StyledAnswerContainer = styled.p`
   }
 `;
 
-const Questions = ({ visibleQuestionNumbers }) => (
-  <StyledQuestions sample={visibleQuestionNumbers?.length === 1}>
-    {visibleQuestionNumbers.map((number) => (
-      <Question key={number} number={number} />
-    ))}
-  </StyledQuestions>
-); // TODO: key redefine
+const Questions = () => {
+  const visibleQuestionNumbers = useSelector(
+    selector.getVisibleQuestionNumbers,
+  );
+
+  return (
+    <StyledQuestions sample={visibleQuestionNumbers.length === 1}>
+      {visibleQuestionNumbers.map((number) => (
+        <Question key={`question-${number}`} number={number} />
+      ))}
+    </StyledQuestions>
+  );
+}; // TODO: key redefine
 
 const StyledQuestions = styled.div`
   display: flex;

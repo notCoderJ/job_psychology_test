@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import * as palette from '../../variables';
 
 const Button = ({ type, disabled, onClick, children }) => (
   <StyledButton type={type} disabled={disabled} onClick={onClick}>
@@ -17,27 +18,25 @@ const StyledButton = styled.button`
     `};
   border-radius: 10px; /////////////////////////////////////이거거거ㅓ거거
   background-color: transparent;
-  color: #ffedfe;
+  color: ${palette.COLOR_DARKSET.FONT};
   font-size: 1.2rem;
   font-weight: bold;
-  border: solid 0.15rem #ffedfe;
+  border: solid 0.15rem ${palette.COLOR_DARKSET.BORDER};
   padding: 1rem 2.5rem;
   letter-spacing: 1px; //////////////////////////////////이거거거ㅓ거거
   transition: all 0.1s ease-in-out;
-  /* margin: 20px 20px; // 임시 */
 
   :hover {
     ${(props) =>
       !props.disabled &&
       css`
-        background-color: #9554f7;
-        color: #ffedfe;
+        background-color: ${palette.COLOR_DARKSET.BUTTON};
       `}
   }
 
   :active {
     opacity: 0.8;
-    box-shadow: inset 2px 2px 3px 2px rgba(30, 18, 46, 0.9);
+    box-shadow: inset 2px 2px 3px 2px ${palette.COLOR_DARKSET.SHADOW};
   }
 
   @media screen and (max-width: 480px) {
@@ -48,7 +47,7 @@ const StyledButton = styled.button`
     }
 
     :active {
-      box-shadow: inset 1px 1px 3px 1px rgba(30, 18, 46, 0.9);
+      box-shadow: inset 1px 1px 3px 1px ${palette.COLOR_DARKSET.SHADOW};
     }
   }
 `;

@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { API_KEY, QUESTION_SEQ } from '../constants';
-
-const BASE_URL = 'https://www.career.go.kr/inspct/openapi/test';
+import { API_KEY } from '../constants/api';
+import { QUESTION_SEQ } from '../constants/test';
+import { createBaseURL } from '../utils';
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: createBaseURL('test'),
   headers: {
     'Content-Type': 'application/json',
   },

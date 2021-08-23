@@ -1,10 +1,9 @@
 import axios from 'axios';
+import { createBaseURL } from '../utils';
 // import { API_KEY, QUESTION_SEQ } from '../constants';
 
-const BASE_URL = 'https://www.career.go.kr/inspct/api/psycho';
-
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: createBaseURL('result'),
   headers: {
     'Content-Type': 'application/json',
   },

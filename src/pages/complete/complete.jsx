@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import api from '../../api';
 
-const PsyTestCompletedPage = () => {
+const PsychologyTestComplete = () => {
   const history = useHistory();
   const { seq } = useParams();
   // report?apikey=인증키&qestrnSeq=심리검사변수
@@ -16,10 +16,10 @@ const PsyTestCompletedPage = () => {
         console.error(err);
       }
     })();
-    console.log('here completed', seq, history.length);
-  }, []);
+    history.goBack();
+  }, [history, seq]);
 
   return <></>;
 };
 
-export default PsyTestCompletedPage;
+export default PsychologyTestComplete;

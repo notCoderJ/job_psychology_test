@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { useHistory } from 'react-router-dom';
@@ -6,34 +6,39 @@ import Questions from '../components/test/questions';
 import UserRegister from '../components/test/registration';
 import PageLayOut from './pageLayout';
 import api from '../api';
-import actionCreators from '../store/actions';
 import { Button, ProgressBar } from '../components/common';
-import { MAX_COUNT_IN_PAGE, RESULT_REQUEST_ANSWER_FORM } from '../constants';
+import { RESULT_ANSWER_FORM } from '../constants/test';
+import selector from '../store/selector';
+import { actionCreator } from '../store/reducer';
 
-const PsyTestPage = () => {
+const getResultFormData = (state) => ({
+  qestrnSeq: state.question.qestrnSeq,
+  trgetSe: state.user.targetSeq,
+  name: state.user.name,
+  gender: state.user.gender,
+  grade: state.user.grade,
+  startDtm: state.user.startDate,
+});
+
+const PsychologyTest = () => {
   const history = useHistory();
-  const [currPageIndex, setCurrPageIndex] = useState(-1);
   const dispatch = useDispatch();
-  const {
-    isLoaded,
-    lastPageIndex,
-    questionSeq,
-    questions,
-    targetSeq,
-    name: userName,
-    gender,
-    grade,
-    startDate,
-    answers,
-  } = useSelector((state) => state);
+
+  // creatSelector를 하면 useMemo처럼 캐싱처리가 된다고 하여 찾아보며 적용을 해봤는데 제대로 사용한건지 잘 모르겠습니다...
+  // 콘솔로 해당 selector 내에 재진입하는 지 확인은 해봤는데 별도로 확인할 방법이 뭔가 있을까요?
+  // createSelector로 생성한 selector를 useSelector에 넘겨서 처리하는 것 말고 혹시 다른 방법도 있는지 궁금합니다
+  const { currentPageIndex, lastPageIndex } = useSelector(
+    selector.getPageIndex,
+  );
+  const isNextDisabled = useSelector(selector.isNextDisabled);
+  const resultFormData = useSelector(getResultFormData);
+  const answers = useSelector(selector.getAnswers);
 
   const loadQuestions = useCallback(
-    (responseData) => dispatch(actionCreators.loadQuestions(responseData)),
-    [],
+    (responseData) => dispatch(actionCreator.loadQuestions(responseData)),
+    [dispatch],
   );
 
-  // useEffect는 race 컨티션을 방지하기 위해서 동기 콜백을 전달받기 때문에
-  // 비동기 함수를 사용하려면 내부에 정의하고 사용해야 합니다.
   useEffect(() => {
     (async () => {
       try {
@@ -42,135 +47,88 @@ const PsyTestPage = () => {
         console.error(err);
       }
     })();
-  }, []);
-
-  // 음... 개선 방법이 없을까...
-  const visibleQuestionNumbers = useMemo(() => {
-    if (currPageIndex <= 0) {
-      return [0];
-    }
-
-    const start = (currPageIndex - 1) * MAX_COUNT_IN_PAGE + 1;
-    const end = Math.min(
-      currPageIndex * MAX_COUNT_IN_PAGE + 1,
-      questions.length,
-    );
-    return Array(end - start)
-      .fill()
-      .map((_, offset) => start + offset);
-  }, [currPageIndex, questions]);
-  //
-
-  const isNextDisabled = useMemo(() => {
-    if (!isLoaded) {
-      return true;
-    }
-
-    if (currPageIndex < 0) {
-      return !userName || !gender;
-    }
-
-    return (
-      visibleQuestionNumbers.filter(
-        (questionNumber) => !answers[questionNumber],
-      ).length !== 0
-    );
-  }, [
-    userName,
-    gender,
-    answers,
-    currPageIndex,
-    visibleQuestionNumbers,
-    isLoaded,
-  ]);
+  }, [loadQuestions]);
 
   const handlePrev = useCallback(
-    () => setCurrPageIndex((current) => (current > 0 ? current - 1 : 0)),
-    [],
+    () => currentPageIndex > 0 && dispatch(actionCreator.updatePageIndex(-1)),
+    [currentPageIndex, dispatch],
+  ); // TODO:dependency
+  const handleNext = useCallback(
+    () =>
+      currentPageIndex < lastPageIndex &&
+      dispatch(actionCreator.updatePageIndex(1)),
+    [currentPageIndex, lastPageIndex, dispatch],
+  ); // TODO:dependency
+
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      const { prefix, infix, postfix } =
+        RESULT_ANSWER_FORM[resultFormData.qestrnSeq]; // TODO: Parsing answers
+      const requestAnswerForm = answers
+        .slice(1)
+        .map(
+          (answer, questionNumber) =>
+            `${prefix}${questionNumber + 1}${infix}${answer}${postfix}`,
+        )
+        .join('');
+
+      const sendData = {
+        ...resultFormData,
+        answers: requestAnswerForm,
+      };
+      console.log(sendData); // TEST
+
+      // TODO: Interceptor 적용하기!
+      (async () => {
+        try {
+          const res = await api.getResultURL(sendData);
+          const paramsString = new URL(res.url).search;
+          const params = new URLSearchParams(paramsString);
+
+          history.push(`/completed/${params.get('seq')}`);
+        } catch (err) {
+          throw new Error(err);
+        }
+      })();
+    },
+    [resultFormData, answers, history],
   );
-  const handleNext = useCallback(() => {
-    setCurrPageIndex((current) =>
-      current < lastPageIndex ? current + 1 : lastPageIndex,
-    );
-  }, [lastPageIndex]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const { prefix, infix, postfix } = RESULT_REQUEST_ANSWER_FORM[questionSeq]; // TODO: Parsing answers
-    const requestAnswerForm = answers
-      .slice(1)
-      .map(
-        (answer, questionNumber) =>
-          `${prefix}${questionNumber + 1}${infix}${answer}${postfix}`,
-      )
-      .join('');
-
-    const sendData = {
-      qestrnSeq: questionSeq,
-      trgetSe: targetSeq,
-      name: userName,
-      gender,
-      grade,
-      startDtm: startDate,
-      answers: requestAnswerForm,
-    };
-    console.log(sendData);
-
-    // 🤔 에러 처리 방향을 어떻게 하는 것이 좋을 것인가...
-    (async () => {
-      try {
-        const res = await api.getResultURL(sendData);
-        const paramsString = new URL(res.url).search;
-        const params = new URLSearchParams(paramsString);
-
-        history.push(`/completed/${params.get('seq')}`);
-      } catch (err) {
-        throw new Error(err);
-      }
-    })();
-  };
-
-  // TEST CODE
-  useEffect(() => {
-    // console.log(questions);
-    // console.log(currPageIndex);
-    // console.log(visibleNumbers);
-  }, [currPageIndex, questions]);
 
   return (
     <PageLayOut
-      header={currPageIndex >= 0 && <ProgressBar />}
+      header={currentPageIndex >= 0 && <ProgressBar />}
       main={
         <StyledPsyTestContainer onSubmit={handleSubmit}>
-          {currPageIndex < 0 ? (
+          {currentPageIndex < 0 ? (
             <UserRegister />
           ) : (
             <>
-              {currPageIndex === 0 && (
+              {currentPageIndex === 0 && (
                 <span className="sample-description">
                   직업과 관련된 두개의 가치 중에서 자기에게 더 중요한 가치에
                   표시하세요. 가치의 뜻을 잘모르겠다면 문항 아래에 있는 가치의
                   설명을 확인해보세요.
                 </span>
               )}
-              <Questions visibleQuestionNumbers={visibleQuestionNumbers} />
+              <Questions />
             </>
           )}
-          <StyledButtonContainer isTesting={currPageIndex > 0}>
-            {currPageIndex > 0 && (
+          <StyledButtonContainer isTesting={currentPageIndex > 0}>
+            {currentPageIndex > 0 && (
               <Button type="button" onClick={handlePrev}>
                 이전
               </Button>
             )}
             <Button
-              type={currPageIndex !== lastPageIndex ? 'button' : 'submit'}
+              type={currentPageIndex !== lastPageIndex ? 'button' : 'submit'}
               disabled={isNextDisabled}
               onClick={handleNext}
             >
-              {currPageIndex <= 0
+              {currentPageIndex <= 0
                 ? '검사 시작'
-                : currPageIndex !== lastPageIndex
+                : currentPageIndex !== lastPageIndex
                 ? '다음'
                 : '제출'}
             </Button>
@@ -208,4 +166,4 @@ const StyledButtonContainer = styled.div`
   margin: 7vh 15% 12vh 15%;
 `;
 
-export default PsyTestPage;
+export default PsychologyTest;
