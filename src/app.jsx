@@ -7,9 +7,9 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import PsyTestPage from './pages';
+import PsychologyTest from './pages';
+import PsychologyTestComplete from './pages/complete/complete';
 import store from './store';
-import PsyTestCompletedPage from './pages/completed/completedPage';
 
 function App() {
   return (
@@ -17,11 +17,11 @@ function App() {
       <Switch>
         <Route path="/exam">
           <Provider store={store}>
-            <PsyTestPage />
+            <PsychologyTest />
           </Provider>
         </Route>
         <Route path="/completed/:seq">
-          <PsyTestCompletedPage />
+          <PsychologyTestComplete />
         </Route>
         <Route path="/result/:seq">
           <Redirect to="/exam" />

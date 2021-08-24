@@ -1,22 +1,14 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import selector from '../../store/selector';
+// import * as palette from '../../variables';
 
 // Need
 //  1. Total questions count(length)
 //  2. Current answer recode count
 const ProgressBar = () => {
-  const { questions, answerCount } = useSelector((state) => state);
-  const percentage = useMemo(() => {
-    if (answerCount <= 1) {
-      return 0;
-    }
-
-    const floatPercent = ((answerCount - 1) / (questions.length - 1)) * 100;
-    return floatPercent > 99
-      ? Math.floor(floatPercent)
-      : Math.ceil(floatPercent);
-  }, [questions.length, answerCount]);
+  const percentage = useSelector(selector.getCurrentPercentage);
 
   return (
     <StyledProgressBarContainer>
@@ -54,7 +46,7 @@ const StyledPercentageBoard = styled.span`
 
 const StyledProgressBar = styled.div`
   width: 100%;
-  height: 18%;
+  height: 15%;
   border-radius: 10vh;
   border: solid 0.25vh #9e9c9e;
   margin-bottom: 3vh;
@@ -72,6 +64,8 @@ const ProgressBarGage = styled.div`
   border-radius: 10vh;
   background-color: #9554f7;
   opacity: 0.9;
+  transition: all 300ms linear;
+
   @media screen and (max-width: 480px) {
   }
 `;

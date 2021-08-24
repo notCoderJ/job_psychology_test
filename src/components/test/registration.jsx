@@ -1,21 +1,23 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import actionCreators from '../../store/actions';
-import { GENDER_TO_STRING } from '../../constants';
+import { GENDER_STRING } from '../../constants/test';
+import { actionCreator } from '../../store/reducer';
+import selector from '../../store/selector';
 
 const UserRegister = () => {
   const dispatch = useDispatch();
-  const { name: userName, gender: userGender } = useSelector((state) => state);
+  const userName = useSelector(selector.getUserName);
+  const userGender = useSelector(selector.getUserGender);
 
   const saveName = useCallback(
-    (name) => dispatch(actionCreators.saveName(name)),
-    [],
+    (name) => dispatch(actionCreator.saveName(name)),
+    [dispatch],
   );
 
   const saveGender = useCallback(
-    (gender) => dispatch(actionCreators.saveGender(gender)),
-    [],
+    (gender) => dispatch(actionCreator.saveGender(gender)),
+    [dispatch],
   );
 
   const handleChangeName = useCallback(
@@ -28,10 +30,15 @@ const UserRegister = () => {
     [userName, saveName],
   ); // TODO: useCallback 동작 매커니즘 알아보기!!
 
-  // TEST
-  useEffect(() => {
-    console.log(userName, userGender);
-  }, [userName, userGender]);
+  const handleChangeGender = useCallback(
+    (e) => {
+      if (e.target.value === userGender) {
+        return;
+      }
+      saveGender(e.target.value);
+    },
+    [userGender, saveGender],
+  );
 
   return (
     <StyledUserRegisterContainer>
@@ -56,8 +63,8 @@ const UserRegister = () => {
             name="gender"
             value={100323}
             type="radio"
-            onClick={(e) => saveGender(e.target.value)}
-            defaultChecked={GENDER_TO_STRING[userGender] === '남성'}
+            onClick={handleChangeGender}
+            defaultChecked={GENDER_STRING[userGender] === '남성'}
           />
           남성
         </label>
@@ -67,8 +74,8 @@ const UserRegister = () => {
             name="gender"
             value={100324}
             type="radio"
-            onClick={(e) => saveGender(e.target.value)}
-            defaultChecked={GENDER_TO_STRING[userGender] === '여성'}
+            onClick={handleChangeGender}
+            defaultChecked={GENDER_STRING[userGender] === '여성'}
           />
           여성
         </label>
@@ -116,8 +123,10 @@ const StyledItemContainer = styled.p`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     > input {
+      cursor: pointer;
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;

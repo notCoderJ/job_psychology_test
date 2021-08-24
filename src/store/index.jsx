@@ -1,47 +1,15 @@
-import { createStore } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import logger from 'redux-logger';
 import reducer from './reducer';
-import { SAMPLE_QUESTION, QUESTION_SEQ, TARGET_SEQ } from '../constants';
-// import { createSlice } from '@reduxjs/toolkit';
+// import createSagaMiddleware from 'redux-saga';
 
-// TODO: questrnSeq, trgetSe값 변경가능하게 추가하자!(현재 임시)
-const initialState = {
-  name: '',
-  gender: '',
-  grade: '',
-  email: '',
-  targetSeq: TARGET_SEQ['일반'],
+// const sagaMiddleware = createSagaMiddleware();
 
-  isLoaded: false,
-  lastPageIndex: 0,
-  questionSeq: QUESTION_SEQ,
-  questions: [SAMPLE_QUESTION],
-  startDate: new Date().getTime(),
+const store = configureStore({
+  reducer,
+  middleware: [logger],
+});
 
-  answerCount: 0,
-  answers: [],
-
-  isDark: true,
-};
-
-// const initialState = {
-//   user: {
-//     name: '',
-//     gender: '',
-//     grade: '',
-//     email: '',
-//     targetSeq: TARGET_SEQ['일반'],
-//   },
-//   questions: {
-//     isLoaded: false,
-//     lastPageIndex: 0,
-//     questionSeq: QUESTION_SEQ,
-//     questions: [SAMPLE_QUESTION],
-//     startDate: new Date().getTime(),
-//   },
-//   answers: [],
-//   isDark: true,
-// };
-
-const store = createStore(reducer, initialState);
+// sagaMiddleware.run(rootSaga);
 
 export default store;
