@@ -3,7 +3,11 @@ import styled, { css } from 'styled-components';
 import * as palette from '../../variables';
 
 const Button = ({ type, disabled, onClick, children }) => (
-  <StyledButton type={type} disabled={disabled} onClick={onClick}>
+  <StyledButton
+    type={type ? `${type}` : 'button'}
+    disabled={disabled}
+    onClick={typeof onClick === 'function' ? onClick : null}
+  >
     {children}
   </StyledButton>
 );
@@ -22,7 +26,7 @@ const StyledButton = styled.button`
   font-size: 1.2rem;
   font-weight: bold;
   border: solid 0.15rem ${palette.COLOR_DARKSET.BORDER};
-  padding: 1rem 2.5rem;
+  padding: 0.8rem 2.2rem;
   letter-spacing: 1px; //////////////////////////////////이거거거ㅓ거거
   transition: all 0.1s ease-in-out;
 
@@ -43,7 +47,7 @@ const StyledButton = styled.button`
     // TODO: 모바일용 색조절...
     & {
       font-size: 1rem;
-      padding: 0.7rem 1.2rem;
+      padding: 0.6rem 1.2rem;
     }
 
     :active {

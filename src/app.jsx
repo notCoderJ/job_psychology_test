@@ -7,10 +7,12 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import PsychologyTest from './pages';
-import PsychologyTestComplete from './pages/complete/complete';
+import PsychologyTest from './components/test';
+import PsychologyTestComplete from './components/complete';
 import store from './store';
+import PsychologyTestResult from './components/result';
 
+// TODO: Provider 위치 결정하기!!
 function App() {
   return (
     <Router>
@@ -20,11 +22,11 @@ function App() {
             <PsychologyTest />
           </Provider>
         </Route>
-        <Route path="/completed/:seq">
+        <Route path="/complete/:seq">
           <PsychologyTestComplete />
         </Route>
         <Route path="/result/:seq">
-          <Redirect to="/exam" />
+          <PsychologyTestResult />
         </Route>
         <Route path="/">
           <Redirect to="/exam" />

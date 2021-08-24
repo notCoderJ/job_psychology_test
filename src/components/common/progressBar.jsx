@@ -40,19 +40,19 @@ const StyledPercentageBoard = styled.span`
   @media screen and (max-width: 480px) {
     height: 12%;
     font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.6rem;
   }
 `;
 
 const StyledProgressBar = styled.div`
   width: 100%;
-  height: 15%;
+  height: 14%;
   border-radius: 10vh;
   border: solid 0.25vh #9e9c9e;
   margin-bottom: 3vh;
 
   @media screen and (max-width: 480px) {
-    height: 11%;
+    height: 13%;
     margin-bottom: 2vh;
   }
 `;

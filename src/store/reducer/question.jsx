@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { QUESTION_SEQ, SAMPLE_QUESTION } from '../../constants/test';
 
-// TODO: questrnSeq 값 변경가능하게 추가하자!(현재 임시)
+// TODO: 시간이 된다면 questrnSeq 값 변경가능하게 추가하자!(현재 임시)
+// scores도 확장을 생각하면 변경해야 하는데 일단...fix
 const initialState = {
-  isLoaded: false, // 임시 테스트
+  isLoaded: false,
   questionSeq: QUESTION_SEQ,
   questions: [SAMPLE_QUESTION],
   startDate: new Date().getTime(),

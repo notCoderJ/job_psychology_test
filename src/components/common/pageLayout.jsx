@@ -41,11 +41,11 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 20vh;
+  min-height: 15vh;
 
   @media screen and (max-width: 480px) {
     & {
-      min-height: 18vh;
+      min-height: 13vh;
     }
   }
 `;

@@ -11,30 +11,44 @@ const api = axios.create({
 
 const getResultData = async (seq) => {
   try {
-    const res = await api.get('/report', {
-      params: {
-        seq,
-      },
-    });
+    // TODO: interceptor 처리
+    const res = await api.get('/report', { params: { seq } });
 
-    console.log(res);
-
-    // Need Data
-    //  1. user info (name, gender, age etc..)
-    //    inspct: { nm==name, sexdstn==gender, trgetSeNm==targetNm(대상자 구분), endDtm(검사일?) } (options: email, grade )
-    //  2. wonScore info
-    //    result: { [wonScore,wonScore2](가치관 점수: 종사자 관련 정보 얻을 때 이용) }
-
-    if (res.data.SUCC_YN === 'Y') {
-      return res.data.RESULT;
+    // TODO: 다른 200대 번호일 경우 에러 처리는???
+    if (res.status === 200) {
+      return res.data;
     }
 
-    throw new Error(res.data.ERROR_REASON);
+    throw new Error(res.statusText);
   } catch (err) {
     throw new Error(err);
   }
 };
 
-const resultAPI = { getResultData };
+// const getVaulusdfjls? TODO: 가치관별 설명 api
+
+const getAverageJobInfoByType = async (type, [...highScore]) => {
+  const urlBytype = { grade: '/jobs', major: '/majors' };
+  try {
+    // TODO: interceptor 처리
+    const res = await api.get(`/value${urlBytype[type]}`, {
+      params: {
+        no1: highScore[0],
+        no2: highScore[1],
+      },
+    });
+
+    // TODO: check error
+    if (res.status === 200) {
+      return res.data;
+    }
+
+    throw new Error(res.statusText);
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const resultAPI = { getResultData, getAverageJobInfoByType };
 
 export default resultAPI;

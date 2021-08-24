@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { GENDER_STRING } from '../../constants/test';
+import { GENDER_NAMES } from '../../constants';
 import { actionCreator } from '../../store/reducer';
 import selector from '../../store/selector';
 
@@ -64,7 +64,7 @@ const UserRegister = () => {
             value={100323}
             type="radio"
             onClick={handleChangeGender}
-            defaultChecked={GENDER_STRING[userGender] === '남성'}
+            defaultChecked={GENDER_NAMES[userGender] === '남성'}
           />
           남성
         </label>
@@ -75,7 +75,7 @@ const UserRegister = () => {
             value={100324}
             type="radio"
             onClick={handleChangeGender}
-            defaultChecked={GENDER_STRING[userGender] === '여성'}
+            defaultChecked={GENDER_NAMES[userGender] === '여성'}
           />
           여성
         </label>

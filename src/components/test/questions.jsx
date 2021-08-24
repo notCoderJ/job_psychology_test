@@ -1,8 +1,10 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { VIEW_OF_VALUES } from '../../constants';
 import { actionCreator } from '../../store/reducer';
 import selector from '../../store/selector';
+import { getFixedDigits } from '../../utils';
 
 const Question = ({ number }) => {
   const dispatch = useDispatch();
@@ -13,14 +15,15 @@ const Question = ({ number }) => {
   } = useSelector(selector.getQeustionInfo(number));
 
   const saveAnswer = useCallback(
-    (questionNumber, answerScore) =>
-      dispatch(actionCreator.saveAnswer({ questionNumber, answerScore })),
+    (questionNumber, answerDescription, answerScore) =>
+      dispatch(
+        actionCreator.saveAnswer({
+          questionNumber,
+          answerDescription,
+          answerScore,
+        }),
+      ),
     [dispatch],
-  );
-
-  const prefixNumber = useCallback(
-    (num) => (num < 10 ? `0${num}` : `${num}`),
-    [],
   );
 
   const handleCheckAnswer = useCallback(
@@ -28,7 +31,13 @@ const Question = ({ number }) => {
       if (e.target.value === answer) {
         return;
       }
-      saveAnswer(number, e.target.value);
+
+      // TODO: 이거 처리가 좀 참...흠...쩝...
+      saveAnswer(
+        number,
+        VIEW_OF_VALUES[e.target.nextSibling.textContent],
+        e.target.value,
+      );
     },
     [answer, saveAnswer, number],
   );
@@ -40,8 +49,8 @@ const Question = ({ number }) => {
       </StyledDescription>
       <StyledAnswerContainer>
         {defaultAnswerOptions.map((answerOption, index) => {
-          const name = `question${prefixNumber(number)}-answer-option`;
-          const id = `${name}${prefixNumber(index + 1)}`;
+          const name = `question${getFixedDigits(number)}-answer-option`;
+          const id = `${name}${getFixedDigits(index + 1)}`;
 
           return (
             <label htmlFor={id} key={id}>
@@ -66,7 +75,7 @@ const Question = ({ number }) => {
 // TODO : 반응형 사이즈 추가 예정 : 768px, 1024px
 
 const StyledQuestion = styled.fieldset`
-  border: solid #fffdfa 2px; //////////////////////////////////이거거거ㅓ거거
+  border: solid #a899d8 2px; //////////////////////////////////이거거거ㅓ거거
   border-radius: 5px; //////////////////////////////////이거거거ㅓ거거
   color: #fffdfa;
 
@@ -83,7 +92,7 @@ const StyledDescription = styled.legend`
   font-weight: bold;
   font-size: 1.2rem;
   text-align: center; // TODO: 2줄이상일 때는 양쪽 정렬하게 변경해보기!
-  padding: 0.8rem 1.6rem;
+  padding: 0.4rem 1.6rem;
   margin: auto;
   border-radius: 10px; //////////////////////////////////이거거거ㅓ거거
 
@@ -91,7 +100,7 @@ const StyledDescription = styled.legend`
     & {
       width: 87%;
       font-size: 0.85rem;
-      padding: 0.5rem 0.6rem;
+      padding: 0.3rem 0.6rem;
     }
   } ;
 `;
@@ -100,12 +109,12 @@ const StyledAnswerContainer = styled.p`
   display: flex;
   justify-content: space-between;
   font-size: 1.3rem;
-  margin: 2rem 18%;
+  margin: 1rem 23%;
 
   @media screen and (max-width: 480px) {
     & {
       font-size: 0.9rem;
-      margin: 1.3rem 5%;
+      margin: 1rem 5%;
     }
   }
 
