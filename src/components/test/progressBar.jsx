@@ -42,12 +42,19 @@ const StyledPercentageBoard = styled.div`
   display: flex;
   font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 0.8rem;
+  margin: 0 1rem 0.8rem;
+
+  > span + span {
+    margin-left: 0.5rem;
+    @media screen and (max-width: 480px) {
+      margin-left: 0.3rem;
+    }
+  }
 
   @media screen and (max-width: 480px) {
     height: 12%;
     font-size: 1.5rem;
-    margin-bottom: 1.8rem;
+    margin: 0 0.5rem 1.8rem;
   }
 `;
 

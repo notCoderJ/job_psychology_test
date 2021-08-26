@@ -24,9 +24,14 @@ const UserRegister = () => {
   const handleChangeName = useCallback(
     (e) => {
       // TODO: 이름 예외처리하기!
-      if (userName !== e.target.value) {
-        saveName(e.target.value);
+      if (!e.target.value) {
+        console.log('뭐하냐 ㅡㅡ');
+        // 특수문자나 숫자 포함인지 확인!!
       }
+      if (e.target.value === userName) {
+        return;
+      }
+      saveName(e.target.value);
     },
     [userName, saveName],
   );
@@ -43,114 +48,170 @@ const UserRegister = () => {
 
   return (
     <StyledUserRegisterContainer>
-      <legend>사용자 등록</legend>
-      <StyledItemContainer>
-        <span>이름</span>
-        <label className="user-name" htmlFor="user-name">
-          <input
-            id="user-name"
-            name="user-name"
-            defaultValue={userName}
-            type="text"
-            onChange={handleChangeName}
-          />
-        </label>
-      </StyledItemContainer>
-      <StyledItemContainer>
-        <span>성별</span>
-        <label className="gender" htmlFor="male">
-          <input
-            id="male"
-            name="gender"
-            value={100323}
-            type="radio"
-            onClick={handleChangeGender}
-            defaultChecked={GENDER_NAMES[userGender] === '남성'}
-          />
-          남성
-        </label>
-        <label className="gender" htmlFor="female">
-          <input
-            id="female"
-            name="gender"
-            value={100324}
-            type="radio"
-            onClick={handleChangeGender}
-            defaultChecked={GENDER_NAMES[userGender] === '여성'}
-          />
-          여성
-        </label>
-      </StyledItemContainer>
+      <StyledPsychologyTestMainTitle>
+        직업가치관검사
+      </StyledPsychologyTestMainTitle>
+      <StyledUserInputContainer>
+        <StyledItemContainer>
+          <StyledNameInputLabel htmlFor="user-name">
+            <input
+              id="user-name"
+              name="user-name"
+              defaultValue={userName}
+              placeholder="이름을 입력해주세요."
+              type="text"
+              onChange={handleChangeName}
+            />
+          </StyledNameInputLabel>
+        </StyledItemContainer>
+        <StyledItemContainer>
+          <StyledItemName>성별</StyledItemName>
+          <StyledGenderCheckboxContainer>
+            <StyledGenderCheckboxLabel htmlFor="male">
+              <input
+                id="male"
+                name="gender"
+                value={100323}
+                type="radio"
+                onClick={handleChangeGender}
+                defaultChecked={GENDER_NAMES[userGender] === '남성'}
+              />
+              남성
+            </StyledGenderCheckboxLabel>
+            <StyledGenderCheckboxLabel htmlFor="female">
+              <input
+                id="female"
+                name="gender"
+                value={100324}
+                type="radio"
+                onClick={handleChangeGender}
+                defaultChecked={GENDER_NAMES[userGender] === '여성'}
+              />
+              여성
+            </StyledGenderCheckboxLabel>
+          </StyledGenderCheckboxContainer>
+        </StyledItemContainer>
+        <StyledGenderCheckGuide hidden={userGender}>
+          성별은 필수 입력 사항입니다.
+        </StyledGenderCheckGuide>
+      </StyledUserInputContainer>
     </StyledUserRegisterContainer>
   );
 };
 
+// Define Styled Components
 const StyledUserRegisterContainer = styled.fieldset`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 25vw;
-  height: 50vh;
   border-style: none;
-  margin: auto;
+  margin-top: 30vh;
 
-  > legend {
-    font-size: 1.7rem;
+  @media screen and (max-width: 480px) {
+    margin-top: 25vh;
   }
 `;
 
-const StyledItemContainer = styled.p`
+const StyledPsychologyTestMainTitle = styled.legend`
+  font-size: 2.5rem;
+
+  @media screen and (max-width: 480px) {
+    font-size: 2rem;
+  }
+`;
+
+const StyledUserInputContainer = styled.div`
+  margin: 2.5rem auto 0.5rem auto;
+  width: fit-content;
+
+  @media screen and (max-width: 480px) {
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  } ;
+`;
+
+const StyledItemContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+`;
+
+const StyledItemName = styled.span`
+  margin-right: 2rem;
+`;
+
+const StyledNameInputLabel = styled.label`
+  > input {
+    width: 12rem;
+    padding: 0.5rem 0;
+    border-style: none;
+    border-bottom: solid 2px ${COLOR_DARKSET.HIGHLIGHT_TEXT};
+    background-color: transparent;
+    color: white;
+    font-size: 1.1rem;
+    text-align: center;
+
+    ::placeholder {
+      color: ${COLOR_DARKSET.FONT};
+      font-size: 1rem;
+      text-align: center;
+    }
+    :focus {
+      outline: none;
+      background-color: ${COLOR_DARKSET.NAME_INPUT_FOCUS};
+      box-shadow: 0px 0px 10px 2px ${COLOR_DARKSET.NAME_INPUT_FOCUS};
+    }
+  }
+`;
+
+const StyledGenderCheckboxContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+`;
 
-  > span {
-    align-self: flex-start;
-    margin-left: 20%;
-  }
+const StyledGenderCheckboxLabel = styled.label`
+  cursor: pointer;
 
-  > label.user-name {
-    > input {
-      :focus {
-        box-shadow: 0px 0px 10px 2px ${COLOR_DARKSET.BORDER};
+  > input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-right: 0.4rem;
+    border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER};
+    border-radius: 50%;
+    transition: 0.1s all ease-in-out;
+
+    :checked {
+      border: 4px solid ${COLOR_DARKSET.CHECKBOX};
+    }
+
+    @media screen and (max-width: 480px) {
+      & {
+        width: 0.7rem;
+        height: 0.7rem;
+        margin-right: 0.3rem;
+      }
+
+      :checked {
+        border-width: 3.5px;
       }
     }
   }
+`;
 
-  > label.gender {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+const StyledGenderCheckGuide = styled.p`
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+  color: #ec1010;
+  animation: 1.5s linear infinite alternate notice_check;
 
-    > input {
-      cursor: pointer;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-
-      width: 0.8rem;
-      height: 0.8rem;
-      margin-right: 0.4rem;
-      border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER};
-      border-radius: 50%;
-      transition: 0.1s all ease-in-out;
-
-      :checked {
-        border: 4px solid ${COLOR_DARKSET.CHECKBOX};
-      }
-
-      @media screen and (max-width: 480px) {
-        & {
-          width: 0.7rem;
-          height: 0.7rem;
-          margin-right: 0.3rem;
-        }
-
-        :checked {
-          border-width: 3.5px;
-        }
-      }
+  @keyframes notice_check {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
     }
   }
 `;

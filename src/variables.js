@@ -3,6 +3,7 @@ export const COLOR_DARKSET = {
   FONT: '#ffedfe',
   BORDER: '#837adb',
   BUTTON: '#5d5bc0',
+  NAME_INPUT_FOCUS: '#837adb',
   SHADOW: 'rgba(30, 18, 46, 0.9)',
   HIGHLIGHT_TITLE: '#837adb',
   HIGHLIGHT_TEXT: '#2ba5bb',

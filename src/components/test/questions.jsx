@@ -15,6 +15,12 @@ const Question = ({ number }) => {
     answer,
   } = useSelector(selector.getQeustionInfo(number));
 
+  // TODO: 스크롤 이동
+  // useEffect(() => {
+  //   console.log('test');
+  //   window.scrollTo(0, 0);
+  // }, []);
+
   const saveAnswer = useCallback(
     (questionNumber, answerDescription, answerScore) =>
       dispatch(
@@ -106,20 +112,19 @@ const StyledDescription = styled.legend`
 const StyledAnswerContainer = styled.p`
   display: flex;
   justify-content: space-between;
+
   font-size: 1.3rem;
   margin: 1rem 23%;
 
   @media screen and (max-width: 480px) {
     & {
+      justify-content: space-around;
       font-size: 0.9rem;
       margin: 1rem 8%;
     }
   }
 
   > label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     cursor: pointer;
     padding: 0.5rem 0.5rem;
 
@@ -176,14 +181,7 @@ const Questions = () => {
 };
 
 const StyledQuestions = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-btween;
-  ${(props) =>
-    props?.sample &&
-    css`
-      justify-content: center;
-    `}
+  ${(props) => props?.sample && css``}
 
   & > fieldset + fieldset {
     margin-top: 5vh;
