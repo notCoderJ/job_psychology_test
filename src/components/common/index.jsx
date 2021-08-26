@@ -1,5 +1,5 @@
 import Button from './button';
 import ProgressBar from './progressBar';
-import PageLayOut from './pageLayout';
+import PageLayout from './pageLayout';
 
-export { PageLayOut, Button, ProgressBar };
+export { PageLayout, Button, ProgressBar };

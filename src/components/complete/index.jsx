@@ -1,81 +1,74 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import api from '../../api';
-import { MONTHS, WEEKDAYS } from '../../constants/result';
-import { GENDER_NAMES } from '../../constants';
-import { getFixedDigits, getParsedResult } from '../../utils';
-import { PageLayOut, Button } from '../common';
+import { actionCreator } from '../../store/reducer';
+import selector from '../../store/selector';
+import { PageLayout, Button } from '../common';
 // import styled from 'styled-components';
 
 const PsychologyTestComplete = () => {
   const { seq } = useParams();
-  const [resultInfo, setResultInfo] = useState(null);
+  const dispatch = useDispatch();
+  const isResultLoaded = useSelector(selector.isResultLoaded);
+  const twoHighLevelValues = useSelector(selector.getTwoHighLevelValues);
 
-  const getParsedData = useCallback((data) => {
-    const { user, inspct, result } = data;
-    const dateInfo = new Date(inspct?.registDt);
-    const inspectionDate = `${dateInfo.getFullYear()}.${getFixedDigits(
-      MONTHS[dateInfo.getMonth()],
-    )}.${dateInfo.getDate()}(${WEEKDAYS[dateInfo.getDay()]})`;
-    const parsedResult = getParsedResult(inspct?.qestnrSeq, result);
+  const loadResultData = useCallback(
+    (resultData) => dispatch(actionCreator.loadResult(resultData)),
+    [dispatch],
+  );
 
-    // TODO: email, birthday 항목 추가 고려 중...
-    return {
-      user: {
-        name: user.name,
-        gender: GENDER_NAMES[user.gender] || GENDER_NAMES[inspct.sexdstn],
-        type: user.targetNm,
-      },
-      inspect: {
-        type: inspct.qestnrNm,
-        date: inspectionDate,
-      },
-      result: parsedResult,
-    };
-  }, []);
+  const loadJobData = useCallback(
+    (jobData) => dispatch(actionCreator.loadJobData(jobData)),
+    [dispatch],
+  );
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await api.getResultData(seq);
-        const parsedData = getParsedData(res);
-        // TODO: functionify
-        parsedData.jobs = await Promise.all([
-          api.getAverageJobInfoByType('grade', [
-            parsedData.result.firstHighValue,
-            parsedData.result.secondHighValue,
-          ]),
-          api.getAverageJobInfoByType('major', [
-            parsedData.result.firstHighValue,
-            parsedData.result.secondHighValue,
-          ]),
-        ]); // end
-
-        setResultInfo(parsedData);
+        loadResultData(await api.getResultData(seq));
       } catch (err) {
         console.error(err); // TODO: loading으로 변경?
       }
     })();
-  }, [seq, getParsedData]);
+  }, [seq, loadResultData]);
+
+  useEffect(() => {
+    if (!twoHighLevelValues) {
+      return;
+    }
+
+    (async () => {
+      try {
+        // ??? 이시점에 값이 변해서 가져올까 확인해보자!
+        loadJobData(
+          await Promise.all([
+            api.getAverageJobInfoByType('grade', twoHighLevelValues),
+            api.getAverageJobInfoByType('major', twoHighLevelValues),
+          ]),
+        );
+      } catch (err) {
+        console.error(err); // TODO: loading으로 변경?
+      }
+    })();
+  }, [twoHighLevelValues, loadJobData]);
 
   // TEST
   useEffect(() => {
-    console.log(resultInfo);
-  }, [resultInfo]);
+    console.log('sdfsfjml;msd;');
+  }, []);
 
-  // TODO: 지금 바로 작업 중...
+  // TODO: 지금 바로 작업 중... Loading부분 좀 수정 좀 해야겠다...
   return (
-    <PageLayOut
+    <PageLayout
       main={
-        <Link
-          to={{
-            pathname: `/result/${seq}`,
-            state: { resultInfo },
-          }}
-          replace
-        >
-          <Button />
-        </Link>
+        isResultLoaded ? (
+          <Link to={`/result/${seq}`} replace>
+            <Button />
+          </Link>
+        ) : (
+          <h1>Loading...</h1>
+        )
       }
     />
   );

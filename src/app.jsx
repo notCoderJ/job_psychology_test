@@ -16,22 +16,22 @@ import PsychologyTestResult from './components/result';
 function App() {
   return (
     <Router>
-      <Switch>
-        <Route path="/exam">
-          <Provider store={store}>
+      <Provider store={store}>
+        <Switch>
+          <Route path="/exam">
             <PsychologyTest />
-          </Provider>
-        </Route>
-        <Route path="/complete/:seq">
-          <PsychologyTestComplete />
-        </Route>
-        <Route path="/result/:seq">
-          <PsychologyTestResult />
-        </Route>
-        <Route path="/">
-          <Redirect to="/exam" />
-        </Route>
-      </Switch>
+          </Route>
+          <Route path="/complete/:seq">
+            <PsychologyTestComplete />
+          </Route>
+          <Route path="/result/:seq">
+            <PsychologyTestResult />
+          </Route>
+          <Route path="/">
+            <Redirect to="/exam" />
+          </Route>
+        </Switch>
+      </Provider>
     </Router>
   );
 }

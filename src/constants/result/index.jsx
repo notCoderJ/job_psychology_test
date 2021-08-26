@@ -17,19 +17,13 @@ export const MONTHS = [
   '12월',
 ];
 
-export const BY_TYPE = {
+export const JOB_SELECT_TYPE = {
   grade: 0,
   major: 1,
 };
 
 // 종사자 평균 학력별(grade)
-export const educationLevelNames = [
-  '중졸이하',
-  '고졸',
-  '전문대졸',
-  '대졸',
-  '대학원졸',
-];
+export const GRADE_NAMES = ['중졸이하', '고졸', '전문대졸', '대졸', '대학원졸'];
 
 // 종사자 평균 전공별(major)
 export const MAJOR_NAMES = [

@@ -5,6 +5,7 @@ import { VIEW_OF_VALUES } from '../../constants';
 import { actionCreator } from '../../store/reducer';
 import selector from '../../store/selector';
 import { getFixedDigits } from '../../utils';
+import { COLOR_DARKSET } from '../../variables';
 
 const Question = ({ number }) => {
   const dispatch = useDispatch();
@@ -75,9 +76,9 @@ const Question = ({ number }) => {
 // TODO : 반응형 사이즈 추가 예정 : 768px, 1024px
 
 const StyledQuestion = styled.fieldset`
-  border: solid #a899d8 2px; //////////////////////////////////이거거거ㅓ거거
+  border: solid ${COLOR_DARKSET.QUESTION_BORDER} 2px; //////////////이거거
   border-radius: 5px; //////////////////////////////////이거거거ㅓ거거
-  color: #fffdfa;
+  background-color: ${COLOR_DARKSET.QUESTION_BOX};
 
   @media screen and (max-width: 480px) {
     & {
@@ -87,7 +88,7 @@ const StyledQuestion = styled.fieldset`
 `;
 
 const StyledDescription = styled.legend`
-  background-color: #a899d8;
+  background-color: ${COLOR_DARKSET.QUESTION_DESCRIPTION};
   width: 72%;
   font-weight: bold;
   font-size: 1.2rem;
@@ -114,7 +115,7 @@ const StyledAnswerContainer = styled.p`
   @media screen and (max-width: 480px) {
     & {
       font-size: 0.9rem;
-      margin: 1rem 5%;
+      margin: 1rem 8%;
     }
   }
 
@@ -139,13 +140,13 @@ const StyledAnswerContainer = styled.p`
       width: 1rem;
       height: 1rem;
       margin-right: 0.5rem;
-      border: 2px solid #ccc; //////////////////////////////////이거거거ㅓ거거
+      border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER}; //////////////////////////////////이거거거ㅓ거거
       border-radius: 50%;
       transition: 0.1s all ease-in-out;
       cursor: pointer;
 
       :checked {
-        border: 5px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
+        border: 5px solid ${COLOR_DARKSET.CHECKBOX}; //////////////////////////////////이거거거ㅓ거거
       }
 
       @media screen and (max-width: 480px) {
@@ -156,7 +157,7 @@ const StyledAnswerContainer = styled.p`
         }
 
         :checked {
-          border: 3.5px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
+          border-width: 3.5px; //////////////////////이거거
         }
       }
     }

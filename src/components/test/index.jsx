@@ -5,11 +5,14 @@ import { useHistory } from 'react-router-dom';
 import Questions from './questions';
 import UserRegister from './registration';
 import api from '../../api';
-import { PageLayOut, Button, ProgressBar } from '../common';
-import { SAMPLE_DESCRIPTION } from '../../constants/test';
+import { PageLayout, Button, ProgressBar } from '../common';
+import {
+  DUMMY,
+  RESULT_ANSWER_FORM,
+  SAMPLE_DESCRIPTION,
+} from '../../constants/test';
 import selector from '../../store/selector';
 import { actionCreator } from '../../store/reducer';
-import { getResultRequestFormAnswer } from '../../utils';
 import { VIEW_OF_VALUES } from '../../constants';
 
 const getResultRequestFormData = (state) => ({
@@ -41,26 +44,29 @@ const PsychologyTest = () => {
   // TEST CODE
   useEffect(() => {
     console.log('홈!', history);
-    //   (async () => {
-    //     try {
-    //       const res = await api.getResultURL(DUMMY[5]);
-    //       console.log(res);
-    //       const paramsString = new URL(res.url).search;
-    //       const params = new URLSearchParams(paramsString);
-    //       history.push(`/complete/${params.get('seq')}`);
-    //     } catch (err) {
-    //       throw new Error(err);
-    //     }
-    // })();
+    (async () => {
+      try {
+        const res = await api.getResultURL(DUMMY[5]);
+        console.log(res);
+        const paramsString = new URL(res.url).search;
+        const params = new URLSearchParams(paramsString);
+        history.push(`/complete/${params.get('seq')}`);
+      } catch (err) {
+        throw new Error(err);
+      }
+    })();
   }, [history]);
 
-  // Store 초기화
+  // TODO: Store 초기화 다른 방법으로 할 수도?
   useEffect(() => {}, []);
 
   useEffect(() => {
     (async () => {
       try {
-        loadQuestions(await api.getQuestions());
+        const test = await api.getQuestions();
+        console.log('here', test);
+        loadQuestions(test);
+        // loadQuestions(await api.getQuestions());
       } catch (err) {
         console.error(err); // TODO: loading으로 변경?
       }
@@ -77,6 +83,16 @@ const PsychologyTest = () => {
       dispatch(actionCreator.updatePageIndex(1)),
     [currentPageIndex, lastPageIndex, dispatch],
   ); // TODO:dependency
+
+  const getResultRequestFormAnswer = useCallback((questionSeq, rawAnswers) => {
+    const { prefix, infix, postfix } = RESULT_ANSWER_FORM[questionSeq];
+    return rawAnswers
+      .map((answer, index) => {
+        const questionNumber = index + 1;
+        return `${prefix}${questionNumber}${infix}${answer}${postfix}`;
+      })
+      .join('');
+  }, []);
 
   const handleSubmit = useCallback(
     (e) => {
@@ -102,14 +118,12 @@ const PsychologyTest = () => {
         ...resultRequestFormData,
         answers: requestFormAnswer,
       };
-      console.log('워쓰!', scoreByValues);
-      console.log(sendData); // TEST
 
       // TODO: Interceptor 적용하기! && api async wrapping 함수 만들까 생각 중...
       (async () => {
         try {
           const res = await api.getResultURL(sendData);
-          console.log(res);
+          console.log(res); // TEST
           const paramsString = new URL(res.url).search;
           const params = new URLSearchParams(paramsString);
           history.replace(`/complete/${params.get('seq')}`);
@@ -118,11 +132,11 @@ const PsychologyTest = () => {
         }
       })();
     },
-    [resultRequestFormData, answers, history],
+    [getResultRequestFormAnswer, resultRequestFormData, answers, history],
   );
 
   return (
-    <PageLayOut
+    <PageLayout
       header={currentPageIndex >= 0 && <ProgressBar />}
       main={
         <StyledPsyTestContainer onSubmit={handleSubmit}>
@@ -161,8 +175,6 @@ const PsychologyTest = () => {
 };
 
 const StyledPsyTestContainer = styled.form`
-  color: #ffedfe;
-
   > span.sample-description {
     display: block;
     font-size: 1.7rem;

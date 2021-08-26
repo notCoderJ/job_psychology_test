@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { GENDER_NAMES } from '../../constants';
 import { actionCreator } from '../../store/reducer';
 import selector from '../../store/selector';
+import { COLOR_DARKSET } from '../../variables';
+// import { COLOR_DARKSET } from '../../variables';
 
 const UserRegister = () => {
   const dispatch = useDispatch();
@@ -91,7 +93,7 @@ const StyledUserRegisterContainer = styled.fieldset`
   width: 25vw;
   height: 50vh;
   border-style: none;
-  color: #fffdfa;
+  /* color: #fffdfa; */
   margin: auto;
 
   > legend {
@@ -114,7 +116,7 @@ const StyledItemContainer = styled.p`
   > label.user-name {
     > input {
       :focus {
-        box-shadow: 0px 0px 10px 2px #fffdfa;
+        box-shadow: 0px 0px 10px 2px ${COLOR_DARKSET.BORDER}; // 임시임 변경예정
       }
     }
   }
@@ -134,12 +136,12 @@ const StyledItemContainer = styled.p`
       width: 0.8rem;
       height: 0.8rem;
       margin-right: 0.4rem;
-      border: 2px solid #ccc; //////////////////////////////////이거거거ㅓ거거
+      border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER}; //////////////////////////////////이거거거ㅓ거거
       border-radius: 50%;
       transition: 0.1s all ease-in-out;
 
       :checked {
-        border: 4px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
+        border: 4px solid ${COLOR_DARKSET.CHECKBOX}; //////////////////////////////////이거거거ㅓ거거
       }
 
       @media screen and (max-width: 480px) {
@@ -150,7 +152,7 @@ const StyledItemContainer = styled.p`
         }
 
         :checked {
-          border: 3.5px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
+          border-width: 3.5px; //////////////////////////////////이거거거ㅓ거거
         }
       }
     }

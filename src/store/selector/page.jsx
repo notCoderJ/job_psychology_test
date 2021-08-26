@@ -66,9 +66,9 @@ const isNextDisabled = createSelector(
     userSelector.isUserInvalid,
     getMarkedAnswerInfo,
   ],
-  (currentPageIndex, isLoaded, isUserInvalid, markedAnswerInfo) => {
+  (currentPageIndex, isQuestionLoaded, isUserInvalid, markedAnswerInfo) => {
     if (currentPageIndex < 0) {
-      return !isLoaded || isUserInvalid;
+      return !isQuestionLoaded || isUserInvalid;
     }
 
     return !markedAnswerInfo[currentPageIndex];

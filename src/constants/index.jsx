@@ -1,5 +1,7 @@
 export const API_KEY = process.env.REACT_APP_API_KEY;
 export const API_BASE_URL = 'https://www.career.go.kr/inspct';
+export const JOB_INFO_URL =
+  'https://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=';
 
 export const GENDER_NAMES = { 100323: '남성', 100324: '여성' };
 export const VIEW_OF_VALUES = {
