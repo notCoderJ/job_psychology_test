@@ -1,8 +1,11 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { VIEW_OF_VALUES } from '../../constants';
 import { actionCreator } from '../../store/reducer';
 import selector from '../../store/selector';
+import { getFixedDigits } from '../../utils';
+import { COLOR_DARKSET } from '../../variables';
 
 const Question = ({ number }) => {
   const dispatch = useDispatch();
@@ -13,14 +16,15 @@ const Question = ({ number }) => {
   } = useSelector(selector.getQeustionInfo(number));
 
   const saveAnswer = useCallback(
-    (questionNumber, answerScore) =>
-      dispatch(actionCreator.saveAnswer({ questionNumber, answerScore })),
+    (questionNumber, answerDescription, answerScore) =>
+      dispatch(
+        actionCreator.saveAnswer({
+          questionNumber,
+          answerDescription,
+          answerScore,
+        }),
+      ),
     [dispatch],
-  );
-
-  const prefixNumber = useCallback(
-    (num) => (num < 10 ? `0${num}` : `${num}`),
-    [],
   );
 
   const handleCheckAnswer = useCallback(
@@ -28,7 +32,12 @@ const Question = ({ number }) => {
       if (e.target.value === answer) {
         return;
       }
-      saveAnswer(number, e.target.value);
+
+      saveAnswer(
+        number,
+        VIEW_OF_VALUES[e.target.nextSibling.textContent],
+        e.target.value,
+      );
     },
     [answer, saveAnswer, number],
   );
@@ -40,8 +49,8 @@ const Question = ({ number }) => {
       </StyledDescription>
       <StyledAnswerContainer>
         {defaultAnswerOptions.map((answerOption, index) => {
-          const name = `question${prefixNumber(number)}-answer-option`;
-          const id = `${name}${prefixNumber(index + 1)}`;
+          const name = `question${getFixedDigits(number)}-answer-option`;
+          const id = `${name}${getFixedDigits(index + 1)}`;
 
           return (
             <label htmlFor={id} key={id}>
@@ -60,15 +69,13 @@ const Question = ({ number }) => {
         })}
       </StyledAnswerContainer>
     </StyledQuestion>
-  ); // TODO: key redefine
+  );
 };
 
-// TODO : 반응형 사이즈 추가 예정 : 768px, 1024px
-
 const StyledQuestion = styled.fieldset`
-  border: solid #fffdfa 2px; //////////////////////////////////이거거거ㅓ거거
-  border-radius: 5px; //////////////////////////////////이거거거ㅓ거거
-  color: #fffdfa;
+  border: solid ${COLOR_DARKSET.QUESTION_BORDER} 2px;
+  border-radius: 5px;
+  background-color: ${COLOR_DARKSET.QUESTION_BOX};
 
   @media screen and (max-width: 480px) {
     & {
@@ -78,20 +85,20 @@ const StyledQuestion = styled.fieldset`
 `;
 
 const StyledDescription = styled.legend`
-  background-color: #a899d8;
+  background-color: ${COLOR_DARKSET.QUESTION_DESCRIPTION};
   width: 72%;
   font-weight: bold;
   font-size: 1.2rem;
-  text-align: center; // TODO: 2줄이상일 때는 양쪽 정렬하게 변경해보기!
-  padding: 0.8rem 1.6rem;
+  text-align: center;
+  padding: 0.4rem 1.6rem;
   margin: auto;
-  border-radius: 10px; //////////////////////////////////이거거거ㅓ거거
+  border-radius: 10px;
 
   @media screen and (max-width: 480px) {
     & {
       width: 87%;
       font-size: 0.85rem;
-      padding: 0.5rem 0.6rem;
+      padding: 0.3rem 0.6rem;
     }
   } ;
 `;
@@ -100,12 +107,12 @@ const StyledAnswerContainer = styled.p`
   display: flex;
   justify-content: space-between;
   font-size: 1.3rem;
-  margin: 2rem 18%;
+  margin: 1rem 23%;
 
   @media screen and (max-width: 480px) {
     & {
       font-size: 0.9rem;
-      margin: 1.3rem 5%;
+      margin: 1rem 8%;
     }
   }
 
@@ -130,13 +137,13 @@ const StyledAnswerContainer = styled.p`
       width: 1rem;
       height: 1rem;
       margin-right: 0.5rem;
-      border: 2px solid #ccc; //////////////////////////////////이거거거ㅓ거거
+      border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER};
       border-radius: 50%;
       transition: 0.1s all ease-in-out;
       cursor: pointer;
 
       :checked {
-        border: 5px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
+        border: 5px solid ${COLOR_DARKSET.CHECKBOX};
       }
 
       @media screen and (max-width: 480px) {
@@ -147,7 +154,7 @@ const StyledAnswerContainer = styled.p`
         }
 
         :checked {
-          border: 3.5px solid #9554f7; //////////////////////////////////이거거거ㅓ거거
+          border-width: 3.5px;
         }
       }
     }
@@ -166,13 +173,12 @@ const Questions = () => {
       ))}
     </StyledQuestions>
   );
-}; // TODO: key redefine
+};
 
 const StyledQuestions = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-btween;
-  margin: 0 12%;
   ${(props) =>
     props?.sample &&
     css`

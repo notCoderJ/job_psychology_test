@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import answerSelector from './answer';
 
-const isQuestionLoaded = (state) => state.question.isLoaded;
+const isQuestionLoaded = (state) => state.question.isQuestionLoaded;
 const getStartDate = (state) => state.question.startDate;
 const getQuestionSeq = (state) => state.question.questionSeq;
 const getQuestions = (state) => state.question.questions;

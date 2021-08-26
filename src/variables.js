@@ -1,12 +1,35 @@
 export const COLOR_DARKSET = {
-  BACKGROUND: '#27332a',
+  BACKGROUND: '#2c2c2c',
   FONT: '#ffedfe',
-  BORDER: '#ffedfe',
-  BUTTON: '#9554f7',
-  CHECKBOX: '#9554f7',
-  DESCRIPTION: '#a899d8',
-  SCROLL_THUMB: '#a476e9',
-  PROGRESSBAR_EDGE: '#9e9c9e',
-  PROGRESSBAR_GAGE: '9554f7',
+  BORDER: '#837adb',
+  BUTTON: '#5d5bc0',
   SHADOW: 'rgba(30, 18, 46, 0.9)',
+  HIGHLIGHT_TITLE: '#837adb',
+  HIGHLIGHT_TEXT: '#2ba5bb',
+
+  // CHECKBOX: '#5d5bc0',
+  CHECKBOX: '#ffedfe',
+  CHECKBOX_BORDER: '#ccc',
+  QUESTION_DESCRIPTION: '#837adb',
+  QUESTION_BOX: '#414141',
+  QUESTION_BORDER: '#837adb',
+
+  SCROLL_BAR: '#ffedfe',
+  SCROLL_THUMB: '#5d5bc0',
+
+  PROGRESSBAR_EDGE: '#9e9c9e',
+  PROGRESSBAR_GAGE: '#5d5bc0',
+
+  TABLE_BORDER: '#ffedfe',
+  TABLE_HIGHLIGHT: '#837adb',
+  TABLE_HIGHLIGHT_FONT: '#ffedfe',
+  TABLE_BODY: '#a09add',
+  TABLE_BODY_FONT: '#2c2c2c',
+  TABLE_ADDITIONAL_NOTICE: '#2ba5bb',
+
+  CHART: {
+    BORDER: '#ffedfe',
+    DATA: [],
+  },
 };
+// #4a58d3;

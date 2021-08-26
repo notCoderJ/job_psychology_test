@@ -1,4 +1,4 @@
 import Button from './button';
-import ProgressBar from './progressBar';
+import PageLayout from './pageLayout';
 
-export { Button, ProgressBar };
+export { PageLayout, Button };

@@ -16,7 +16,6 @@ const getPsyChologyTestActualPageInfo = createSelector(
   }),
 );
 
-// TODO: 주의사항 먼가 봤던 것 같은데... 나중에 좀 더 찾아봐야겠다!
 const getPageIndex = createSelector(
   [getCurrentPageIndex, getPsyChologyTestActualPageInfo],
   (currentPageIndex, { pageCount }) => ({
@@ -66,9 +65,9 @@ const isNextDisabled = createSelector(
     userSelector.isUserInvalid,
     getMarkedAnswerInfo,
   ],
-  (currentPageIndex, isLoaded, isUserInvalid, markedAnswerInfo) => {
+  (currentPageIndex, isQuestionLoaded, isUserInvalid, markedAnswerInfo) => {
     if (currentPageIndex < 0) {
-      return !isLoaded || isUserInvalid;
+      return !isQuestionLoaded || isUserInvalid;
     }
 
     return !markedAnswerInfo[currentPageIndex];

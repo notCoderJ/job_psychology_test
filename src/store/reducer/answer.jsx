@@ -9,10 +9,13 @@ const answerSlice = createSlice({
   name: 'answer',
   initialState,
   reducers: {
+    initAnswer() {
+      return initialState;
+    },
     saveAnswer(state, action) {
-      const { questionNumber, answerScore } = action.payload;
+      const { questionNumber, answerDescription, answerScore } = action.payload;
       state.answerCount += state.answers[questionNumber] ? 0 : 1;
-      state.answers[questionNumber] = answerScore;
+      state.answers[questionNumber] = [answerDescription, answerScore];
     },
   },
 });

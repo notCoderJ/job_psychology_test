@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_KEY } from '../constants/api';
+import { API_KEY } from '../constants';
 import { QUESTION_SEQ } from '../constants/test';
 import { createBaseURL } from '../utils';
 

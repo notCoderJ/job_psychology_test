@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { TARGET_SEQ } from '../../constants/test';
 
-// TODO: trgetSe값 변경가능하게 추가하자!(현재 임시)
 const initialState = {
   name: '',
   gender: '',
@@ -14,6 +13,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    initUser() {
+      return initialState;
+    },
     saveName(state, action) {
       state.name = action.payload;
     },
