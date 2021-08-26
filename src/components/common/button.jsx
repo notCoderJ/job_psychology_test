@@ -20,14 +20,14 @@ const StyledButton = styled.button`
       cursor: not-allowed;
       opacity: 0.4;
     `};
-  border-radius: 10px; /////////////////////////////////////이거거거ㅓ거거
+  border-radius: 10px;
   background-color: transparent;
   color: ${palette.COLOR_DARKSET.FONT};
   font-size: 1.2rem;
   font-weight: bold;
   border: solid 0.15rem ${palette.COLOR_DARKSET.BORDER};
   padding: 0.8rem 2.2rem;
-  letter-spacing: 1px; //////////////////////////////////이거거거ㅓ거거
+  letter-spacing: 1px;
   transition: all 0.1s ease-in-out;
 
   :hover {
@@ -44,7 +44,6 @@ const StyledButton = styled.button`
   }
 
   @media screen and (max-width: 480px) {
-    // TODO: 모바일용 색조절...
     & {
       font-size: 1rem;
       padding: 0.6rem 1.2rem;

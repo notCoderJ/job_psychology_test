@@ -12,7 +12,6 @@ import PsychologyTestComplete from './components/complete';
 import store from './store';
 import PsychologyTestResult from './components/result';
 
-// TODO: Provider 위치 결정하기!!
 function App() {
   return (
     <Router>

@@ -1,18 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { COLOR_DARKSET } from '../../variables';
 
 const PageLayout = ({ header, main, footer }) => (
   <Container>
     <Header>{header}</Header>
     <Main>{main}</Main>
-    <Footer>{footer}</Footer>
+    <Footer disable={!footer}>{footer}</Footer>
   </Container>
 );
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  /* justify-content: center; */
   width: 100vw;
   height: 100vh;
   color: ${COLOR_DARKSET.FONT};
@@ -23,9 +24,9 @@ const Container = styled.div`
   user-select: none;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  padding: 0 15%;
 
   @media screen and (min-width: 480px) {
-    // TODO: 있었다 사라졌다 하기로 변경해야지!
     ::-webkit-scrollbar {
       width: 0.7vw;
       background-color: ${COLOR_DARKSET.SCROLL_BAR};
@@ -34,19 +35,34 @@ const Container = styled.div`
       background-color: ${COLOR_DARKSET.SCROLL_THUMB};
     }
   }
+
+  @media screen and (max-width: 480px) {
+    padding: 0 8%;
+  }
 `;
 
-const Header = styled.header``;
+const Header = styled.header`
+  min-height: fit-content;
 
-// const DesignBar = styled.div``;
+  @media screen and (max-width: 480px) {
+    min-height: fit-content;
+  }
+`;
 
 const Main = styled.main`
   height: fit-content;
 `;
 
-// 모드용 임시
 const Footer = styled.footer`
-  /* position: fixed; */
+  ${(props) =>
+    !props.disable &&
+    css`
+      min-height: 27%;
+
+      @media screen and (max-width: 480px) {
+        min-height: 25%;
+      }
+    `};
 `;
 
 export default PageLayout;

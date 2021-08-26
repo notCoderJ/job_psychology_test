@@ -4,6 +4,8 @@ export const COLOR_DARKSET = {
   BORDER: '#837adb',
   BUTTON: '#5d5bc0',
   SHADOW: 'rgba(30, 18, 46, 0.9)',
+  HIGHLIGHT_TITLE: '#837adb',
+  HIGHLIGHT_TEXT: '#2ba5bb',
 
   // CHECKBOX: '#5d5bc0',
   CHECKBOX: '#ffedfe',
@@ -23,6 +25,7 @@ export const COLOR_DARKSET = {
   TABLE_HIGHLIGHT_FONT: '#ffedfe',
   TABLE_BODY: '#a09add',
   TABLE_BODY_FONT: '#2c2c2c',
+  TABLE_ADDITIONAL_NOTICE: '#2ba5bb',
 
   CHART: {
     BORDER: '#ffedfe',

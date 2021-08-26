@@ -5,15 +5,16 @@ import { useHistory } from 'react-router-dom';
 import Questions from './questions';
 import UserRegister from './registration';
 import api from '../../api';
-import { PageLayout, Button, ProgressBar } from '../common';
+import { PageLayout, Button } from '../common';
 import {
-  DUMMY,
+  // DUMMY,
   RESULT_ANSWER_FORM,
   SAMPLE_DESCRIPTION,
 } from '../../constants/test';
 import selector from '../../store/selector';
 import { actionCreator } from '../../store/reducer';
 import { VIEW_OF_VALUES } from '../../constants';
+import ProgressBar from './progressBar';
 
 const getResultRequestFormData = (state) => ({
   qestrnSeq: state.question.questionSeq,
@@ -42,31 +43,25 @@ const PsychologyTest = () => {
   );
 
   // TEST CODE
-  useEffect(() => {
-    console.log('홈!', history);
-    (async () => {
-      try {
-        const res = await api.getResultURL(DUMMY[5]);
-        console.log(res);
-        const paramsString = new URL(res.url).search;
-        const params = new URLSearchParams(paramsString);
-        history.push(`/complete/${params.get('seq')}`);
-      } catch (err) {
-        throw new Error(err);
-      }
-    })();
-  }, [history]);
-
-  // TODO: Store 초기화 다른 방법으로 할 수도?
-  useEffect(() => {}, []);
+  // useEffect(() => {
+  //   console.log('홈!', history);
+  //   (async () => {
+  //     try {
+  //       const res = await api.getResultURL(DUMMY);
+  //       console.log(res);
+  //       const paramsString = new URL(res.url).search;
+  //       const params = new URLSearchParams(paramsString);
+  //       history.push(`/complete/${params.get('seq')}`);
+  //     } catch (err) {
+  //       throw new Error(err);
+  //     }
+  //   })();
+  // }, [history]);
 
   useEffect(() => {
     (async () => {
       try {
-        const test = await api.getQuestions();
-        console.log('here', test);
-        loadQuestions(test);
-        // loadQuestions(await api.getQuestions());
+        loadQuestions(await api.getQuestions());
       } catch (err) {
         console.error(err); // TODO: loading으로 변경?
       }
@@ -76,13 +71,13 @@ const PsychologyTest = () => {
   const handleMovePrev = useCallback(
     () => currentPageIndex > 0 && dispatch(actionCreator.updatePageIndex(-1)),
     [currentPageIndex, dispatch],
-  ); // TODO:dependency
+  );
   const handleMoveNext = useCallback(
     () =>
       currentPageIndex < lastPageIndex &&
       dispatch(actionCreator.updatePageIndex(1)),
     [currentPageIndex, lastPageIndex, dispatch],
-  ); // TODO:dependency
+  );
 
   const getResultRequestFormAnswer = useCallback((questionSeq, rawAnswers) => {
     const { prefix, infix, postfix } = RESULT_ANSWER_FORM[questionSeq];
@@ -123,7 +118,6 @@ const PsychologyTest = () => {
       (async () => {
         try {
           const res = await api.getResultURL(sendData);
-          console.log(res); // TEST
           const paramsString = new URL(res.url).search;
           const params = new URLSearchParams(paramsString);
           history.replace(`/complete/${params.get('seq')}`);
@@ -178,12 +172,11 @@ const StyledPsyTestContainer = styled.form`
   > span.sample-description {
     display: block;
     font-size: 1.7rem;
-    margin: 0 14% 5vh 14%;
+    margin-bottom: 5vh;
     text-align: justify;
 
     @media screen and (max-width: 480px) {
       font-size: 1rem;
-      margin: 0 3rem 4vh 3rem;
     }
   }
 `;
@@ -196,7 +189,8 @@ const StyledButtonContainer = styled.div`
     css`
       justify-content: space-between;
     `};
-  margin: 5vh 15% 8vh 15%;
+  margin-top: 5vh;
+  margin-bottom: 8vh;
 `;
 
 export default PsychologyTest;

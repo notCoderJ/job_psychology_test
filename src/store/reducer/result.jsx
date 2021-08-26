@@ -16,16 +16,16 @@ const resultSlice = createSlice({
   name: 'result',
   initialState,
   reducers: {
-    // TODO: 에러 처리 등 조정 필요할듯...??
+    initResult() {
+      return initialState;
+    },
     loadResult(state, action) {
-      // TODO: email, birthday 항목 추가 고려 중...
       const { user, inspct, result } = action.payload;
       if (!result) {
         state.isResultLoaded = false;
         return;
       }
 
-      state.isResultLoaded = true;
       const dateInfo = new Date(inspct?.registDt);
       const inspectionDate = `${dateInfo.getFullYear()}.${getFixedDigits(
         MONTHS[dateInfo.getMonth()],
@@ -39,6 +39,8 @@ const resultSlice = createSlice({
       };
       state.inspect = { type: inspct.qestnrNm, date: inspectionDate };
       state.result = parsedResult;
+
+      state.isResultLoaded = true;
     },
     loadJobData(state, action) {
       // TODO: job info 로드 확인 플래그가 필요할까? (나중에 생각할 것!)

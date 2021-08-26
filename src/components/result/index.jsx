@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+// import { useDispatch } from 'react-redux';
 import { RESULT_DESCRIPTION } from '../../constants/result';
 import { COLOR_DARKSET } from '../../variables';
 import { Button, PageLayout } from '../common';
@@ -8,20 +9,37 @@ import AverageJobsByTypes from './averageJobsByTypes';
 import JobValuesResult from './jobValuesResult';
 import UserInfo from './userInfo';
 import ResultItemLayout from './resultItemLayout';
+// import { actionCreator } from '../../store/reducer';
 
-// TODO:지금 바로 작업 중...
 const PsychologyTestResult = () => {
   const history = useHistory();
-
   useEffect(() => {
-    console.log('요기느느느으으응 결과!', history);
+    console.log('임시 에러 차단용');
   }, [history]);
+  // const dispatch = useDispatch();
 
-  // const handleMoveTest = useCallback(() => {
-  //   history.go(-2);
-  // }, [history]);
+  // TODO: 시간되면 saga로 변경!!
+  // const handleReplay = useCallback(() => {
+  //   // (async () => {
+  //   //   await Promise.all([
+  //   //     dispatch(actionCreator.initUser()),
+  //   //     dispatch(actionCreator.initQuestion()),
+  //   //     dispatch(actionCreator.initAnswer()),
+  //   //     dispatch(actionCreator.initResult()),
+  //   //     dispatch(actionCreator.initPage()),
+  //   //   ]);
 
-  // TODO: 임시, 초기화 작업 <a> 태그로 히스토리 없애거나 다른 방법 찾아봐야 함!!
+  //   //   history.replace('/exam');
+  //   // })();
+  //   dispatch(actionCreator.initUser());
+  //   dispatch(actionCreator.initQuestion());
+  //   dispatch(actionCreator.initAnswer());
+  //   dispatch(actionCreator.initResult());
+  //   dispatch(actionCreator.initPage());
+
+  //   history.replace('/exam');
+  // }, [dispatch, history]);
+
   return (
     <PageLayout
       header={
@@ -49,15 +67,25 @@ const PsychologyTestResult = () => {
         </StyledPsychologyTestResult>
       }
       footer={
-        <a href="/">
+        <Temp href="/">
           <Button>다시 검사하기</Button>
-        </a>
+
+          {/* <Button onClick={handleReplay}>다시 검사하기</Button> */}
+        </Temp>
       }
     />
   );
 };
 // <Link to="/" replace>
 // </Link>
+
+const Temp = styled.a`
+  display: block;
+  margin-top: 8vh;
+  @media screen and (max-width: 480px) {
+    margin-top: 6vh;
+  }
+`;
 
 // TODO: 다 구현 후 반응형으로 mixin 적용하기!
 const StyledPageMainTitle = styled.section`
@@ -69,26 +97,26 @@ const StyledPageMainTitle = styled.section`
   font-size: 2rem;
 
   @media screen and (max-width: 480px) {
-    font-size: 1.3rem;
-  }
-  @media screen and (max-width: 320px) {
-    font-size: 1.1rem;
+    font-size: 1.6rem;
+    margin-top: 3rem;
+    word-break: keep-all;
   }
 `;
 
-// TODO: 중복 코드 합치기 여기랑 jobValue
+// TODO: 중복 코드 합치기 여기랑 jobValue, complete 페이지
 const StyledDivisionLine = styled.div`
   width: 31rem;
   height: 2px;
   background-color: ${COLOR_DARKSET.BORDER};
   margin-top: 0.5rem;
+
+  @media screen and (max-width: 480px) {
+    width: 17rem;
+  }
 `;
 
 const StyledPsychologyTestResult = styled.div`
-  margin: 0 15%;
-
   @media screen and (max-width: 480px) {
-    margin: 0 8%;
   }
 `;
 
@@ -96,6 +124,11 @@ const StyledResultDescription = styled.p`
   text-align: justify;
   font-size: 1.2rem;
   margin-top: 4rem;
+
+  @media screen and (max-width: 480px) {
+    font-size: 1rem;
+    margin-top: 2rem;
+  }
 `;
 
 const StyledUserInfoContainer = styled.section`

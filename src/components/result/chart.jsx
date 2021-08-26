@@ -1,23 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { PolarArea } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import selector from '../../store/selector';
-
-// 컬러 농도 구하는 식... 보고 써먹을지 말지...
-// function colorize(opaque, hover, ctx) {
-//   var v = ctx.raw;
-//   var c =
-//     v < 35 ? '#D60000' : v < 55 ? '#F46300' : v < 75 ? '#0358B6' : '#44DE28';
-
-//   var opacity = hover ? 1 - Math.abs(v / 150) - 0.2 : 1 - Math.abs(v / 150);
-
-//   return opaque ? c : Utils.transparentize(c, opacity);
-// }
-
-// function hoverColorize(ctx) {
-//   return colorize(false, true, ctx);
-// }
 
 const ResultChart = ({ labels }) => {
   const {
@@ -25,14 +10,6 @@ const ResultChart = ({ labels }) => {
     // firstHighLevelValue,
     // secondHighLevelValue,
   } = useSelector(selector.getResultData);
-
-  useEffect(() => {
-    console.log('먼데 라비레', labels);
-  }, [labels]);
-
-  // const test = () => {
-  //   console.log('testdfnslfdsnfl');
-  // };
 
   return (
     <StyledResultChartWrapper>
@@ -59,7 +36,7 @@ const ResultChart = ({ labels }) => {
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: false,
+              position: 'bottom',
             },
           },
           ticks: {
@@ -67,26 +44,6 @@ const ResultChart = ({ labels }) => {
           },
         }}
       />
-      {/* <Radar
-          data={{
-            labels,
-            datasets: [
-              {
-                label: '# of Votes',
-                data: values,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1,
-              },
-            ],
-          }}
-          options={{
-            scale: {
-              ticks: { beginAtZero: true },
-              maintainAspectRatio: false,
-            },
-          }}
-        /> */}
     </StyledResultChartWrapper>
   );
 };
@@ -94,11 +51,12 @@ const ResultChart = ({ labels }) => {
 const StyledResultChartWrapper = styled.div`
   background-color: #ffedfe;
   border-radius: 12px;
-  width: 100%;
-  height: 100%; // 조정해야대아아아아
+  width: 55vh;
+  height: 55vh;
 
   @media screen and (max-width: 480px) {
-    width: 100%;
+    width: 45vh;
+    height: 45vh;
   }
 `;
 

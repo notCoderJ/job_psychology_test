@@ -9,6 +9,9 @@ const psychologyTestSlice = createSlice({
   name: 'psychologyTest',
   initialState,
   reducers: {
+    initPage() {
+      return initialState;
+    },
     updatePageIndex(state, action) {
       state.currentPageIndex += action.payload;
     },

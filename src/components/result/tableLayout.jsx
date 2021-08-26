@@ -1,14 +1,16 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { COLOR_DARKSET } from '../../variables';
 
-const TableLayout = ({ highlight, separate = true, border = {}, contents }) => {
+const TableLayout = ({
+  textAlign,
+  highlight,
+  separate = true,
+  border = {},
+  contents,
+}) => {
   const { head, body } = contents;
   const { borderWidth, borderStyle, borderColor } = border;
-
-  useEffect(() => {
-    console.log('끼야호', body);
-  }, [body]);
 
   const drawTableRows = useCallback(() => {
     if (Array.isArray(body[0])) {
@@ -64,7 +66,9 @@ const TableLayout = ({ highlight, separate = true, border = {}, contents }) => {
         </StyledTableHead>
       )}
       {Array.isArray(body) && (
-        <StyledTableBody number={highlight}>{drawTableRows()}</StyledTableBody>
+        <StyledTableBody textAlign={textAlign} number={highlight}>
+          {drawTableRows()}
+        </StyledTableBody>
       )}
     </StyledTable>
   );
@@ -77,14 +81,14 @@ const StyledTable = styled.table`
 
 const StyledTableHead = styled.thead`
   background-color: ${COLOR_DARKSET.TABLE_HIGHLIGHT};
-
   font-weight: bold;
 `;
 
 const StyledTableBody = styled.tbody`
   background-color: ${COLOR_DARKSET.TABLE_BODY};
-  color: ${COLOR_DARKSET.TABLE_BODY_FONT}; // TODO: 컬러 정의
+  color: ${COLOR_DARKSET.TABLE_BODY_FONT};
   font-weight: bold;
+  text-align: ${(props) => (props.textAlign ? props.textAlign : 'center')};
 
   ${(props) =>
     props.number &&
@@ -92,9 +96,15 @@ const StyledTableBody = styled.tbody`
       td:nth-child(${props.number}) {
         background-color: ${COLOR_DARKSET.TABLE_HIGHLIGHT};
         color: ${COLOR_DARKSET.TABLE_HIGHLIGHT_FONT};
-        white-space: nowrap;
+        width: 8vw;
+        font-size: 1.1em;
+        text-align: center;
       }
     `};
+
+  @media screen and (max-width: 480px) {
+    text-align: center;
+  }
 `;
 
 const StyledTableTh = styled.th`
@@ -102,7 +112,8 @@ const StyledTableTh = styled.th`
   border-style: ${(props) => (props.borderStyle ? props.borderStyle : 'solid')};
   border-color: ${(props) =>
     props.borderColor ? props.borderColor : COLOR_DARKSET.TABLE_BORDER};
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
+  font-size: 1.1em;
 `;
 
 const StyledTableTd = styled.td`
@@ -110,7 +121,7 @@ const StyledTableTd = styled.td`
   border-style: ${(props) => (props.borderStyle ? props.borderStyle : 'solid')};
   border-color: ${(props) =>
     props.borderColor ? props.borderColor : COLOR_DARKSET.TABLE_BORDER};
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
 `;
 
 export default TableLayout;

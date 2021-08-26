@@ -5,7 +5,6 @@ import { GENDER_NAMES } from '../../constants';
 import { actionCreator } from '../../store/reducer';
 import selector from '../../store/selector';
 import { COLOR_DARKSET } from '../../variables';
-// import { COLOR_DARKSET } from '../../variables';
 
 const UserRegister = () => {
   const dispatch = useDispatch();
@@ -24,13 +23,13 @@ const UserRegister = () => {
 
   const handleChangeName = useCallback(
     (e) => {
-      // TODO: 이름 예외처리
+      // TODO: 이름 예외처리하기!
       if (userName !== e.target.value) {
         saveName(e.target.value);
       }
     },
     [userName, saveName],
-  ); // TODO: useCallback 동작 매커니즘 알아보기!!
+  );
 
   const handleChangeGender = useCallback(
     (e) => {
@@ -93,7 +92,6 @@ const StyledUserRegisterContainer = styled.fieldset`
   width: 25vw;
   height: 50vh;
   border-style: none;
-  /* color: #fffdfa; */
   margin: auto;
 
   > legend {
@@ -107,16 +105,14 @@ const StyledItemContainer = styled.p`
   justify-content: space-around;
 
   > span {
-    ////////////////////////////////여기기기기기
     align-self: flex-start;
     margin-left: 20%;
   }
 
-  //// TODO: 아직...
   > label.user-name {
     > input {
       :focus {
-        box-shadow: 0px 0px 10px 2px ${COLOR_DARKSET.BORDER}; // 임시임 변경예정
+        box-shadow: 0px 0px 10px 2px ${COLOR_DARKSET.BORDER};
       }
     }
   }
@@ -136,12 +132,12 @@ const StyledItemContainer = styled.p`
       width: 0.8rem;
       height: 0.8rem;
       margin-right: 0.4rem;
-      border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER}; //////////////////////////////////이거거거ㅓ거거
+      border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER};
       border-radius: 50%;
       transition: 0.1s all ease-in-out;
 
       :checked {
-        border: 4px solid ${COLOR_DARKSET.CHECKBOX}; //////////////////////////////////이거거거ㅓ거거
+        border: 4px solid ${COLOR_DARKSET.CHECKBOX};
       }
 
       @media screen and (max-width: 480px) {
@@ -152,7 +148,7 @@ const StyledItemContainer = styled.p`
         }
 
         :checked {
-          border-width: 3.5px; //////////////////////////////////이거거거ㅓ거거
+          border-width: 3.5px;
         }
       }
     }

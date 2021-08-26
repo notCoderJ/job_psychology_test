@@ -33,7 +33,6 @@ const Question = ({ number }) => {
         return;
       }
 
-      // TODO: 이거 처리가 좀 참...흠...쩝...
       saveAnswer(
         number,
         VIEW_OF_VALUES[e.target.nextSibling.textContent],
@@ -70,14 +69,12 @@ const Question = ({ number }) => {
         })}
       </StyledAnswerContainer>
     </StyledQuestion>
-  ); // TODO: key redefine
+  );
 };
 
-// TODO : 반응형 사이즈 추가 예정 : 768px, 1024px
-
 const StyledQuestion = styled.fieldset`
-  border: solid ${COLOR_DARKSET.QUESTION_BORDER} 2px; //////////////이거거
-  border-radius: 5px; //////////////////////////////////이거거거ㅓ거거
+  border: solid ${COLOR_DARKSET.QUESTION_BORDER} 2px;
+  border-radius: 5px;
   background-color: ${COLOR_DARKSET.QUESTION_BOX};
 
   @media screen and (max-width: 480px) {
@@ -92,10 +89,10 @@ const StyledDescription = styled.legend`
   width: 72%;
   font-weight: bold;
   font-size: 1.2rem;
-  text-align: center; // TODO: 2줄이상일 때는 양쪽 정렬하게 변경해보기!
+  text-align: center;
   padding: 0.4rem 1.6rem;
   margin: auto;
-  border-radius: 10px; //////////////////////////////////이거거거ㅓ거거
+  border-radius: 10px;
 
   @media screen and (max-width: 480px) {
     & {
@@ -140,13 +137,13 @@ const StyledAnswerContainer = styled.p`
       width: 1rem;
       height: 1rem;
       margin-right: 0.5rem;
-      border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER}; //////////////////////////////////이거거거ㅓ거거
+      border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER};
       border-radius: 50%;
       transition: 0.1s all ease-in-out;
       cursor: pointer;
 
       :checked {
-        border: 5px solid ${COLOR_DARKSET.CHECKBOX}; //////////////////////////////////이거거거ㅓ거거
+        border: 5px solid ${COLOR_DARKSET.CHECKBOX};
       }
 
       @media screen and (max-width: 480px) {
@@ -157,7 +154,7 @@ const StyledAnswerContainer = styled.p`
         }
 
         :checked {
-          border-width: 3.5px; //////////////////////이거거
+          border-width: 3.5px;
         }
       }
     }
@@ -176,13 +173,12 @@ const Questions = () => {
       ))}
     </StyledQuestions>
   );
-}; // TODO: key redefine
+};
 
 const StyledQuestions = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-btween;
-  margin: 0 12%;
   ${(props) =>
     props?.sample &&
     css`

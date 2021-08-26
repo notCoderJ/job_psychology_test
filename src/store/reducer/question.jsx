@@ -14,6 +14,9 @@ const questionSlice = createSlice({
   name: 'question',
   initialState,
   reducers: {
+    initQuestion() {
+      return initialState;
+    },
     loadQuestions(state, action) {
       const questions = action.payload;
       if (!Array.isArray(questions) || questions.length === 0) {
@@ -21,7 +24,6 @@ const questionSlice = createSlice({
         return;
       }
 
-      state.isQuestionLoaded = true;
       questions.forEach((questionItem) => {
         const { question, qitemNo, ...rest } = questionItem;
         const description = question.replace('<br/>', '');
@@ -43,6 +45,8 @@ const questionSlice = createSlice({
           defaultAnswerOptions,
         });
       });
+
+      state.isQuestionLoaded = true;
     },
   },
 });

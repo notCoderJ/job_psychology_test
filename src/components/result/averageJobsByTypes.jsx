@@ -8,7 +8,10 @@ import { COLOR_DARKSET } from '../../variables';
 import TableLayout from './tableLayout';
 
 const AverageJobsByTypes = () => {
-  // const
+  const { firstHighLevelValueName, secondHighLevelValueName } = useSelector(
+    selector.getTwoHighLevelValueNames,
+  );
+
   const [jobsByGrade, jobsByMajor] = useSelector(selector.getJobData);
 
   const averageJobs = useCallback((jobsByType) => {
@@ -54,38 +57,87 @@ const AverageJobsByTypes = () => {
 
   return (
     <StyledAverageJobsByTypes>
-      <p>{`내가 중요하게 생각하는 ${null}과(와) ${null}을(를) 만족시킬 수 있는 직업은 다음과 같습니다.`}</p>
+      <p>{`내가 중요하게 생각하는 ${firstHighLevelValueName}과(와) ${secondHighLevelValueName}을(를) 만족시킬 수 있는 직업은 다음과 같습니다.`}</p>
       <StyledAverageJobsByGrade>
+        <StyledAverageJobsSubTitle>
+          종사자 평균 학력별
+        </StyledAverageJobsSubTitle>
         <TableLayout
+          textAlign="left"
           highlight="1"
           border={{
             borderStyle: 'none',
           }}
           contents={{
-            head: ['분야', '직업명'],
+            // head: ['분야', '직업명'],
             body: changeJobInfoLink(averageJobsByGrade, GRADE_NAMES),
           }}
         />
+        <StyledAdditionalNotice>
+          직업명을 클릭하시면, 커리어넷 직업사전으로 이동하여 직업에 대한 더
+          자세한 정보를 확인할 수 있습니다.
+        </StyledAdditionalNotice>
       </StyledAverageJobsByGrade>
       <StyledAverageJobsByMajor>
+        <StyledAverageJobsSubTitle>
+          종사자 평균 전공별
+        </StyledAverageJobsSubTitle>
         <TableLayout
+          textAlign="left"
           highlight="1"
           border={{
             borderStyle: 'none',
           }}
           contents={{
-            head: ['분야', '직업명'],
+            // head: ['분야', '직업명'],
             body: changeJobInfoLink(averageJobsByMajor, MAJOR_NAMES),
           }}
         />
+        <StyledAdditionalNotice>
+          직업명을 클릭하시면, 커리어넷 직업사전으로 이동하여 직업에 대한 더
+          자세한 정보를 확인할 수 있습니다.
+        </StyledAdditionalNotice>
       </StyledAverageJobsByMajor>
     </StyledAverageJobsByTypes>
   );
 };
 
-const StyledAverageJobsByTypes = styled.div``;
-const StyledAverageJobsByGrade = styled.div``;
-const StyledAverageJobsByMajor = styled.div``;
+const StyledAverageJobsByTypes = styled.div`
+  > p {
+    text-align: left;
+    font-size: 1.2rem;
+  }
+`;
+
+const StyledAverageJobsSubTitle = styled.h3`
+  font-size: 1.7rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 30px;
+  border: solid 2px ${COLOR_DARKSET.TABLE_BORDER};
+  background-color: ${COLOR_DARKSET.TABLE_HIGHLIGHT};
+`;
+
+const StyledAverageJobsByGrade = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const StyledAverageJobsByMajor = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledAdditionalNotice = styled.span`
+  margin-top: 0.1rem;
+  font-size: 0.8rem;
+  text-align: right;
+  color: ${COLOR_DARKSET.TABLE_ADDITIONAL_NOTICE};
+
+  @media screen and (max-width: 480px) {
+    text-align: left;
+  }
+`;
 
 const StyledJobInfoLink = styled.a`
   text-decoration: none;

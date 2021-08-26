@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import selector from '../../store/selector';
 import { COLOR_DARKSET } from '../../variables';
-// import * as palette from '../../variables';
 
 // Need
 //  1. Total questions count(length)
@@ -31,7 +30,6 @@ const StyledProgressBarContainer = styled.div`
   margin: auto;
 
   align-items: center;
-  width: 73%;
   height: 15vh;
 
   @media screen and (max-width: 480px) {
@@ -42,14 +40,13 @@ const StyledProgressBarContainer = styled.div`
 const StyledPercentageBoard = styled.div`
   align-self: flex-end;
   display: flex;
-  /* justify-content: space-around; */
   font-size: 1.8rem;
   font-weight: bold;
   margin-bottom: 0.8rem;
 
   @media screen and (max-width: 480px) {
     height: 12%;
-    font-size: 1.5rem; // 글씨만 조정 필요
+    font-size: 1.5rem;
     margin-bottom: 1.8rem;
   }
 `;
@@ -72,7 +69,6 @@ const ProgressBarGage = styled.div`
   height: 100%;
   border-radius: 10vh;
   background-color: ${COLOR_DARKSET.PROGRESSBAR_GAGE};
-  /* background-color: #9a5dd3; */ // TODO: 색감 찾기!
   opacity: 0.9;
   transition: all 300ms linear;
 

@@ -11,10 +11,12 @@ const parseJobValuesNormal = (result) => {
     allValues,
     firstHighLevelValue: values.pop()[1],
     secondHighLevelValue: values.pop()[1],
+    firstLowLevelValue: values[0][1],
+    secondLowLevelValue: values[1][1],
   };
 };
 
-// TODO: xxx[inspct?.qestnrSeq] = 요걸로 타입별 파슁!(모든 검사 확장할 때...)
+// TODO: 요걸로 타입별 파싱!(모든 검사 확장할 때...)
 export const getParsedResult = (questionSeq, result) => {
   switch (questionSeq) {
     case TEST_TYPE.JOB_INTEREST_KM:

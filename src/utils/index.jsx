@@ -6,14 +6,3 @@ export const createBaseURL = (type) => {
 };
 
 export const getFixedDigits = (num) => (num < 10 ? `0${num}` : `${num}`);
-
-// TODO: Error handle wrapper
-// export const safetyWrapper = () =>{
-//   return () => {
-//   }
-//   try {
-
-//   } catch(err) {
-//     console.log(err);
-//   }
-// }

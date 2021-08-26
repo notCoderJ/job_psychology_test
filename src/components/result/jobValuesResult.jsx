@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import selector from '../../store/selector';
@@ -7,36 +7,19 @@ import { VIEW_OF_VALUES } from '../../constants';
 
 const JobValuesResult = () => {
   // TODO: 가장 높은 가치에 대한 설명 표시하기
-  const userName = useSelector(selector.getUserName);
-  const [firstHighLevelValue, secondHighLevelValue] = useSelector(
-    selector.getTwoHighLevelValues,
+  const psychologyTestReulstText = useSelector(
+    selector.getPsychologyTestReulstText,
   );
-
-  // CHECK DATA
-  useEffect(() => {
-    console.log('hurry up!');
-  }, []);
 
   const valueNames = useMemo(() => Object.keys(VIEW_OF_VALUES), []);
-  const firstPriorityValuesName = useMemo(
-    () => valueNames[firstHighLevelValue - 1],
-    [valueNames, firstHighLevelValue],
-  );
-  const secondPriorityValuesName = useMemo(
-    () => valueNames[secondHighLevelValue - 1],
-    [valueNames, secondHighLevelValue],
-  );
 
+  // TODO: 로오디딩
   return (
     <StyledJobValuesResult>
-      <StyledResultSummary>
-        {`직장생활과 관련하여 ${userName}님은 ${firstPriorityValuesName}과(와) ${secondPriorityValuesName}을(를) 가장 중요하게 생각합니다. `}
-        <br />
-        {`반면에 ${null}, ${null}은(는) 상대적으로 덜 중요하게 생각합니다.`}
-      </StyledResultSummary>
+      <StyledResultSummary>{psychologyTestReulstText}</StyledResultSummary>
       <StyledResultAnalysisContainer>
         <ResultChart labels={valueNames} />
-        <div>dfsdkfnsdklfnsdlk</div>
+        <div>rolem</div>
       </StyledResultAnalysisContainer>
     </StyledJobValuesResult>
   );
@@ -46,20 +29,25 @@ const StyledJobValuesResult = styled.div``;
 
 const StyledResultSummary = styled.p`
   width: 100%;
-  text-align: justify;
-  font-weight: bold;
+  text-align: left;
   font-size: 1.2rem;
+
+  @media screen and (max-width) {
+    text-align: center;
+  }
 `;
 
+// 와 그래프 높이 왜이러니...제밟르ㅏ라랇
 const StyledResultAnalysisContainer = styled.div`
-  /* display: flex; */
-  /* justify-content: space-between; */
-  width: 50%;
-  height: 50vh; // 조정해야대아아아아
+  display: flex;
+  justify-content: space-between; // around?
+  align-items: center;
+  width: 100%;
   margin-top: 3rem;
 
   @media screen and (max-width: 480px) {
-    width: 100%;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
