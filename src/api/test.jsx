@@ -34,6 +34,7 @@ const getResultURL = async (data) => {
       '/report',
       JSON.stringify({ apikey: API_KEY, ...data }),
     );
+
     if (res.data.SUCC_YN === 'Y') {
       return res.data.RESULT;
     }

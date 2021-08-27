@@ -1,40 +1,30 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import selector from '../../store/selector';
 import { getFixedDigits } from '../../utils';
+import { COLOR_DARKSET } from '../../variables';
 
 const itemRange = ['특징', '직업선택', '직업생활'];
 
 const ValueDescription = ({ labels }) => {
   const valueDescriptions = useSelector(selector.getValueDescriptions);
-  const [firstHighLevelValue] = useSelector(selector.getTwoHighLevelValues);
-
-  const initValueIndex = useMemo(
-    () => firstHighLevelValue - 1,
-    [firstHighLevelValue],
+  const currentValueDescription = useSelector(
+    selector.getCurrentValueDescription,
   );
-
-  useEffect(() => {
-    console.log('ㅅㄷ느ㅟㅏㅅ누', valueDescriptions);
-  }, [valueDescriptions]);
 
   return labels.map((valueName, tableIndex) => (
     <StyledValueDescriptionTable
-      hidden={tableIndex !== initValueIndex}
+      hidden={tableIndex !== currentValueDescription}
       key={`valueDesc-table-${valueName}${getFixedDigits(tableIndex)}`}
     >
-      <thead>
-        <StyledValueDescriptionTableRow colSpan="2">
-          <th>{valueName}</th>
-        </StyledValueDescriptionTableRow>
-      </thead>
+      <StyledSelectedValue>{valueName}</StyledSelectedValue>
       <tbody>
         {valueDescriptions[tableIndex].map((valueDescription, rowIndex) => (
           <StyledValueDescriptionTableRow
             key={`${valueName}-${valueDescription}${getFixedDigits(rowIndex)}`}
           >
-            <StyledValueDescriptionTableTh scope="row">
+            <StyledValueDescriptionTableTh>
               {itemRange[rowIndex]}
             </StyledValueDescriptionTableTh>
             <StyledValueDescriptionTableTd>
@@ -49,36 +39,26 @@ const ValueDescription = ({ labels }) => {
 
 const StyledValueDescriptionTable = styled.table`
   border-collapse: collapse;
-  border-radius: 10px;
-  margin-left: 3vw;
-
-  > thead {
-    border-top: solid 1px white;
-    white-space: nowrap;
-    font-size: 1.5rem;
-    > tr {
-      > th {
-        padding: 1.1rem 1rem;
-
-        @media screen and (max-width: 480px) {
-          padding: 0.8rem 0;
-        }
-      }
-    }
-  }
+  height: 35vh;
 
   @media screen and (max-width: 1024px) {
-    margin: 5vh 2vw 0 2vw;
+    height: fit-content;
   }
+`;
 
+const StyledSelectedValue = styled.caption`
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 2rem 0 1rem;
+  color: ${COLOR_DARKSET.HIGHLIGHT_TITLE};
   @media screen and (max-width: 480px) {
-    width: 80vw;
-    height: 80vw;
+    font-size: 1.5rem;
   }
 `;
 
 const StyledValueDescriptionTableRow = styled.tr`
-  border-bottom: solid 1px white;
+  border-top: solid 1px ${COLOR_DARKSET.TABLE_BORDER};
+  border-bottom: solid 1px ${COLOR_DARKSET.TABLE_BORDER};
 
   @media screen and (max-width: 1024px) {
     display: flex;
@@ -87,28 +67,29 @@ const StyledValueDescriptionTableRow = styled.tr`
 `;
 
 const StyledValueDescriptionTableTh = styled.th`
+  border-right: solid 1px ${COLOR_DARKSET.TABLE_BORDER};
+  padding: 0 1.5vw;
   white-space: nowrap;
-  border-right: solid 1px white;
+  font-size: 1.2rem;
 
   @media screen and (max-width: 1024px) {
     padding: 0.7rem 0;
-    border-bottom: solid 1px white;
+    border-bottom: solid 1px ${COLOR_DARKSET.TABLE_BORDER};
     border-right: none;
+    font-size: 1.1rem;
   }
 
   @media screen and (max-width: 480px) {
     padding: 0.5rem 0;
-    border-bottom: solid 1px white;
-    border-right: none;
   }
 `;
 
 const StyledValueDescriptionTableTd = styled.td`
-  padding: 2rem 1rem;
+  padding: 2vh 1vw 2vh 1.5vw;
   text-align: left;
 
-  @media screen and (max-width: 1280px) {
-    padding: 1.2rem 1rem;
+  @media screen and (min-width: 1280px) {
+    padding: 3vh 2vw;
   }
 
   @media screen and (max-width: 1024px) {
@@ -116,7 +97,7 @@ const StyledValueDescriptionTableTd = styled.td`
   }
 
   @media screen and (max-width: 480px) {
-    padding: 0.8rem 0;
+    padding: 2.5vh 0;
   }
 `;
 

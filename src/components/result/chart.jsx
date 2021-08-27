@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { PolarArea } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { actionCreator } from '../../store/reducer';
 import selector from '../../store/selector';
 import { COLOR_DARKSET } from '../../variables';
 
@@ -12,6 +13,7 @@ const convertColor = (scale, value) => {
 };
 
 const ResultChart = ({ labels }) => {
+  const dispatch = useDispatch();
   const {
     allValues: values,
     // firstHighLevelValue,
@@ -19,9 +21,19 @@ const ResultChart = ({ labels }) => {
   } = useSelector(selector.getResultData);
   const valuesScale = useSelector(selector.getValueScoreScale);
 
-  useEffect(() => {
-    console.log('scale 뽝', valuesScale);
-  }, [valuesScale]);
+  const handleClickValue = useCallback(
+    (e, legendItem) => {
+      if (
+        legendItem[0]?.index === undefined ||
+        legendItem[0].index >= labels.length
+      ) {
+        return;
+      }
+
+      dispatch(actionCreator.setCurrentValueDescription(legendItem[0]?.index));
+    },
+    [dispatch, labels],
+  );
 
   return (
     <StyledResultChartWrapper>
@@ -39,20 +51,21 @@ const ResultChart = ({ labels }) => {
           ],
         }}
         options={{
-          onClick: (e) => {
-            console.log(e.chart);
+          layout: {
+            padding: {
+              top: 10,
+              left: 10,
+              right: 10,
+              bottom: 10,
+            },
           },
+          onClick: handleClickValue,
           maintainAspectRatio: false,
           plugins: {
             legend: {
               position: 'bottom',
             },
           },
-          scale: {},
-          ticks: {
-            z: 0,
-          },
-          // elements
         }}
       />
     </StyledResultChartWrapper>
@@ -60,20 +73,10 @@ const ResultChart = ({ labels }) => {
 };
 
 const StyledResultChartWrapper = styled.div`
-  background-color: #ffedfe;
+  width: 100%;
+  height: 100%;
+  background-color: ${COLOR_DARKSET.CHART.BACKGROUND};
   border-radius: 12px;
-  width: 30vw;
-  height: 30vw;
-
-  @media screen and (max-width: 1024px) {
-    width: 65vw;
-    height: 65vw;
-  }
-
-  @media screen and (max-width: 480px) {
-    width: 80vw;
-    height: 80vw;
-  }
 `;
 
 export default ResultChart;
