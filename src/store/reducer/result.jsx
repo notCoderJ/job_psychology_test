@@ -9,6 +9,7 @@ const initialState = {
   user: null,
   inspect: null,
   result: null,
+  valueDescriptions: null,
   jobs: null,
 };
 
@@ -37,10 +38,24 @@ const resultSlice = createSlice({
         gender: GENDER_NAMES[user.gender] || GENDER_NAMES[inspct.sexdstn],
         type: user.targetNm,
       };
-      state.inspect = { type: inspct.qestnrNm, date: inspectionDate };
+      state.inspect = {
+        type: inspct.qestnrNm,
+        date: inspectionDate,
+      };
       state.result = parsedResult;
 
       state.isResultLoaded = true;
+    },
+    loadValueDescriptions(state, action) {
+      const valueDescriptions = action.payload;
+
+      state.valueDescriptions = valueDescriptions.map(
+        ({ upptValue, middlValue, lwptValue }) => [
+          upptValue,
+          middlValue,
+          lwptValue,
+        ],
+      );
     },
     loadJobData(state, action) {
       // TODO: job info 로드 확인 플래그가 필요할까? (나중에 생각할 것!)

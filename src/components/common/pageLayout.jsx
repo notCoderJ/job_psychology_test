@@ -2,13 +2,13 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { COLOR_DARKSET } from '../../variables';
 
-const PageLayout = ({ header, main, footer }) => (
-  <Container>
+const PageLayout = React.forwardRef(({ header, main, footer }, ref) => (
+  <Container ref={ref}>
     <Header>{header}</Header>
     <Main>{main}</Main>
     <Footer disable={!footer}>{footer}</Footer>
   </Container>
-);
+));
 
 const Container = styled.div`
   display: flex;

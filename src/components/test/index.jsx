@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { useHistory } from 'react-router-dom';
@@ -26,6 +26,7 @@ const getResultRequestFormData = (state) => ({
 });
 
 const PsychologyTest = () => {
+  const ref = useRef();
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -41,6 +42,14 @@ const PsychologyTest = () => {
     (responseData) => dispatch(actionCreator.loadQuestions(responseData)),
     [dispatch],
   );
+
+  const scrollToTop = useCallback(() => {
+    ref.current.scrollTo(0, 0);
+  }, [ref]);
+
+  useEffect(() => {
+    scrollToTop();
+  }, [scrollToTop, currentPageIndex]);
 
   // TEST CODE
   // useEffect(() => {
@@ -131,15 +140,27 @@ const PsychologyTest = () => {
 
   return (
     <PageLayout
-      header={currentPageIndex >= 0 && <ProgressBar />}
+      ref={ref}
+      header={
+        currentPageIndex >= 0 && (
+          <StyledProgressBarContainer sample={currentPageIndex === 0}>
+            <ProgressBar />
+          </StyledProgressBarContainer>
+        )
+      }
       main={
-        <StyledPsyTestContainer onSubmit={handleSubmit}>
+        <StyledPsyTestContainer
+          sample={currentPageIndex === 0}
+          onSubmit={handleSubmit}
+        >
           {currentPageIndex < 0 ? (
             <UserRegister />
           ) : (
             <>
               {currentPageIndex === 0 && (
-                <span className="sample-description">{SAMPLE_DESCRIPTION}</span>
+                <StyledSampleDescription className="sample-description">
+                  {SAMPLE_DESCRIPTION}
+                </StyledSampleDescription>
               )}
               <Questions />
             </>
@@ -168,16 +189,34 @@ const PsychologyTest = () => {
   );
 };
 
-const StyledPsyTestContainer = styled.form`
-  > span.sample-description {
-    display: block;
-    font-size: 1.7rem;
-    margin-bottom: 5vh;
-    text-align: justify;
+const StyledProgressBarContainer = styled.div`
+  ${(props) =>
+    props.sample &&
+    css`
+      margin-top: 15vh;
 
-    @media screen and (max-width: 480px) {
-      font-size: 1rem;
-    }
+      @media screen and (max-width: 480px) {
+        margin-top: 10vh;
+      }
+    `}
+`;
+
+const StyledPsyTestContainer = styled.form`
+  ${(props) =>
+    props.sample &&
+    css`
+      display: flex;
+      flex-direction: column;
+    `}
+`;
+
+const StyledSampleDescription = styled.p`
+  font-size: 1.7rem;
+  margin-bottom: 5vh;
+  text-align: justify;
+
+  @media screen and (max-width: 480px) {
+    font-size: 1rem;
   }
 `;
 

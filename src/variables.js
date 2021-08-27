@@ -3,6 +3,7 @@ export const COLOR_DARKSET = {
   FONT: '#ffedfe',
   BORDER: '#837adb',
   BUTTON: '#5d5bc0',
+  NAME_INPUT_FOCUS: '#837adb',
   SHADOW: 'rgba(30, 18, 46, 0.9)',
   HIGHLIGHT_TITLE: '#837adb',
   HIGHLIGHT_TEXT: '#2ba5bb',
@@ -29,7 +30,9 @@ export const COLOR_DARKSET = {
 
   CHART: {
     BORDER: '#ffedfe',
-    DATA: [],
+    DATA: [138, 84, 247],
   },
 };
 // #4a58d3;
+// pink : #dfa9e0fb
+// green : #a9dce0fa

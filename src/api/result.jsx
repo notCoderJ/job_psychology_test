@@ -24,9 +24,25 @@ const getResultData = async (seq) => {
   }
 };
 
-// const getVaulusdfjls? TODO: 가치관별 설명 api
+const getValuesDescription = async (questionSeq) => {
+  try {
+    const res = await api.get('/intrprts', {
+      params: {
+        qestnrseq: questionSeq,
+      },
+    });
 
-// TODO: interceptor 처리
+    if (res.status === 200) {
+      return res.data;
+    }
+
+    throw new Error(res.statusText);
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// TODO: api들 interceptor 처리
 const getAverageJobInfoByType = async (type, [...highScore]) => {
   const urlBytype = { grade: '/jobs', major: '/majors' };
   try {
@@ -47,6 +63,10 @@ const getAverageJobInfoByType = async (type, [...highScore]) => {
   }
 };
 
-const resultAPI = { getResultData, getAverageJobInfoByType };
+const resultAPI = {
+  getResultData,
+  getAverageJobInfoByType,
+  getValuesDescription,
+};
 
 export default resultAPI;
