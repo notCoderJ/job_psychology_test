@@ -14,10 +14,12 @@ const AverageJobsByTypes = () => {
 
   const [jobsByGrade, jobsByMajor] = useSelector(selector.getJobData);
 
-  const averageJobs = useCallback((jobsByType) => {
+  const averageJobs = useCallback((typeName, jobs) => {
     const divisionByType = {};
-    jobsByType.forEach(([seq, job, type]) => {
-      const typeIndex = type - 1;
+    const typeOffset = { grade: -1, major: 0 };
+
+    jobs.forEach(([seq, job, type]) => {
+      const typeIndex = type + typeOffset[typeName];
       divisionByType[typeIndex] = divisionByType[typeIndex]
         ? [...divisionByType[typeIndex], [seq, job]]
         : [[seq, job]];
@@ -27,11 +29,11 @@ const AverageJobsByTypes = () => {
   }, []);
 
   const averageJobsByGrade = useMemo(
-    () => averageJobs(jobsByGrade),
+    () => averageJobs('grade', jobsByGrade),
     [jobsByGrade, averageJobs],
   );
   const averageJobsByMajor = useMemo(
-    () => averageJobs(jobsByMajor),
+    () => averageJobs('major', jobsByMajor),
     [jobsByMajor, averageJobs],
   );
 
