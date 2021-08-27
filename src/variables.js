@@ -29,6 +29,7 @@ export const COLOR_DARKSET = {
   TABLE_ADDITIONAL_NOTICE: '#2ba5bb',
 
   CHART: {
+    BACKGROUND: '#ffedfe',
     BORDER: '#ffedfe',
     DATA: [138, 84, 247],
   },

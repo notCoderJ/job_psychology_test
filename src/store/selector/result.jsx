@@ -11,6 +11,8 @@ const getInspectData = (state) => state.result.inspect;
 const getResultData = (state) => state.result.result;
 const getResultValuesAll = (state) => state.result.result?.allValues;
 const getValueDescriptions = (state) => state.result.valueDescriptions;
+const getCurrentValueDescription = (state) =>
+  state.result.currentValueDescription;
 const getJobData = (state) => state.result.jobs;
 
 const getUserInfo = createSelector(
@@ -115,6 +117,7 @@ const resultSelector = {
   getResultData,
   getResultValuesAll,
   getValueDescriptions,
+  getCurrentValueDescription,
   getJobData,
   getUserInfo,
   getFirstHighLevelValue,

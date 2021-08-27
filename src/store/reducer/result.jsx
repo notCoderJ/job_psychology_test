@@ -9,6 +9,7 @@ const initialState = {
   user: null,
   inspect: null,
   result: null,
+  currentValueDescription: null,
   valueDescriptions: null,
   jobs: null,
 };
@@ -43,6 +44,7 @@ const resultSlice = createSlice({
         date: inspectionDate,
       };
       state.result = parsedResult;
+      state.currentValueDescription = parsedResult.firstHighLevelValue - 1;
 
       state.isResultLoaded = true;
     },
@@ -56,6 +58,13 @@ const resultSlice = createSlice({
           lwptValue,
         ],
       );
+    },
+    setCurrentValueDescription(state, action) {
+      if (state.currentValueDescription === action.payload) {
+        return;
+      }
+
+      state.currentValueDescription = action.payload;
     },
     loadJobData(state, action) {
       // TODO: job info 로드 확인 플래그가 필요할까? (나중에 생각할 것!)
