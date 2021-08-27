@@ -7,7 +7,7 @@ import UserRegister from './registration';
 import api from '../../api';
 import { PageLayout, Button } from '../common';
 import {
-  DUMMY,
+  // DUMMY,
   RESULT_ANSWER_FORM,
   SAMPLE_DESCRIPTION,
 } from '../../constants/test';
@@ -52,20 +52,20 @@ const PsychologyTest = () => {
   }, [scrollToTop, currentPageIndex]);
 
   // TEST CODE
-  useEffect(() => {
-    console.log('홈!', history);
-    (async () => {
-      try {
-        const res = await api.getResultURL(DUMMY);
-        console.log(res);
-        const paramsString = new URL(res.url).search;
-        const params = new URLSearchParams(paramsString);
-        history.push(`/complete/${params.get('seq')}`);
-      } catch (err) {
-        throw new Error(err);
-      }
-    })();
-  }, [history]);
+  // useEffect(() => {
+  //   console.log('홈!', history);
+  //   (async () => {
+  //     try {
+  //       const res = await api.getResultURL(DUMMY);
+  //       console.log(res);
+  //       const paramsString = new URL(res.url).search;
+  //       const params = new URLSearchParams(paramsString);
+  //       history.push(`/complete/${params.get('seq')}`);
+  //     } catch (err) {
+  //       throw new Error(err);
+  //     }
+  //   })();
+  // }, [history]);
 
   useEffect(() => {
     (async () => {
