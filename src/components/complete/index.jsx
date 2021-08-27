@@ -17,6 +17,7 @@ const PsychologyTestComplete = () => {
   const psychologyTestReulstText = useSelector(
     selector.getPsychologyTestReulstText,
   );
+  const questionSeq = useSelector(selector.getQuestionSeq);
 
   const loadResultData = useCallback(
     (resultData) => dispatch(actionCreator.loadResult(resultData)),
@@ -28,15 +29,22 @@ const PsychologyTestComplete = () => {
     [dispatch],
   );
 
+  const loadValueDescriptions = useCallback(
+    (valueDescriptions) =>
+      dispatch(actionCreator.loadValueDescriptions(valueDescriptions)),
+    [dispatch],
+  );
+
   useEffect(() => {
     (async () => {
       try {
         loadResultData(await api.getResultData(seq));
+        loadValueDescriptions(await api.getValuesDescription(questionSeq));
       } catch (err) {
         console.error(err); // TODO: loading으로 변경?
       }
     })();
-  }, [seq, loadResultData]);
+  }, [seq, questionSeq, loadResultData, loadValueDescriptions]);
 
   useEffect(() => {
     if (!twoHighLevelValues) {
@@ -55,7 +63,7 @@ const PsychologyTestComplete = () => {
         console.error(err); // TODO: loading으로 변경?
       }
     })();
-  }, [twoHighLevelValues, loadJobData]);
+  }, [twoHighLevelValues, loadJobData, questionSeq]);
 
   // TODO: 지금 바로 작업 중... Loading부분 좀 수정 좀 해야겠다...
   return (

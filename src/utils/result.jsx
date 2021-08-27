@@ -4,7 +4,8 @@ const parseJobValuesNormal = (result) => {
   const allValues = result?.wonScore
     .trim()
     .replace(/[0-9]+=/g, '')
-    .split(' ');
+    .split(' ')
+    .map((score) => Number(score));
   const values = allValues.map((score, index) => [score, index + 1]).sort();
 
   return {

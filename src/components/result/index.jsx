@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { RESULT_DESCRIPTION } from '../../constants/result';
 import { COLOR_DARKSET } from '../../variables';
 import { Button, PageLayout } from '../common';
@@ -9,36 +9,38 @@ import AverageJobsByTypes from './averageJobsByTypes';
 import JobValuesResult from './jobValuesResult';
 import UserInfo from './userInfo';
 import ResultItemLayout from './resultItemLayout';
-// import { actionCreator } from '../../store/reducer';
+import { actionCreator } from '../../store/reducer';
 
 const PsychologyTestResult = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   useEffect(() => {
     console.log('임시 에러 차단용');
   }, [history]);
+
   // const dispatch = useDispatch();
 
   // TODO: 시간되면 saga로 변경!!
-  // const handleReplay = useCallback(() => {
-  //   // (async () => {
-  //   //   await Promise.all([
-  //   //     dispatch(actionCreator.initUser()),
-  //   //     dispatch(actionCreator.initQuestion()),
-  //   //     dispatch(actionCreator.initAnswer()),
-  //   //     dispatch(actionCreator.initResult()),
-  //   //     dispatch(actionCreator.initPage()),
-  //   //   ]);
+  const handleReplay = useCallback(() => {
+    // (async () => {
+    //   await Promise.all([
+    //     dispatch(actionCreator.initUser()),
+    //     dispatch(actionCreator.initQuestion()),
+    //     dispatch(actionCreator.initAnswer()),
+    //     dispatch(actionCreator.initResult()),
+    //     dispatch(actionCreator.initPage()),
+    //   ]);
 
-  //   //   history.replace('/exam');
-  //   // })();
-  //   dispatch(actionCreator.initUser());
-  //   dispatch(actionCreator.initQuestion());
-  //   dispatch(actionCreator.initAnswer());
-  //   dispatch(actionCreator.initResult());
-  //   dispatch(actionCreator.initPage());
+    //   history.replace('/exam');
+    // })();
+    dispatch(actionCreator.initPage());
+    dispatch(actionCreator.initUser());
+    dispatch(actionCreator.initQuestion());
+    dispatch(actionCreator.initAnswer());
+    dispatch(actionCreator.initResult());
 
-  //   history.replace('/exam');
-  // }, [dispatch, history]);
+    history.replace('/exam');
+  }, [dispatch, history]);
 
   return (
     <PageLayout
@@ -67,11 +69,10 @@ const PsychologyTestResult = () => {
         </StyledPsychologyTestResult>
       }
       footer={
-        <Temp href="/">
-          <Button>다시 검사하기</Button>
-
-          {/* <Button onClick={handleReplay}>다시 검사하기</Button> */}
-        </Temp>
+        <StyledButtonContainer>
+          {/* <Button>다시 검사하기</Button> */}
+          <Button onClick={handleReplay}>다시 검사하기</Button>
+        </StyledButtonContainer>
       }
     />
   );
@@ -79,7 +80,7 @@ const PsychologyTestResult = () => {
 // <Link to="/" replace>
 // </Link>
 
-const Temp = styled.a`
+const StyledButtonContainer = styled.div`
   display: block;
   margin-top: 8vh;
   @media screen and (max-width: 480px) {

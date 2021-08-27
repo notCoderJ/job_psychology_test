@@ -30,7 +30,7 @@ export const COLOR_DARKSET = {
 
   CHART: {
     BORDER: '#ffedfe',
-    DATA: [],
+    DATA: [138, 84, 247],
   },
 };
 // #4a58d3;

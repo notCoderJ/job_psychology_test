@@ -9,12 +9,24 @@ const getUserData = (state) => state.result.user;
 const getUserName = createSelector([getUserData], (userData) => userData?.name);
 const getInspectData = (state) => state.result.inspect;
 const getResultData = (state) => state.result.result;
+const getResultValuesAll = (state) => state.result.result?.allValues;
+const getValueDescriptions = (state) => state.result.valueDescriptions;
 const getJobData = (state) => state.result.jobs;
 
 const getUserInfo = createSelector(
   [isResultLoaded, getUserData, getInspectData],
   (isLoaded, userData, inspectData) =>
     isLoaded && { user: userData, inspect: inspectData },
+);
+
+const getFirstHighLevelValue = createSelector(
+  [getResultData],
+  (resultData) => resultData?.firstHighLevelValue,
+);
+
+const getFirstLowLevelValue = createSelector(
+  [getResultData],
+  (resultData) => resultData?.firstLowLevelValue,
 );
 
 const getTwoHighLevelValues = createSelector(
@@ -82,19 +94,32 @@ const HighLightText = styled.span`
   font-weight: bold;
 `;
 
+const getValueScoreScale = createSelector(
+  [getResultValuesAll, getFirstHighLevelValue],
+  (allValues, firstHighLevelValue) =>
+    allValues &&
+    firstHighLevelValue &&
+    Number(allValues[firstHighLevelValue - 1]),
+);
+
 const resultSelector = {
   isResultLoaded,
   getUserData,
   getUserName,
   getInspectData,
   getResultData,
+  getResultValuesAll,
+  getValueDescriptions,
   getJobData,
   getUserInfo,
+  getFirstHighLevelValue,
+  getFirstLowLevelValue,
   getTwoHighLevelValues,
   getTwoHighLevelValueNames,
   getTwoLowLevelValues,
   getTwoLowLevelValueNames,
   getPsychologyTestReulstText,
+  getValueScoreScale,
 };
 
 export default resultSelector;

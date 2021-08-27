@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import selector from '../../store/selector';
 import ResultChart from './chart';
 import { VIEW_OF_VALUES } from '../../constants';
+import ValueDescription from './valueDescriptions';
 
 const JobValuesResult = () => {
   // TODO: 가장 높은 가치에 대한 설명 표시하기
@@ -19,7 +20,7 @@ const JobValuesResult = () => {
       <StyledResultSummary>{psychologyTestReulstText}</StyledResultSummary>
       <StyledResultAnalysisContainer>
         <ResultChart labels={valueNames} />
-        <div>rolem</div>
+        <ValueDescription labels={valueNames} />
       </StyledResultAnalysisContainer>
     </StyledJobValuesResult>
   );

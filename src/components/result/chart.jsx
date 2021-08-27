@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PolarArea } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import selector from '../../store/selector';
+import { COLOR_DARKSET } from '../../variables';
+
+const colorOpaqueScale = 1;
+const convertColor = (scale, value) => {
+  const [r, g, b] = COLOR_DARKSET.CHART.DATA;
+  return `rgba(${r}, ${g}, ${b}, ${value * (colorOpaqueScale / scale)})`;
+};
 
 const ResultChart = ({ labels }) => {
   const {
@@ -10,6 +17,11 @@ const ResultChart = ({ labels }) => {
     // firstHighLevelValue,
     // secondHighLevelValue,
   } = useSelector(selector.getResultData);
+  const valuesScale = useSelector(selector.getValueScoreScale);
+
+  useEffect(() => {
+    console.log('scale 뽝', valuesScale);
+  }, [valuesScale]);
 
   return (
     <StyledResultChartWrapper>
@@ -18,30 +30,31 @@ const ResultChart = ({ labels }) => {
           labels,
           datasets: [
             {
-              label: '# of Votes',
               data: values,
-              backgroundColor: [
-                'rgba(138, 84, 247, 0.9)',
-                'rgba(138, 84, 247, 0.9)',
-                'rgba(153, 102, 255, 0.4)',
-                'rgba(153, 102, 255, 0.6)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(153, 102, 255, 0.3)',
-              ],
+              backgroundColor: values.map((score) =>
+                convertColor(valuesScale, score),
+              ),
               borderWidth: 1,
             },
           ],
         }}
         options={{
+          onClick: (e) => {
+            console.log(e);
+          },
           maintainAspectRatio: false,
           plugins: {
             legend: {
               position: 'bottom',
             },
           },
-          ticks: {
-            z: 1,
+          scale: {
+            backgroundColor: '#ffedfe',
           },
+          ticks: {
+            z: 0,
+          },
+          // elements
         }}
       />
     </StyledResultChartWrapper>
@@ -49,10 +62,10 @@ const ResultChart = ({ labels }) => {
 };
 
 const StyledResultChartWrapper = styled.div`
-  background-color: #ffedfe;
+  /* background-color: #ffedfe; */
   border-radius: 12px;
-  width: 55vh;
-  height: 55vh;
+  width: 60vh;
+  height: 60vh;
 
   @media screen and (max-width: 480px) {
     width: 45vh;

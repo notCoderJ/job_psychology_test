@@ -10,6 +10,7 @@ const UserRegister = () => {
   const dispatch = useDispatch();
   const userName = useSelector(selector.getUserName);
   const userGender = useSelector(selector.getUserGender);
+  const isUserNameValid = useSelector(selector.isUserNameValid);
 
   const saveName = useCallback(
     (name) => dispatch(actionCreator.saveName(name)),
@@ -21,20 +22,16 @@ const UserRegister = () => {
     [dispatch],
   );
 
-  const handleChangeName = useCallback(
-    (e) => {
-      // TODO: 이름 예외처리하기!
-      if (!e.target.value) {
-        console.log('뭐하냐 ㅡㅡ');
-        // 특수문자나 숫자 포함인지 확인!!
-      }
-      if (e.target.value === userName) {
-        return;
-      }
-      saveName(e.target.value);
-    },
-    [userName, saveName],
-  );
+  // const handleChangeName = useCallback(
+  //   (e) => {
+  //     // TODO: 입력된 이름이 기존 저장된 이름이랑 동일하다면(sage 등으로 가능하거나 debounce 처리?)
+  //     // if (e.target.value === userName) {
+  //     //   return;
+  //     // }
+  //     saveName(e.target.value);
+  //   },
+  //   [saveName],
+  // );
 
   const handleChangeGender = useCallback(
     (e) => {
@@ -60,10 +57,17 @@ const UserRegister = () => {
               defaultValue={userName}
               placeholder="이름을 입력해주세요."
               type="text"
-              onChange={handleChangeName}
+              onChange={(e) => {
+                saveName(e.target.value);
+              }}
             />
           </StyledNameInputLabel>
         </StyledItemContainer>
+        <StyledCheckInValidInput hidden={isUserNameValid}>
+          유요하지 않은 이름입니다.
+          <br />
+          한글 2자이상 입력해주세요.
+        </StyledCheckInValidInput>
         <StyledItemContainer>
           <StyledItemName>성별</StyledItemName>
           <StyledGenderCheckboxContainer>
@@ -91,9 +95,9 @@ const UserRegister = () => {
             </StyledGenderCheckboxLabel>
           </StyledGenderCheckboxContainer>
         </StyledItemContainer>
-        <StyledGenderCheckGuide hidden={userGender}>
-          성별은 필수 입력 사항입니다.
-        </StyledGenderCheckGuide>
+        <StyledCheckInValidInput hidden={userGender}>
+          성별은 필수 입력사항입니다.
+        </StyledCheckInValidInput>
       </StyledUserInputContainer>
     </StyledUserRegisterContainer>
   );
@@ -102,10 +106,10 @@ const UserRegister = () => {
 // Define Styled Components
 const StyledUserRegisterContainer = styled.fieldset`
   border-style: none;
-  margin-top: 30vh;
+  margin-top: 27vh;
 
   @media screen and (max-width: 480px) {
-    margin-top: 25vh;
+    margin-top: 23vh;
   }
 `;
 
@@ -148,6 +152,7 @@ const StyledNameInputLabel = styled.label`
     color: white;
     font-size: 1.1rem;
     text-align: center;
+    margin-bottom: 0.3rem;
 
     ::placeholder {
       color: ${COLOR_DARKSET.FONT};
@@ -200,11 +205,11 @@ const StyledGenderCheckboxLabel = styled.label`
   }
 `;
 
-const StyledGenderCheckGuide = styled.p`
+const StyledCheckInValidInput = styled.p`
   font-size: 0.8rem;
   margin-top: 0.2rem;
   color: #ec1010;
-  animation: 1.5s linear infinite alternate notice_check;
+  animation: 1s linear infinite alternate notice_check;
 
   @keyframes notice_check {
     from {
