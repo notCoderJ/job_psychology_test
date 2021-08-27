@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -14,25 +14,9 @@ import { actionCreator } from '../../store/reducer';
 const PsychologyTestResult = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log('임시 에러 차단용');
-  }, [history]);
-
-  // const dispatch = useDispatch();
 
   // TODO: 시간되면 saga로 변경!!
   const handleReplay = useCallback(() => {
-    // (async () => {
-    //   await Promise.all([
-    //     dispatch(actionCreator.initUser()),
-    //     dispatch(actionCreator.initQuestion()),
-    //     dispatch(actionCreator.initAnswer()),
-    //     dispatch(actionCreator.initResult()),
-    //     dispatch(actionCreator.initPage()),
-    //   ]);
-
-    //   history.replace('/exam');
-    // })();
     dispatch(actionCreator.initPage());
     dispatch(actionCreator.initUser());
     dispatch(actionCreator.initQuestion());
@@ -70,15 +54,12 @@ const PsychologyTestResult = () => {
       }
       footer={
         <StyledButtonContainer>
-          {/* <Button>다시 검사하기</Button> */}
           <Button onClick={handleReplay}>다시 검사하기</Button>
         </StyledButtonContainer>
       }
     />
   );
 };
-// <Link to="/" replace>
-// </Link>
 
 const StyledButtonContainer = styled.div`
   display: block;

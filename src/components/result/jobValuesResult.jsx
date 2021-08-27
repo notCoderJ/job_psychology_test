@@ -20,7 +20,9 @@ const JobValuesResult = () => {
       <StyledResultSummary>{psychologyTestReulstText}</StyledResultSummary>
       <StyledResultAnalysisContainer>
         <ResultChart labels={valueNames} />
-        <ValueDescription labels={valueNames} />
+        <StyledValueDescriptionContainer>
+          <ValueDescription labels={valueNames} />
+        </StyledValueDescriptionContainer>
       </StyledResultAnalysisContainer>
     </StyledJobValuesResult>
   );
@@ -46,10 +48,12 @@ const StyledResultAnalysisContainer = styled.div`
   width: 100%;
   margin-top: 3rem;
 
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
   }
 `;
+
+const StyledValueDescriptionContainer = styled.article``;
 
 export default JobValuesResult;

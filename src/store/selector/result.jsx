@@ -92,6 +92,11 @@ const HighLightText = styled.span`
   color: ${COLOR_DARKSET.HIGHLIGHT_TEXT};
   font-size: 1.1rem;
   font-weight: bold;
+  opacity: 0.8;
+
+  :hover {
+    opacity: 1;
+  }
 `;
 
 const getValueScoreScale = createSelector(

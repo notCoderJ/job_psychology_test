@@ -34,3 +34,5 @@ export const COLOR_DARKSET = {
   },
 };
 // #4a58d3;
+// pink : #dfa9e0fb
+// green : #a9dce0fa

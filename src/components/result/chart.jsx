@@ -40,7 +40,7 @@ const ResultChart = ({ labels }) => {
         }}
         options={{
           onClick: (e) => {
-            console.log(e);
+            console.log(e.chart);
           },
           maintainAspectRatio: false,
           plugins: {
@@ -48,9 +48,7 @@ const ResultChart = ({ labels }) => {
               position: 'bottom',
             },
           },
-          scale: {
-            backgroundColor: '#ffedfe',
-          },
+          scale: {},
           ticks: {
             z: 0,
           },
@@ -62,14 +60,19 @@ const ResultChart = ({ labels }) => {
 };
 
 const StyledResultChartWrapper = styled.div`
-  /* background-color: #ffedfe; */
+  background-color: #ffedfe;
   border-radius: 12px;
-  width: 60vh;
-  height: 60vh;
+  width: 30vw;
+  height: 30vw;
+
+  @media screen and (max-width: 1024px) {
+    width: 65vw;
+    height: 65vw;
+  }
 
   @media screen and (max-width: 480px) {
-    width: 45vh;
-    height: 45vh;
+    width: 80vw;
+    height: 80vw;
   }
 `;
 
