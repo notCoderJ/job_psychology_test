@@ -15,7 +15,7 @@ const UserInfo = () => {
       }}
       contents={{
         head: ['이름', '성별', '구분', '검사 종류', '검사일'],
-        body: [user.name, user.gender, user.type, '', inspect.date],
+        body: [user.name, user.gender, user.type, inspect.type, inspect.date],
       }}
     />
   );

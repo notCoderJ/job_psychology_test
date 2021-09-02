@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { GENDER_NAMES } from '../../constants';
 import { actionCreator } from '../../store/reducer';
 import selector from '../../store/selector';
+import { debounce } from '../../utils';
 import { COLOR_DARKSET } from '../../variables';
 
 const UserRegister = () => {
@@ -13,7 +14,7 @@ const UserRegister = () => {
   const isUserNameValid = useSelector(selector.isUserNameValid);
 
   const saveName = useCallback(
-    (name) => dispatch(actionCreator.saveName(name)),
+    (e) => dispatch(actionCreator.saveName(e.target.value)),
     [dispatch],
   );
 
@@ -21,17 +22,6 @@ const UserRegister = () => {
     (gender) => dispatch(actionCreator.saveGender(gender)),
     [dispatch],
   );
-
-  // const handleChangeName = useCallback(
-  //   (e) => {
-  //     // TODO: 입력된 이름이 기존 저장된 이름이랑 동일하다면(sage 등으로 가능하거나 debounce 처리?)
-  //     // if (e.target.value === userName) {
-  //     //   return;
-  //     // }
-  //     saveName(e.target.value);
-  //   },
-  //   [saveName],
-  // );
 
   const handleChangeGender = useCallback(
     (e) => {
@@ -51,21 +41,18 @@ const UserRegister = () => {
       <StyledUserInputContainer>
         <StyledItemContainer>
           <StyledNameInputLabel htmlFor="user-name">
+            <input hidden type="text" />
             <input
               id="user-name"
               name="user-name"
               defaultValue={userName}
               placeholder="이름을 입력해주세요."
               type="text"
-              onChange={(e) => {
-                saveName(e.target.value);
-              }}
+              onChange={debounce(saveName, 200)}
             />
           </StyledNameInputLabel>
         </StyledItemContainer>
         <StyledCheckInValidInput hidden={isUserNameValid}>
-          유요하지 않은 이름입니다.
-          <br />
           한글 2자이상 입력해주세요.
         </StyledCheckInValidInput>
         <StyledItemContainer>
@@ -135,7 +122,7 @@ const StyledItemContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 `;
 
 const StyledItemName = styled.span`
