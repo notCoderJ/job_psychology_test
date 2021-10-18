@@ -9,7 +9,7 @@ import AverageJobsByTypes from './averageJobsByTypes';
 import JobValuesResult from './jobValuesResult';
 import UserInfo from './userInfo';
 import ResultItemLayout from './resultItemLayout';
-import { actionCreator } from '../../store/reducer';
+import { actions } from '../../store/modules';
 
 const PsychologyTestResult = () => {
   const history = useHistory();
@@ -17,11 +17,11 @@ const PsychologyTestResult = () => {
 
   // TODO: 시간되면 saga로 변경!!
   const handleReplay = useCallback(() => {
-    dispatch(actionCreator.initPage());
-    dispatch(actionCreator.initUser());
-    dispatch(actionCreator.initQuestion());
-    dispatch(actionCreator.initAnswer());
-    dispatch(actionCreator.initResult());
+    dispatch(actions.initPage());
+    dispatch(actions.initUser());
+    dispatch(actions.initQuestion());
+    dispatch(actions.initAnswer());
+    dispatch(actions.initResult());
 
     history.replace('/exam');
   }, [dispatch, history]);

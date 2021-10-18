@@ -4,21 +4,28 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
+  // Redirect,
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import PsychologyTest from './components/test';
 import PsychologyTestComplete from './components/complete';
-import store from './store';
 import PsychologyTestResult from './components/result';
+import store from './store';
+import MainPage from './components/main';
+import TestPage from './components/test';
 
 function App() {
   return (
     <Router>
       <Provider store={store}>
         <Switch>
-          <Route path="/exam">
-            <PsychologyTest />
+          <Route exact path="/">
+            <MainPage />
+          </Route>
+          <Route exact path="/test">
+            <TestPage />
+          </Route>
+          <Route path="/result/:seq">
+            <PsychologyTestResult />
           </Route>
           <Route path="/complete/:seq">
             <PsychologyTestComplete />
@@ -26,8 +33,9 @@ function App() {
           <Route path="/result/:seq">
             <PsychologyTestResult />
           </Route>
-          <Route path="/">
-            <Redirect to="/exam" />
+          <Route path="*">
+            {/* TODO: Add 404 Not found */}
+            {/* <Redirect to="/" /> */}
           </Route>
         </Switch>
       </Provider>

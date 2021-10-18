@@ -12,6 +12,7 @@ export const debounce = (func, delay) => {
 
   return (e) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(func.bind(this, e), delay);
+    timeoutId = setTimeout(() => func(e), delay);
+    // timeoutId = setTimeout(func.bind(this, e), delay); TODO: 왜 bind 했지??
   };
 };

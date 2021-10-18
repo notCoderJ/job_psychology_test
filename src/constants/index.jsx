@@ -3,6 +3,7 @@ export const API_BASE_URL = 'https://www.career.go.kr/inspct';
 export const JOB_INFO_URL =
   'https://www.career.go.kr/cnet/front/base/job/jobView.do?SEQ=';
 
+export const GENDER = { 남성: 100323, 여성: 100324 };
 export const GENDER_NAMES = { 100323: '남성', 100324: '여성' };
 export const VIEW_OF_VALUES = {
   능력발휘: 0,

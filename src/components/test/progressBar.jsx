@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import selector from '../../store/selector';
+import { selector } from '../../store/modules';
 import { COLOR_DARKSET } from '../../variables';
 
 // Need

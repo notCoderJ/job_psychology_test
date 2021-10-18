@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import selector from '../../store/selector';
+import { selector } from '../../store/modules';
 import ResultChart from './chart';
 import { VIEW_OF_VALUES } from '../../constants';
 import ValueDescription from './valueDescriptions';
