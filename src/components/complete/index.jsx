@@ -4,8 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import api from '../../api';
 import { COMPLETE_DESCRIPTION } from '../../constants/complete';
-import { actionCreator } from '../../store/reducer';
-import selector from '../../store/selector';
+import { actions, selector } from '../../store/modules';
 import { COLOR_DARKSET } from '../../variables';
 import { PageLayout, Button } from '../common';
 
@@ -20,18 +19,18 @@ const PsychologyTestComplete = () => {
   const questionSeq = useSelector(selector.getQuestionSeq);
 
   const loadResultData = useCallback(
-    (resultData) => dispatch(actionCreator.loadResult(resultData)),
+    (resultData) => dispatch(actions.loadResult(resultData)),
     [dispatch],
   );
 
   const loadJobData = useCallback(
-    (jobData) => dispatch(actionCreator.loadJobData(jobData)),
+    (jobData) => dispatch(actions.loadJobData(jobData)),
     [dispatch],
   );
 
   const loadValueDescriptions = useCallback(
     (valueDescriptions) =>
-      dispatch(actionCreator.loadValueDescriptions(valueDescriptions)),
+      dispatch(actions.loadValueDescriptions(valueDescriptions)),
     [dispatch],
   );
 
