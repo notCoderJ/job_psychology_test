@@ -6,8 +6,8 @@ export const SAMPLE_QUESTION = {
   questionNumber: 0,
   description: '두 개 가치 중에 자신에게 더 중요한 가치를 선택하세요.',
   defaultAnswerOptions: [
-    { description: '보수', score: '1' },
-    { description: '사회적 인정', score: '2' },
+    { option: '보수', score: '1' },
+    { option: '사회적 인정', score: '2' },
   ],
 };
 

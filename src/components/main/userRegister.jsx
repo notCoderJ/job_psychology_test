@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import styled, { css } from 'styled-components';
 import { ToastContainer, toast } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
+import styled from 'styled-components';
 import { GENDER } from '../../constants';
 import { actions, selector } from '../../store/modules';
 import { debounce } from '../../utils';
@@ -73,7 +74,7 @@ const UserRegister = ({ submitHandler }) => {
   // TODO: Error processing
   // TODO: Create fieldset templete and temp css
   return (
-    <form onSubmit={handleSubmit}>
+    <StyledForm onSubmit={handleSubmit}>
       <fieldset>
         <legend>사용자 등록</legend>
         <label htmlFor="userName">
@@ -139,8 +140,10 @@ const UserRegister = ({ submitHandler }) => {
       </fieldset>
       <button type="submit">검사 시작</button>
       <ToastContainer />
-    </form>
+    </StyledForm>
   );
 };
+
+const StyledForm = styled.form``;
 
 export default UserRegister;

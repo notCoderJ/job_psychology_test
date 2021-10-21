@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProgressBar from './progressBar';
 import Questions from './questions';
 import { actions, selector } from '../../store/modules';
+import Example from './example';
+import { handleScrollDown } from '../../utils';
 
 // const getResultRequestFormData = (state) => ({
 //   qestrnSeq: state.question.questionSeq,
@@ -18,26 +20,29 @@ import { actions, selector } from '../../store/modules';
 const TestPage = () => {
   const dispatch = useDispatch();
   // const history = useHistory();
-  // const totalPageCount = useSelector(selector.getTotalPageCount);
-  const currentPageIndex = useSelector(selector.getCurrentPageIndex);
-  const totalPages = useSelector(selector.getTotalPages);
-  // const lastPageIndex = useMemo(() => totalPageCount - 1, [totalPageCount]);
-  const totalPageIndexes = useMemo(
-    () => totalPages.map((index) => String(index)),
-    [totalPages],
+  const sectionCount = useSelector(selector.getSectionCount);
+  const currentSection = useSelector(selector.getCurrentSection);
+  const isSectionAnswered = useSelector(
+    selector.isSectionAnswered(currentSection),
+  );
+  // const lastPageIndex = useMemo(() => sectionCount - 1, [sectionCount]);
+  const totalSection = useMemo(
+    () => [...Array(sectionCount).keys()].map((section) => String(section)),
+    [sectionCount],
   );
 
   const updatePageIndex = useCallback(
     (_, destination) =>
-      currentPageIndex !== destination.index &&
-      dispatch(actions.updatePageIndex(destination.index)),
-    [dispatch, currentPageIndex],
+      currentSection !== destination.index &&
+      dispatch(actions.updateSection(destination.index)),
+    [dispatch, currentSection],
   );
 
-  // TEST
-  useEffect(() => {
-    console.log('현재:', currentPageIndex);
-  }, [currentPageIndex]);
+  // Control Next Scroll
+  useEffect(
+    () => handleScrollDown(window.fullpage_api)(isSectionAnswered),
+    [isSectionAnswered],
+  );
 
   // const handleSubmit = useCallback(() => {});
 
@@ -48,26 +53,21 @@ const TestPage = () => {
         <h1>직업가치관검사 페이지</h1>
       </header>
       <main role="main">
-        <form action="">
+        <div role="form">
           <ReactFullpage
             // licenseKey=""
-            anchors={totalPageIndexes}
-            afterLoad={updatePageIndex}
-            onLeave={() => true}
-            render={({ state, fullpageApi }) => (
+            anchors={totalSection}
+            onLeave={updatePageIndex}
+            render={() => (
               <ReactFullpage.Wrapper>
-                {totalPages.map((pageIndex) => (
-                  <Questions
-                    key={`test#${pageIndex}`}
-                    pageIndex={pageIndex}
-                    state={state}
-                    fullpageApi={fullpageApi}
-                  />
+                <Example />
+                {totalSection.slice(1).map((section) => (
+                  <Questions key={`test#${section}`} section={section} />
                 ))}
               </ReactFullpage.Wrapper>
             )}
           />
-        </form>
+        </div>
       </main>
       <footer id="footer">나는 발</footer>
     </div>

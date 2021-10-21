@@ -17,7 +17,7 @@ const PsychologyTestResult = () => {
 
   // TODO: 시간되면 saga로 변경!!
   const handleReplay = useCallback(() => {
-    dispatch(actions.initPage());
+    dispatch(actions.initSection());
     dispatch(actions.initUser());
     dispatch(actions.initQuestion());
     dispatch(actions.initAnswer());

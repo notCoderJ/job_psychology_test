@@ -1,4 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { questionSelector } from './question';
 
 const initialState = {
   answerCount: 0,
@@ -23,18 +24,21 @@ const answerSlice = createSlice({
 
 // Define Selectors
 const getAnswers = (state) => state.answer.answers;
-const getAnswer = (number) => (state) =>
-  state.answer.answers[number] ? state.answer.answers[number] : null;
 const getAnswerCount = (state) => state.answer.answerCount;
-const getActualAnswerCount = createSelector([getAnswerCount], (answerCount) =>
-  answerCount > 0 ? answerCount - 1 : 0,
-);
+const getAnswer = (number) => (state) => state.answer.answers[number];
+
+const isSectionAnswered = (section) =>
+  createSelector(
+    [getAnswers, questionSelector.getQuestionNumbers(section)],
+    (answers, questions) =>
+      questions.filter((number) => !answers[number]).length === 0,
+  );
 
 export const answerActions = answerSlice.actions;
 export const answerSelector = {
   getAnswers,
-  getAnswer,
   getAnswerCount,
-  getActualAnswerCount,
+  getAnswer,
+  isSectionAnswered,
 };
 export default answerSlice.reducer;
