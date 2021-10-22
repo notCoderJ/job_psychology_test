@@ -1,4 +1,7 @@
 // import { all } from 'redux-saga/effects';
+import { combineReducers } from '@reduxjs/toolkit';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 import psychologyTestReducer, {
   psychologyTestActions,
   psychologyTestSelector,
@@ -20,13 +23,20 @@ export function* rootSaga() {
   // yield all[];
 }
 
-const reducer = {
+const rootReducer = combineReducers({
   user: userReducer,
   question: questionReducer,
   answer: answerReducer,
   psychologyTest: psychologyTestReducer,
   result: resultReducer,
+});
+
+const persistConfig = {
+  key: 'root',
+  storage,
 };
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const selector = {
   ...userSelector,
@@ -36,4 +46,4 @@ export const selector = {
   ...resultSelector,
 };
 
-export default reducer;
+export default persistedReducer;
