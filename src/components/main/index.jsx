@@ -19,7 +19,7 @@ const MainPage = () => {
         // TODO: saga 도입해서 question 겟하면 page정보 갱신하기!
         const questions = await api.getQuestions();
         dispatch(actions.loadQuestions(reducerState.success(questions.RESULT)));
-        history.replace('/test#0');
+        history.push('/test#0');
       } catch (err) {
         dispatch(actions.loadQuestions(reducerState.failure(err)));
         alert(`검사 문항을 불러오는데 실패했습니다. 잠시후 다시 시도해주세요.`);
