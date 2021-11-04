@@ -41,7 +41,7 @@ const commonAPI =
       if (!normal.test(response.status)) {
         throw new Error(response.status);
       }
-
+      
       return response.data;
     } catch (e) {
       throw new Error(e);
