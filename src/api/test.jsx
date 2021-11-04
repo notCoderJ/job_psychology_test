@@ -1,50 +1,17 @@
-import axios from 'axios';
-import { API_KEY } from '../constants';
 import { QUESTION_SEQ } from '../constants/test';
-import { createBaseURL } from '../utils';
+import psychologyAPI, { createBaseURL } from './common';
 
-const api = axios.create({
-  baseURL: createBaseURL('test'),
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const API_KEY = process.env.REACT_APP_API_KEY;
+const BASE_URL = createBaseURL('test');
 
-const getQuestions = async () => {
-  try {
-    const res = await api.get('/questions', {
-      params: {
-        apikey: API_KEY,
-        q: QUESTION_SEQ,
-      },
-    });
-    if (res.data.SUCC_YN === 'Y') {
-      return res.data.RESULT;
-    }
-
-    throw new Error(res.data.ERROR_REASON);
-  } catch (err) {
-    throw new Error(err);
-  }
+const testAPI = {
+  getQuestions: psychologyAPI.get(BASE_URL)('/questions')({
+    apikey: API_KEY,
+    q: QUESTION_SEQ,
+  }),
+  getResultURL: psychologyAPI.post(BASE_URL)('/report')({
+    apikey: API_KEY,
+  }),
 };
-
-const getResultURL = async (data) => {
-  try {
-    const res = await api.post(
-      '/report',
-      JSON.stringify({ apikey: API_KEY, ...data }),
-    );
-
-    if (res.data.SUCC_YN === 'Y') {
-      return res.data.RESULT;
-    }
-
-    throw new Error(res.data.ERROR_REASON);
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-const testAPI = { getQuestions, getResultURL };
 
 export default testAPI;

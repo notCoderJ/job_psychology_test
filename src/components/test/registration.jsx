@@ -2,8 +2,7 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { GENDER_NAMES } from '../../constants';
-import { actionCreator } from '../../store/reducer';
-import selector from '../../store/selector';
+import { actions, selector } from '../../store/modules';
 import { debounce } from '../../utils';
 import { COLOR_DARKSET } from '../../variables';
 
@@ -14,12 +13,12 @@ const UserRegister = () => {
   const isUserNameValid = useSelector(selector.isUserNameValid);
 
   const saveName = useCallback(
-    (e) => dispatch(actionCreator.saveName(e.target.value)),
+    (e) => dispatch(actions.saveName(e.target.value)),
     [dispatch],
   );
 
   const saveGender = useCallback(
-    (gender) => dispatch(actionCreator.saveGender(gender)),
+    (gender) => dispatch(actions.saveGender(gender)),
     [dispatch],
   );
 

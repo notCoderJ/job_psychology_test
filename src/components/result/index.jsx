@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -9,21 +9,21 @@ import AverageJobsByTypes from './averageJobsByTypes';
 import JobValuesResult from './jobValuesResult';
 import UserInfo from './userInfo';
 import ResultItemLayout from './resultItemLayout';
-import { actionCreator } from '../../store/reducer';
+import { persistor } from '../../store';
 
 const PsychologyTestResult = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  // TODO: 시간되면 saga로 변경!!
-  const handleReplay = useCallback(() => {
-    dispatch(actionCreator.initPage());
-    dispatch(actionCreator.initUser());
-    dispatch(actionCreator.initQuestion());
-    dispatch(actionCreator.initAnswer());
-    dispatch(actionCreator.initResult());
+  // Init LocalStorage & Pause
+  useEffect(() => {
+    persistor.purge();
+    persistor.pause();
+  }, []);
 
-    history.replace('/exam');
+  const handleReplay = useCallback(() => {
+    dispatch({ type: 'RESET' });
+    history.replace('/');
   }, [dispatch, history]);
 
   return (
@@ -50,12 +50,10 @@ const PsychologyTestResult = () => {
             title="2. 나의 가치관과 관련이 높은 직업"
             contents={<AverageJobsByTypes />}
           />
+          <StyledButtonContainer>
+            <Button onClick={handleReplay}>다시 검사하기</Button>
+          </StyledButtonContainer>
         </StyledPsychologyTestResult>
-      }
-      footer={
-        <StyledButtonContainer>
-          <Button onClick={handleReplay}>다시 검사하기</Button>
-        </StyledButtonContainer>
       }
     />
   );

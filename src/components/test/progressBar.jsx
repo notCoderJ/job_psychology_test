@@ -1,17 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import selector from '../../store/selector';
+import { selector } from '../../store/modules';
 import { COLOR_DARKSET } from '../../variables';
 
 // Need
 //  1. Total questions count(length)
 //  2. Current answer recode count
-const ProgressBar = () => {
+const ProgressBar = ({ height, width }) => {
   const percentage = useSelector(selector.getCurrentPercentage);
 
   return (
-    <StyledProgressBarContainer>
+    <StyledProgressBarContainer height={height} width={width}>
       <StyledPercentageBoard>
         <span>검사 진행률</span>
         <span>{percentage}%</span>
@@ -24,16 +24,16 @@ const ProgressBar = () => {
 };
 
 const StyledProgressBarContainer = styled.div`
+  width: ${(props) => (props.width ? `${props.width}` : '100%')};
+  height: ${(props) => (props.height ? `${props.height}` : '15vh')};
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: auto;
 
   align-items: center;
-  height: 15vh;
 
   @media screen and (max-width: 480px) {
-    height: 13vh;
+    height: ${(props) => (props.height ? `${props.height}` : '13vh')};
   }
 `;
 
@@ -61,7 +61,7 @@ const StyledPercentageBoard = styled.div`
 const StyledProgressBar = styled.div`
   width: 100%;
   height: 12%;
-  border-radius: 10vh;
+  border-radius: 10px;
   border: solid 0.25vh ${COLOR_DARKSET.PROGRESSBAR_EDGE};
   margin-bottom: 2vh;
 
@@ -74,13 +74,10 @@ const StyledProgressBar = styled.div`
 const ProgressBarGage = styled.div`
   width: ${(props) => props.percentage}%;
   height: 100%;
-  border-radius: 10vh;
+  border-radius: 10px;
   background-color: ${COLOR_DARKSET.PROGRESSBAR_GAGE};
   opacity: 0.9;
   transition: all 300ms linear;
-
-  @media screen and (max-width: 480px) {
-  }
 `;
 
 export default ProgressBar;

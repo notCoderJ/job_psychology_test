@@ -2,8 +2,7 @@ import React, { useCallback } from 'react';
 import { PolarArea } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { actionCreator } from '../../store/reducer';
-import selector from '../../store/selector';
+import { actions, selector } from '../../store/modules';
 import { COLOR_DARKSET } from '../../variables';
 
 const colorOpaqueScale = 1;
@@ -14,11 +13,7 @@ const convertColor = (scale, value) => {
 
 const ResultChart = ({ labels }) => {
   const dispatch = useDispatch();
-  const {
-    allValues: values,
-    // firstHighLevelValue,
-    // secondHighLevelValue,
-  } = useSelector(selector.getResultData);
+  const { allValues: values } = useSelector(selector.getResultData);
   const valuesScale = useSelector(selector.getValueScoreScale);
 
   const handleClickValue = useCallback(
@@ -30,7 +25,7 @@ const ResultChart = ({ labels }) => {
         return;
       }
 
-      dispatch(actionCreator.setCurrentValueDescription(legendItem[0]?.index));
+      dispatch(actions.setCurrentValueDescription(legendItem[0]?.index));
     },
     [dispatch, labels],
   );
