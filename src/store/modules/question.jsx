@@ -1,17 +1,11 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import {
-  MAX_PAGE_QUESTION_COUNT,
-  QUESTION_SEQ,
-  SAMPLE_QUESTION,
-} from '../../constants/test';
+import { MAX_PAGE_QUESTION_COUNT, SAMPLE_QUESTION } from '../../constants/test';
 import { reducerState } from '../../utils/reducer';
 
 const EXAMPLE_COUNT = 1;
 const initialState = {
   sectionCount: 0,
-  questionSeq: QUESTION_SEQ,
   questions: reducerState.initial([]),
-  startDate: new Date().getTime(),
 };
 
 // Define Actions & Reducer
@@ -19,9 +13,6 @@ const questionSlice = createSlice({
   name: 'question',
   initialState,
   reducers: {
-    initQuestion() {
-      return initialState;
-    },
     reqQuestions(state, action) {
       state.questions = action.payload;
     },
@@ -33,7 +24,7 @@ const questionSlice = createSlice({
         return;
       }
 
-      state.sectionCount +=
+      state.sectionCount =
         Math.ceil(data.length / MAX_PAGE_QUESTION_COUNT) + EXAMPLE_COUNT;
       state.questions.data = [SAMPLE_QUESTION].concat(
         data.map(
@@ -71,8 +62,6 @@ const questionSlice = createSlice({
 // Define Selectors
 const isQuestionLoading = (state) => state.question.questions.loading;
 const errorQuestionLoad = (state) => state.question.questions.error;
-const getStartDate = (state) => state.question.startDate;
-const getQuestionSeq = (state) => state.question.questionSeq;
 const getQuestions = (state) => state.question.questions.data;
 const getSectionCount = (state) => state.question.sectionCount;
 const getQuestionCount = createSelector([getQuestions], (questions) =>
@@ -112,8 +101,6 @@ export const questionActions = questionSlice.actions;
 export const questionSelector = {
   isQuestionLoading,
   errorQuestionLoad,
-  getStartDate,
-  getQuestionSeq,
   getQuestions,
   getSectionCount,
   getQuestionCount,

@@ -1,15 +1,26 @@
+import { createBrowserHistory } from 'history';
 import { configureStore } from '@reduxjs/toolkit';
-// import createSagaMiddleware from 'redux-saga';
+import reduxReset from 'redux-reset';
+import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger';
-import persistedReducer from './modules';
+import { persistStore } from 'redux-persist';
+import persistedReducer, { rootSaga } from './modules';
 
-// const sagaMiddleware = createSagaMiddleware();
+const customHistory = createBrowserHistory();
+const sagaMiddleware = createSagaMiddleware({
+  context: { history: customHistory },
+});
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: [logger],
+  middleware: [sagaMiddleware, logger],
+  enhancers: [reduxReset()],
 });
 
-// sagaMiddleware.run(rootSaga);
+sagaMiddleware.run(rootSaga);
 
+const persistor = persistStore(store);
+persistor.pause();
+
+export { persistor, customHistory };
 export default store;

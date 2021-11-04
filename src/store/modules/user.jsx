@@ -1,12 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 
-const TARGET_NORMAL = 100209;
 const initialState = {
   name: '',
   gender: '',
-  grade: '',
-  email: '',
-  targetSeq: TARGET_NORMAL,
 };
 
 // Define Actions & Reducer
@@ -14,9 +10,6 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    initUser() {
-      return initialState;
-    },
     saveName(state, action) {
       const userName = action.payload;
       const isValid = /^[가-힣]{2,15}$/;
@@ -37,14 +30,15 @@ const userSlice = createSlice({
 // Define Selectors
 const getUserName = (state) => state.user.name;
 const getUserGender = (state) => state.user.gender;
-const getUserGrade = (state) => state.user.grade;
-const getUserTargetSeq = (state) => state.user.targetSeq;
+const getUserData = createSelector(
+  [getUserName, getUserGender],
+  (name, gender) => ({ name, gender }),
+);
 
 export const userActions = userSlice.actions;
 export const userSelector = {
   getUserName,
   getUserGender,
-  getUserGrade,
-  getUserTargetSeq,
+  getUserData,
 };
 export default userSlice.reducer;

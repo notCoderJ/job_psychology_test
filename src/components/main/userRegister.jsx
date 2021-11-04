@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { GENDER } from '../../constants';
 import { actions, selector } from '../../store/modules';
 import { debounce } from '../../utils';
+import { COLOR_DARKSET } from '../../variables';
+import { Button } from '../common';
 
 const UserRegister = ({ submitHandler }) => {
   const dispatch = useDispatch();
@@ -71,46 +73,26 @@ const UserRegister = ({ submitHandler }) => {
     [submitHandler, userGender, userName],
   );
 
-  // TODO: Error processing
-  // TODO: Create fieldset templete and temp css
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <StyledUserContainer onSubmit={handleSubmit}>
       <fieldset>
         <legend>사용자 등록</legend>
-        <label htmlFor="userName">
-          <span>이름</span>
-          <abbr
-            title="필수 항목"
-            aria-label="필수 항목"
-            style={{ textDecoration: 'None', color: 'red' }}
-          >
-            *
-          </abbr>
+        <StyledNameInputLabel htmlFor="userName">
           <input hidden type="text" />
           <input
             ref={nameRef}
             id="userName"
             defaultValue={userName}
+            placeholder="이름을 입력해주세요."
             type="text"
             onChange={debounce(saveName, 200)}
           />
-          <span>한글 2자이상 작성해주세요.</span>
-        </label>
-        <fieldset>
-          <legend>
-            <span>성별</span>
-            <abbr
-              title="필수 항목"
-              aria-label="필수 항목"
-              style={{ textDecoration: 'None', color: 'red' }}
-            >
-              *
-            </abbr>
-          </legend>
-          <ul>
+        </StyledNameInputLabel>
+        <StyledItemContainer>
+          <legend>성별</legend>
+          <StyledGenderContainer>
             <li>
-              <label htmlFor="genderMale">
-                남성
+              <StyledGenderLabel htmlFor="genderMale">
                 <input
                   ref={genderRef}
                   id="genderMale"
@@ -120,11 +102,11 @@ const UserRegister = ({ submitHandler }) => {
                   onClick={saveGender}
                   defaultChecked={userGender === GENDER['남성']}
                 />
-              </label>
+                남성
+              </StyledGenderLabel>
             </li>
             <li>
-              <label htmlFor="genderFemale">
-                여성
+              <StyledGenderLabel htmlFor="genderFemale">
                 <input
                   id="genderFemale"
                   name="userGender"
@@ -133,17 +115,117 @@ const UserRegister = ({ submitHandler }) => {
                   onClick={saveGender}
                   defaultChecked={userGender === GENDER['여성']}
                 />
-              </label>
+                여성
+              </StyledGenderLabel>
             </li>
-          </ul>
-        </fieldset>
+          </StyledGenderContainer>
+        </StyledItemContainer>
       </fieldset>
-      <button type="submit">검사 시작</button>
+      <Button type="submit">검사 시작</Button>
       <ToastContainer />
-    </StyledForm>
+    </StyledUserContainer>
   );
 };
 
-const StyledForm = styled.form``;
+// Define Styled Components
+const StyledUserContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  > fieldset {
+    border-style: none;
+    margin-bottom: 2vh;
+
+    > legend {
+      font-size: 0;
+    }
+  }
+`;
+
+const StyledItemContainer = styled.fieldset`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  border: none;
+
+  & > legend {
+    font-size: 0;
+  }
+
+  ::before {
+    content: '성별';
+    font-size: 1.1rem;
+    margin: auto 1rem auto 0;
+  }
+`;
+
+const StyledNameInputLabel = styled.label`
+  > input {
+    width: 12rem;
+    padding: 0.5rem 0;
+    border-style: none;
+    border-bottom: solid 2px ${COLOR_DARKSET.HIGHLIGHT_TEXT};
+    background-color: transparent;
+    color: white;
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+
+    ::placeholder {
+      color: ${COLOR_DARKSET.FONT};
+      font-size: 1rem;
+      text-align: center;
+    }
+    :focus {
+      outline: none;
+      ::placeholder {
+        font-size: 0;
+      }
+    }
+  }
+`;
+
+const StyledGenderContainer = styled.ul`
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+`;
+
+const StyledGenderLabel = styled.label`
+  cursor: pointer;
+
+  > input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-right: 0.4rem;
+    border: 2px solid ${COLOR_DARKSET.CHECKBOX_BORDER};
+    border-radius: 50%;
+    transition: 0.1s all ease-in-out;
+
+    :checked {
+      border: 4px solid ${COLOR_DARKSET.CHECKBOX};
+    }
+
+    @media screen and (max-width: 480px) {
+      & {
+        width: 0.7rem;
+        height: 0.7rem;
+        margin-right: 0.3rem;
+      }
+
+      :checked {
+        border-width: 3.5px;
+      }
+    }
+  }
+`;
 
 export default UserRegister;

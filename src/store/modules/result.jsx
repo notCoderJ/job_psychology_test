@@ -1,21 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { GENDER_NAMES, VIEW_OF_VALUES } from '../../constants';
+import { VIEW_OF_VALUES } from '../../constants';
 import { MONTHS, WEEKDAYS } from '../../constants/result';
 import { getFixedDigits } from '../../utils';
 import { userSelector } from './user';
 import { COLOR_DARKSET } from '../../variables';
+import { reducerState } from '../../utils/reducer';
 
-// TODO: user 통합하자!
 const initialState = {
-  isResultLoaded: false,
-  user: null,
+  userType: null,
   inspect: null,
-  result: null,
   currentValueDescription: null,
-  valueDescriptions: null,
-  jobs: null,
+  result: reducerState.initial(),
+  valueDescriptions: reducerState.initial(),
+  jobs: reducerState.initial(),
 };
 
 const getParsedResult = (result) => {
@@ -40,40 +39,41 @@ const resultSlice = createSlice({
   name: 'result',
   initialState,
   reducers: {
-    initResult() {
-      return initialState;
+    reqResult(state, action) {
+      state.result = action.payload;
     },
     loadResult(state, action) {
-      const { user, inspct, result } = action.payload;
-      if (!result) {
-        state.isResultLoaded = false;
+      const { loading, data, error } = action.payload;
+      state.result.loading = loading;
+      state.result.error = error;
+      if (!data) {
         return;
       }
 
+      const { user, inspct, result } = data;
       const dateInfo = new Date(inspct?.registDt);
       const inspectionDate = `${dateInfo.getFullYear()}.${getFixedDigits(
         MONTHS[dateInfo.getMonth()],
       )}.${dateInfo.getDate()}(${WEEKDAYS[dateInfo.getDay()]})`;
       const parsedResult = getParsedResult(result);
 
-      state.user = {
-        name: user.name,
-        gender: GENDER_NAMES[user.gender] || GENDER_NAMES[inspct.sexdstn],
-        type: user.targetNm,
-      };
-      state.inspect = {
-        type: inspct.qestnrNm,
-        date: inspectionDate,
-      };
-      state.result = parsedResult;
+      state.userType = user.targetNm;
+      state.inspect = { type: inspct.qestnrNm, date: inspectionDate };
+      state.result.data = parsedResult;
       state.currentValueDescription = parsedResult.firstHighLevelValue - 1;
-
-      state.isResultLoaded = true;
+      // TODO setState로 뺴자 이건
+    },
+    reqValueDescriptions(state, action) {
+      state.valueDescriptions = action.payload;
     },
     loadValueDescriptions(state, action) {
-      const valueDescriptions = action.payload;
-
-      state.valueDescriptions = valueDescriptions.map(
+      const { loading, data, error } = action.payload;
+      state.valueDescriptions.loading = loading;
+      state.valueDescriptions.error = error;
+      if (!data) {
+        return;
+      }
+      state.valueDescriptions.data = data.map(
         ({ upptValue, middlValue, lwptValue }) => [
           upptValue,
           middlValue,
@@ -85,31 +85,32 @@ const resultSlice = createSlice({
       if (state.currentValueDescription === action.payload) {
         return;
       }
-
       state.currentValueDescription = action.payload;
     },
+    reqJobData(state, action) {
+      state.jobs = action.payload;
+    },
     loadJobData(state, action) {
-      // TODO: job info 로드 확인 플래그가 필요할까? (나중에 생각할 것!)
       state.jobs = action.payload;
     },
   },
 });
 
 // Define Selectors
-const isResultLoaded = (state) => state.result.isResultLoaded;
-const getUserData = (state) => state.result.user;
+const isResultLoaded = (state) => !!state.result.result.data;
+const getUserType = (state) => state.result.userType;
 const getInspectData = (state) => state.result.inspect;
-const getResultData = (state) => state.result.result;
-const getResultValuesAll = (state) => state.result.result?.allValues;
-const getValueDescriptions = (state) => state.result.valueDescriptions;
+const getResultData = (state) => state.result.result.data;
+const getResultValuesAll = (state) => state.result.result.data.allValues;
+const getValueDescriptions = (state) => state.result.valueDescriptions.data;
 const getCurrentValueDescription = (state) =>
   state.result.currentValueDescription;
-const getJobData = (state) => state.result.jobs;
+const getJobData = (state) => state.result.jobs.data;
 
 const getUserInfo = createSelector(
-  [isResultLoaded, getUserData, getInspectData],
-  (isLoaded, userData, inspectData) =>
-    isLoaded && { user: userData, inspect: inspectData },
+  [isResultLoaded, userSelector.getUserData, getUserType, getInspectData],
+  (isLoaded, userData, userType, inspectData) =>
+    isLoaded && { ...userData, type: userType, inspect: inspectData },
 );
 
 const getFirstHighLevelValue = createSelector(
@@ -203,7 +204,7 @@ const getValueScoreScale = createSelector(
 export const resultActions = resultSlice.actions;
 export const resultSelector = {
   isResultLoaded,
-  getUserData,
+  getUserType,
   getInspectData,
   getResultData,
   getResultValuesAll,

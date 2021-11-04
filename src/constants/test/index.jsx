@@ -1,3 +1,5 @@
+export const TARGET_NORMAL = 100209;
+export const QUESTION_SEQ = 6;
 export const MAX_PAGE_QUESTION_COUNT = 5;
 
 export const SAMPLE_DESCRIPTION =
@@ -6,12 +8,18 @@ export const SAMPLE_QUESTION = {
   questionNumber: 0,
   description: '두 개 가치 중에 자신에게 더 중요한 가치를 선택하세요.',
   defaultAnswerOptions: [
-    { option: '보수', score: '1' },
-    { option: '사회적 인정', score: '2' },
+    {
+      option: '보수',
+      score: '1',
+      optionDesc: '직업을 통해 많은 돈을 버는 것을 말합니다.',
+    },
+    {
+      option: '사회적 인정',
+      score: '2',
+      optionDesc: '내가 한 일을 다른 사람에게 인정받는 것입니다.',
+    },
   ],
 };
-
-export const QUESTION_SEQ = 6;
 
 // 검사 결과 요청 시 검사 번호별 답변 형식
 const FORM_TYPE = Object.freeze({

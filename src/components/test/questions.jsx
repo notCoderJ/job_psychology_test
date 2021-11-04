@@ -1,21 +1,22 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selector } from '../../store/modules';
-import Question from './question';
-
-const Questions = ({ section }) => {
-  const questionNumbers = useSelector(selector.getQuestionNumbers(section));
-
-  console.log('리렌드링');
+import styled from 'styled-components';
 
   return (
-    <fieldset className="section">
-      <legend>{`검사 페이지 ${section} - 검사 문항 1-5번`}</legend>
+    <StyledQuestions>
       {questionNumbers.map((number) => (
         <Question key={`question-${number}`} number={number} />
       ))}
     </fieldset>
   );
 };
+
+const StyledQuestions = styled.div`
+  width: 100%;
+
+  & > fieldset + fieldset {
+    margin-top: 5vh;
+  }
+`;
 
 export default Questions;

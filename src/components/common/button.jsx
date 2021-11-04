@@ -14,6 +14,7 @@ const Button = ({ type, disabled, onClick, children }) => (
 
 const StyledButton = styled.button`
   cursor: pointer;
+
   ${(props) =>
     props.disabled &&
     css`
@@ -21,12 +22,12 @@ const StyledButton = styled.button`
       opacity: 0.4;
     `};
   border-radius: 10px;
-  background-color: transparent;
+  background: transparent;
   color: ${palette.COLOR_DARKSET.FONT};
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
   border: solid 0.15rem ${palette.COLOR_DARKSET.BORDER};
-  padding: 0.8rem 2.2rem;
+  padding: 0.8rem 1.5rem;
   letter-spacing: 1px;
   transition: all 0.1s ease-in-out;
 

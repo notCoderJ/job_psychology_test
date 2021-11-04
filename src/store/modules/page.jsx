@@ -11,11 +11,12 @@ const psychologyTestSlice = createSlice({
   name: 'psychologyTest',
   initialState,
   reducers: {
-    initSection() {
-      return initialState;
+    movePrev(state) {
+      state.currentSection -= state.currentSection === 0 ? 0 : 1;
     },
-    updateSection(state, action) {
-      state.currentSection = action.payload;
+    moveNext(state, action) {
+      const isLast = action.payload;
+      state.currentSection += isLast ? 0 : 1;
     },
   },
 });

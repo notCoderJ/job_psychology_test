@@ -1,7 +1,7 @@
-// import { all } from 'redux-saga/effects';
 import { combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import { all } from 'redux-saga/effects';
 import psychologyTestReducer, {
   psychologyTestActions,
   psychologyTestSelector,
@@ -10,6 +10,8 @@ import userReducer, { userActions, userSelector } from './user';
 import questionReducer, { questionActions, questionSelector } from './question';
 import answerReducer, { answerActions, answerSelector } from './answer';
 import resultReducer, { resultActions, resultSelector } from './result';
+import questionSaga from './questionSaga';
+import resultSaga from './resultSaga';
 
 export const actions = {
   ...userActions,
@@ -20,7 +22,7 @@ export const actions = {
 };
 
 export function* rootSaga() {
-  // yield all[];
+  yield all([questionSaga(), resultSaga()]);
 }
 
 const rootReducer = combineReducers({
@@ -34,6 +36,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['result'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

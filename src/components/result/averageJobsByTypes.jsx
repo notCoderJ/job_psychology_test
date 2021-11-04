@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { GRADE_NAMES, MAJOR_NAMES, JOB_INFO_URL } from '../../constants/result';
+import { JOB_INFO_URL, GRADE_NAMES, MAJOR_NAMES } from '../../constants/result';
 import { selector } from '../../store/modules';
 import { COLOR_DARKSET } from '../../variables';
 import TableLayout from './tableLayout';

@@ -13,11 +13,7 @@ const convertColor = (scale, value) => {
 
 const ResultChart = ({ labels }) => {
   const dispatch = useDispatch();
-  const {
-    allValues: values,
-    // firstHighLevelValue,
-    // secondHighLevelValue,
-  } = useSelector(selector.getResultData);
+  const { allValues: values } = useSelector(selector.getResultData);
   const valuesScale = useSelector(selector.getValueScoreScale);
 
   const handleClickValue = useCallback(
