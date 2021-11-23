@@ -1,45 +1,49 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import styled, { css } from 'styled-components';
 import { COLOR_DARKSET } from '../../variables';
-import { backgroundImg } from '../../assets/images';
+import { backgroundImg, logo } from '../../assets/images';
 
 const ADDITIONAL_INFO = Object.freeze({
   rights: (
-    <span>
-      ⓒ 2021. Jeon Jin Seong <br />
-      All Rights Reserved. <br />
-    </span>
+    <p>
+      <span>ⓒ 2021. Jeon Jin Seong</span>
+      <span>All Rights Reserved.</span>
+    </p>
   ),
   contact: (
-    <span>
-      Contact
-      <br />
-      E-mail: aimer120@nate.com
-      <br />
-      Github: https://github.com/notCoderJ
-    </span>
+    <ul>
+      <li>
+        <FontAwesomeIcon icon={faEnvelope} />
+        <span>aimer120@nate.com</span>
+      </li>
+      <li>
+        <a href="https://github.com/notCoderJ" target="_blank" rel="noreferrer">
+          <object type="image/svg+xml" data={logo.github.svg}>
+            <img src={logo.github.png} alt="github_logo" />
+          </object>
+          https://github.com/notCoderJ
+        </a>
+      </li>
+    </ul>
   ),
 });
 
 const PageLayout = React.forwardRef(
-  ({ background, header, main, footerHide }, ref) => {
-    // const bgImg = useMemo(() => background && backgroundImg, [background]);
-    useEffect(() => {}, []);
-
-    return (
-      <Container ref={ref} background={background}>
-        <Header>{header}</Header>
-        <Main role="main">{main}</Main>
-        <Footer hidden={footerHide}>
-          <div>
-            {ADDITIONAL_INFO.rights}
-            <br />
-            {ADDITIONAL_INFO.contact}
-          </div>
-        </Footer>
-      </Container>
-    );
-  },
+  ({ background, header, main, footerHide }, ref) => (
+    <Container ref={ref} background={background}>
+      <Header>{header}</Header>
+      <Main role="main">{main}</Main>
+      <Footer hidden={footerHide}>
+        <StyledRights>{ADDITIONAL_INFO.rights}</StyledRights>
+        <StyledContact>
+          Contact
+          {ADDITIONAL_INFO.contact}
+        </StyledContact>
+      </Footer>
+    </Container>
+  ),
 );
 
 const Container = styled.div`
@@ -67,6 +71,7 @@ const Container = styled.div`
       background-attachment: fixed;
       background: no-repeat center / cover url(${backgroundImg[0]});
 
+      // TODO: 화면 전환 시 하얗게 반짝임 이슈
       /* animation: 30s ease-in-out infinite fadein;
       @keyframes fadein {
         0% {
@@ -127,13 +132,78 @@ const Footer = styled.footer`
   grid-area: Footer;
   width: 100%;
   height: 100%;
-  font-size: 0.9rem;
   opacity: ${(props) => (props.hidden ? '0' : '1')};
+
+  > div + div {
+    margin-top: 1rem;
+  }
 
   @media screen and (max-width: 480px) {
     > div {
       transform: translateY(15%);
+      font-size: 0.9rem;
+    }
+    > div + div {
+      margin-top: 0.5rem;
+    }
+  }
+`;
+
+const StyledRights = styled.div`
+  > p {
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: 480px) {
+    > p {
       font-size: 0.8rem;
+    }
+  }
+`;
+
+const StyledContact = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  > ul {
+    padding: 0;
+    font-size: 0.9rem;
+    list-style: none;
+
+    > li {
+      width: fit-content;
+      margin: auto;
+
+      > svg,
+      > a > object,
+      > a > object > img {
+        vertical-align: sub;
+        margin-right: 0.3rem;
+        width: 0.9rem;
+      }
+
+      > a {
+        text-decoration: none;
+        color: white;
+
+        > object,
+        > object > img {
+          pointer-events: none;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    ul > li {
+      font-size: 0.8rem;
+      > a > object,
+      > a > object > img {
+        width: 0.8rem;
+      }
     }
   }
 `;

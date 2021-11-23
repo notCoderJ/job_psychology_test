@@ -1,6 +1,6 @@
 import React from 'react';
 import './app.css';
-import { Router, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import MainPage from './components/main';
@@ -28,8 +28,7 @@ function App() {
               <PsychologyTestResult />
             </Route>
             <Route path="*">
-              {/* TODO: Add 404 Not found */}
-              {/* <Redirect to="/" /> */}
+              <Redirect to="/" />
             </Route>
           </Switch>
         </PersistGate>

@@ -67,7 +67,6 @@ const StyledButtonContainer = styled.div`
   }
 `;
 
-// TODO: 다 구현 후 반응형으로 mixin 적용하기!
 const StyledPageMainTitle = styled.section`
   display: flex;
   flex-direction: column;
@@ -83,7 +82,6 @@ const StyledPageMainTitle = styled.section`
   }
 `;
 
-// TODO: 중복 코드 합치기 여기랑 jobValue, complete 페이지
 const StyledDivisionLine = styled.div`
   width: 31rem;
   height: 2px;

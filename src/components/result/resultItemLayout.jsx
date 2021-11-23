@@ -40,7 +40,6 @@ const StyledSectionTitle = styled.h2`
   }
 `;
 
-// TODO: 중복 정의 제거해야댐 + result 페이지랑
 const StyledDivisionLine = styled.div`
   width: 100%;
   height: 1px;
@@ -48,7 +47,6 @@ const StyledDivisionLine = styled.div`
   background-color: ${COLOR_DARKSET.BORDER};
 
   @media screen and(max-width: 480px) {
-    /* width: 70vw; */ // 정렬이 안대애애애
   }
 `;
 

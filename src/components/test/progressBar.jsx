@@ -4,9 +4,6 @@ import styled from 'styled-components';
 import { selector } from '../../store/modules';
 import { COLOR_DARKSET } from '../../variables';
 
-// Need
-//  1. Total questions count(length)
-//  2. Current answer recode count
 const ProgressBar = ({ height, width }) => {
   const percentage = useSelector(selector.getCurrentPercentage);
 

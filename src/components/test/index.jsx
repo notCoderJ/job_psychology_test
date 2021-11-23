@@ -8,9 +8,10 @@ import ProgressBar from './progressBar';
 import SampleQuestion from './sampleQuestion';
 import { persistor } from '../../store';
 import { reducerState } from '../../utils/reducer';
+import Loading from '../common/loading';
 
 const TestPage = () => {
-  const ref = useRef();
+  const ref = useRef(null);
   const dispatch = useDispatch();
   const sectionCount = useSelector(selector.getSectionCount);
   const currentSection = useSelector(selector.getCurrentSection);
@@ -18,6 +19,7 @@ const TestPage = () => {
   const isSectionAnswered = useSelector(
     selector.isSectionAnswered(currentSection),
   );
+  const isResultLoading = useSelector(selector.isResultLoading);
 
   useEffect(() => persistor.persist(), []);
   useEffect(() => ref.current.scrollTo(0, 0), [ref, currentSection]);
@@ -49,41 +51,37 @@ const TestPage = () => {
         </StyledProgressBarContainer>
       }
       main={
-        <StyledQuestionContainer
-          isSample={currentSection === 0}
-          onSubmit={handleSubmit}
-        >
-          {currentSection === 0 ? (
-            <SampleQuestion />
-          ) : (
-            <Questions section={currentSection} />
-          )}
-          <StyledButtonContainer isSample={currentSection === 0}>
-            {currentSection > 0 && (
-              <Button type="button" onClick={handleMovePrev}>
-                이전
-              </Button>
+        <>
+          {isResultLoading && <Loading />}
+          <StyledQuestionContainer
+            isSample={currentSection === 0}
+            onSubmit={handleSubmit}
+          >
+            {currentSection === 0 ? (
+              <SampleQuestion />
+            ) : (
+              <Questions section={currentSection} />
             )}
-            <Button
-              type={currentSection === lastPageIndex && 'submit'}
-              disabled={!isSectionAnswered}
-              onClick={handleMoveNext}
-            >
-              {currentSection !== lastPageIndex ? '다음' : '제출'}
-            </Button>
-          </StyledButtonContainer>
-        </StyledQuestionContainer>
+            <StyledButtonContainer isSample={currentSection === 0}>
+              {currentSection > 0 && (
+                <Button type="button" onClick={handleMovePrev}>
+                  이전
+                </Button>
+              )}
+              <Button
+                type={currentSection === lastPageIndex && 'submit'}
+                disabled={!isSectionAnswered}
+                onClick={handleMoveNext}
+              >
+                {currentSection !== lastPageIndex ? '다음' : '제출'}
+              </Button>
+            </StyledButtonContainer>
+          </StyledQuestionContainer>
+        </>
       }
     />
   );
 };
-
-// <StyledLoadingMessage>Loading...</StyledLoadingMessage>
-
-// const StyledLoadingMessage = styled.h1`
-//   font-size: 5rem;
-//   line-height: 100vh;
-// `;
 
 const StyledProgressBarContainer = styled.div`
   margin: 0 20vw;

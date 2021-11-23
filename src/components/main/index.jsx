@@ -1,36 +1,85 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { toast, ToastContainer } from 'react-toastify';
+import { injectStyle } from 'react-toastify/dist/inject-style';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selector } from '../../store/modules';
 import UserRegister from './userRegister';
 import { reducerState } from '../../utils/reducer';
-import { PageLayout } from '../common';
+import { PageLayout, Button } from '../common';
+import Loading from '../common/loading';
 
 const MainPage = () => {
   const dispatch = useDispatch();
+  const nameRef = useRef(null);
+  const genderRef = useRef(null);
+  const userName = useSelector(selector.getUserName);
+  const userGender = useSelector(selector.getUserGender);
   const isQuestionLoading = useSelector(selector.isQuestionLoading);
-  const errorQuestionLoad = useSelector(selector.errorQuestionLoad);
 
-  const submitHandler = useCallback(
-    () => dispatch(actions.reqQuestions(reducerState.loading())),
+  useEffect(() => injectStyle(), []);
+
+  const nameHandler = useCallback(
+    (name) => dispatch(actions.saveName(name)),
+    [dispatch],
+  );
+  const genderHandler = useCallback(
+    (gender) => dispatch(actions.saveGender(gender)),
     [dispatch],
   );
 
-  useEffect(() => {
-    if (errorQuestionLoad) {
-      //     alert(`검사 문항을 불러오는데 실패했습니다. 잠시후 다시 시도해주세요.`);
-      alert('sdfsdfnsdlf');
-    }
-  }, [errorQuestionLoad]);
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!userName) {
+        nameRef.current.focus();
+        toast.error('한글 2자 이상 입력해주세요.', {
+          toastId: 'name-error-id',
+        });
+        return;
+      }
+
+      if (!userGender) {
+        genderRef.current.focus();
+        toast.error('성별은 필수 항목입니다.', {
+          toastId: 'gender-error-id',
+        });
+        return;
+      }
+
+      dispatch(actions.reqQuestions(reducerState.loading()));
+    },
+    [dispatch, userGender, userName],
+  );
 
   return (
     <PageLayout
       main={
-        <section>
-          <StyledMainTitle>직업가치관검사</StyledMainTitle>
-          {isQuestionLoading && <div>sdfsdf</div>}
-          <UserRegister submitHandler={submitHandler} />
-        </section>
+        <>
+          {isQuestionLoading && <Loading />}
+          <section>
+            <StyledMainTitle>직업가치관검사</StyledMainTitle>
+            <StyledUserContainer onSubmit={handleSubmit}>
+              <UserRegister
+                nameRef={nameRef}
+                userName={userName}
+                nameHandler={nameHandler}
+                genderRef={genderRef}
+                userGender={userGender}
+                genderHandler={genderHandler}
+              />
+              <Button type="submit">검사 시작</Button>
+              <ToastContainer
+                position="top-center"
+                autoClose={1000}
+                hideProgressBar={false}
+                pauseOnHover={false}
+                draggable={false}
+                theme="dark"
+              />
+            </StyledUserContainer>
+          </section>
+        </>
       }
     />
   );
@@ -44,6 +93,13 @@ const StyledMainTitle = styled.h1`
   @media screen and (max-width: 480px) {
     font-size: 2rem;
   }
+`;
+
+const StyledUserContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default MainPage;

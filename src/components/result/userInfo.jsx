@@ -1,8 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-// import styled from 'styled-components';
 import { selector } from '../../store/modules';
-// import { COLOR_DARKSET } from '../../variables';
 import TableLayout from './tableLayout';
 
 const UserInfo = () => {
@@ -20,5 +18,5 @@ const UserInfo = () => {
     />
   );
 };
-// TODO: inspect.type 글씨 초과 수정 계획 후 추가
+
 export default UserInfo;

@@ -1,146 +1,89 @@
-import React, { useCallback, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-// import styled, { css } from 'styled-components';
-import { ToastContainer, toast } from 'react-toastify';
-import { injectStyle } from 'react-toastify/dist/inject-style';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { GENDER } from '../../constants';
-import { actions, selector } from '../../store/modules';
 import { debounce } from '../../utils';
 import { COLOR_DARKSET } from '../../variables';
-import { Button } from '../common';
 
-const UserRegister = ({ submitHandler }) => {
-  const dispatch = useDispatch();
-  const nameRef = useRef();
-  const genderRef = useRef();
-  const userName = useSelector(selector.getUserName);
-  const userGender = useSelector(selector.getUserGender);
-  const nameErrorId = 'name-error-id';
-  const genderErrorId = 'gender-error-id';
-
-  const saveName = useCallback(
-    (e) => dispatch(actions.saveName(e.target.value)),
-    [dispatch],
+const UserRegister = ({
+  nameRef,
+  userName,
+  nameHandler,
+  genderRef,
+  userGender,
+  genderHandler,
+}) => {
+  const handleName = useCallback(
+    (e) => nameHandler(e.target.value),
+    [nameHandler],
   );
 
-  const saveGender = useCallback(
+  const handleGender = useCallback(
     (e) => {
       if (e.target.value === userGender) {
         return;
       }
-      dispatch(actions.saveGender(e.target.value));
+      genderHandler(e.target.value);
     },
-    [userGender, dispatch],
-  );
-
-  injectStyle();
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (!userName) {
-        nameRef.current.focus();
-        toast.error('한글 2자 이상 입력해주세요.', {
-          toastId: nameErrorId,
-          position: 'bottom-center',
-          autoClose: 1000,
-          hideProgressBar: false,
-          pauseOnHover: false,
-          draggable: false,
-          theme: 'dark',
-        });
-        return;
-      }
-
-      if (!userGender) {
-        genderRef.current.focus();
-        toast.error('성별은 필수 항목입니다.', {
-          toastId: genderErrorId,
-          position: 'bottom-center',
-          autoClose: 1000,
-          hideProgressBar: false,
-          pauseOnHover: false,
-          draggable: false,
-          theme: 'dark',
-        });
-        return;
-      }
-
-      if (typeof submitHandler === 'function') {
-        submitHandler();
-      }
-    },
-    [submitHandler, userGender, userName],
+    [userGender, genderHandler],
   );
 
   return (
-    <StyledUserContainer onSubmit={handleSubmit}>
-      <fieldset>
-        <legend>사용자 등록</legend>
-        <StyledNameInputLabel htmlFor="userName">
-          <input hidden type="text" />
-          <input
-            ref={nameRef}
-            id="userName"
-            defaultValue={userName}
-            placeholder="이름을 입력해주세요."
-            type="text"
-            onChange={debounce(saveName, 200)}
-          />
-        </StyledNameInputLabel>
-        <StyledItemContainer>
-          <legend>성별</legend>
-          <StyledGenderContainer>
-            <li>
-              <StyledGenderLabel htmlFor="genderMale">
-                <input
-                  ref={genderRef}
-                  id="genderMale"
-                  name="userGender"
-                  value={GENDER['남성']}
-                  type="radio"
-                  onClick={saveGender}
-                  defaultChecked={userGender === GENDER['남성']}
-                />
-                남성
-              </StyledGenderLabel>
-            </li>
-            <li>
-              <StyledGenderLabel htmlFor="genderFemale">
-                <input
-                  id="genderFemale"
-                  name="userGender"
-                  value={GENDER['여성']}
-                  type="radio"
-                  onClick={saveGender}
-                  defaultChecked={userGender === GENDER['여성']}
-                />
-                여성
-              </StyledGenderLabel>
-            </li>
-          </StyledGenderContainer>
-        </StyledItemContainer>
-      </fieldset>
-      <Button type="submit">검사 시작</Button>
-      <ToastContainer />
+    <StyledUserContainer>
+      <legend>사용자 등록</legend>
+      <StyledNameInputLabel htmlFor="userName">
+        <input hidden type="text" />
+        <input
+          ref={nameRef}
+          id="userName"
+          defaultValue={userName}
+          placeholder="이름을 입력해주세요."
+          type="text"
+          onChange={debounce(handleName, 200)}
+        />
+      </StyledNameInputLabel>
+      <StyledItemContainer>
+        <legend>성별</legend>
+        <StyledGenderContainer>
+          <li>
+            <StyledGenderLabel htmlFor="genderMale">
+              <input
+                ref={genderRef}
+                id="genderMale"
+                name="userGender"
+                value={GENDER['남성']}
+                type="radio"
+                onClick={handleGender}
+                defaultChecked={userGender === GENDER['남성']}
+              />
+              남성
+            </StyledGenderLabel>
+          </li>
+          <li>
+            <StyledGenderLabel htmlFor="genderFemale">
+              <input
+                id="genderFemale"
+                name="userGender"
+                value={GENDER['여성']}
+                type="radio"
+                onClick={handleGender}
+                defaultChecked={userGender === GENDER['여성']}
+              />
+              여성
+            </StyledGenderLabel>
+          </li>
+        </StyledGenderContainer>
+      </StyledItemContainer>
     </StyledUserContainer>
   );
 };
 
 // Define Styled Components
-const StyledUserContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+const StyledUserContainer = styled.fieldset`
+  border: none;
+  margin-bottom: 2vh;
 
-  > fieldset {
-    border-style: none;
-    margin-bottom: 2vh;
-
-    > legend {
-      font-size: 0;
-    }
+  > legend {
+    font-size: 0;
   }
 `;
 

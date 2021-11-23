@@ -20,9 +20,7 @@ const questionSlice = createSlice({
       const { loading, data, error } = action.payload;
       state.questions.loading = loading;
       state.questions.error = error;
-      if (!Array.isArray(data) || data.length === 0) {
-        return;
-      }
+      if (!data) return;
 
       state.sectionCount =
         Math.ceil(data.length / MAX_PAGE_QUESTION_COUNT) + EXAMPLE_COUNT;
@@ -74,7 +72,7 @@ const getQuestionsBySection = createSelector(
   [getQuestionCount, getSectionCount],
   (questionCount, sectionCount) => {
     if (!questionCount) {
-      return [[0]];
+      return [[]];
     }
 
     const questionNumbers = [...Array(questionCount).keys()].map(

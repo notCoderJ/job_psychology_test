@@ -28,6 +28,7 @@ const PsychologyTestComplete = () => {
   );
 };
 
+// TODO: 디자인 보정 작업
 const StyledCompleteTitle = styled.h1`
   /* height: 15vh; */
   /* margin-top: 5vh; */
