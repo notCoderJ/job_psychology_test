@@ -43,7 +43,7 @@ const Question = ({ number }) => {
           return (
             <React.Fragment key={id}>
               <StyledAnswerOption htmlFor={id} checked={answer === score}>
-                <span>{option}</span>
+                {option}
                 <input
                   id={id}
                   key={id}
@@ -65,10 +65,10 @@ const Question = ({ number }) => {
 
 const StyledQuestion = styled.fieldset`
   position: relative;
-  border: solid 1px ${COLOR_DARKSET.BORDER};
+  border: solid 2px ${COLOR_DARKSET.BORDER};
   border-radius: 5px;
   padding: 0;
-  background-color: #2c2c2c6a;
+  background-color: #ffffff5a;
   backdrop-filter: blur(15px);
   transition: all 300ms ease-in-out;
 
@@ -154,20 +154,20 @@ const StyledAnswerOption = styled.label`
   padding: 0.8rem 1.5rem;
   font-size: 1.1rem;
   cursor: pointer;
-  color: #e4e2e4;
+
   ${(props) =>
     props.checked &&
     css`
-      color: ${COLOR_DARKSET.HIGHLIGHT_TITLE};
+      color: ${COLOR_DARKSET.OPTION_CHECKED};
       font-weight: bold;
       + span {
-        color: ${COLOR_DARKSET.HIGHLIGHT_TITLE};
+        color: ${COLOR_DARKSET.OPTION_CHECKED};
         font-size: 1rem;
       }
     `}
 
   :hover {
-    color: ${COLOR_DARKSET.HIGHLIGHT_TITLE};
+    color: ${COLOR_DARKSET.OPTION_CHECKED};
     + span {
       font-size: 1rem;
     }

@@ -97,15 +97,24 @@ const resultSlice = createSlice({
 });
 
 // Define Selectors
+const isResultDataLoading = (state) => state.result.result.loading;
 const isResultLoaded = (state) => !!state.result.result.data;
 const getUserType = (state) => state.result.userType;
 const getInspectData = (state) => state.result.inspect;
 const getResultData = (state) => state.result.result.data;
 const getResultValuesAll = (state) => state.result.result.data.allValues;
+const isValueDescLoading = (state) => state.result.valueDescriptions.loading;
 const getValueDescriptions = (state) => state.result.valueDescriptions.data;
 const getCurrentValueDescription = (state) =>
   state.result.currentValueDescription;
+const isJobDataLoading = (state) => state.result.jobs.loading;
 const getJobData = (state) => state.result.jobs.data;
+
+const isResultLoading = createSelector(
+  [isResultDataLoading, isValueDescLoading, isJobDataLoading],
+  (resultLoading, valueDescLoading, jobsLoading) =>
+    resultLoading || valueDescLoading || jobsLoading,
+);
 
 const getUserInfo = createSelector(
   [isResultLoaded, userSelector.getUserData, getUserType, getInspectData],
@@ -203,14 +212,18 @@ const getValueScoreScale = createSelector(
 
 export const resultActions = resultSlice.actions;
 export const resultSelector = {
+  isResultDataLoading,
   isResultLoaded,
   getUserType,
   getInspectData,
   getResultData,
   getResultValuesAll,
+  isValueDescLoading,
   getValueDescriptions,
   getCurrentValueDescription,
+  isJobDataLoading,
   getJobData,
+  isResultLoading,
   getUserInfo,
   getFirstHighLevelValue,
   getFirstLowLevelValue,

@@ -70,7 +70,7 @@ const AverageJobsByTypes = () => {
             borderStyle: 'none',
           }}
           contents={{
-            // head: ['분야', '직업명'],
+            head: ['분야', '직업명'],
             body: changeJobInfoLink(averageJobsByGrade, GRADE_NAMES),
           }}
         />
@@ -90,7 +90,7 @@ const AverageJobsByTypes = () => {
             borderStyle: 'none',
           }}
           contents={{
-            // head: ['분야', '직업명'],
+            head: ['분야', '직업명'],
             body: changeJobInfoLink(averageJobsByMajor, MAJOR_NAMES),
           }}
         />

@@ -8,14 +8,12 @@ import ValueDescription from './valueDescriptions';
 import { COLOR_DARKSET } from '../../variables';
 
 const JobValuesResult = () => {
-  // TODO: 가장 높은 가치에 대한 설명 표시하기
   const psychologyTestReulstText = useSelector(
     selector.getPsychologyTestReulstText,
   );
 
   const valueNames = useMemo(() => Object.keys(VIEW_OF_VALUES), []);
 
-  // TODO: 로오디딩
   return (
     <StyledJobValuesResult>
       <StyledResultSummary>{psychologyTestReulstText}</StyledResultSummary>
@@ -47,10 +45,9 @@ const StyledResultSummary = styled.p`
   }
 `;
 
-// 와 그래프 높이 왜이러니...제밟르ㅏ라랇
 const StyledResultAnalysisContainer = styled.div`
   display: flex;
-  justify-content: space-between; // around?
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 50vh;
