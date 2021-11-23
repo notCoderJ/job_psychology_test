@@ -5,6 +5,11 @@ export const debounce = (func, delay) => {
 
   return (e) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(func.bind(this, e), delay);
+    timeoutId = setTimeout(() => func.call(this, e), delay);
   };
+};
+
+export const handleScrollDown = (api) => (activate) => {
+  api.setAllowScrolling(activate, 'down');
+  api.setKeyboardScrolling(activate, 'down');
 };

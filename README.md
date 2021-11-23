@@ -4,41 +4,56 @@
 
 <br/>
 
-## 💦 사용 기술 및 버전
+## 💦 사용 기술 및 용도 (Update: 21.11.04)
 
 - [x] Javascript
 - [x] Functional Components + Hooks
-- [x] React `17.0.2`
-- [x] react-router-dom `5.2`
-- [x] axios `0.21.1`
-- [x] redux `4.1.1`
-- [x] react-redux `7.2.4`
-- [x] @reduxjs/toolkit `1.6.1`
-- [x] styled-components `5.3.0`
-- [x] redux-logger: `3.0.6`,
-- [ ] react saga(예정)
+- [x] 컴포넌트: React `17.0.2`
+- [x] SPA 라우팅: react-router-dom `5.2`
+- [x] HTTP 통신: axios `0.21.1`
+- [x] React와 Redux 연결: react-redux `7.2.4`
+- [x] 전역 상태 관리: @reduxjs/toolkit `1.6.1`
+- [x] 비동기 상태 관리: redux-saga `1.1.3`
+- [x] Saga와 라우터 연동: history `4.10.1`
+- [x] 상태 로컬 유지: redux-persist `6.0.0`
+- [x] 기존 상태 초기화: redux-reset `0.3.0`
+- [x] 상태 흐름 디버깅: redux-logger: `3.0.6`
+- [x] 디자인: styled-components `5.3.0`
+- [x] 알림 메시지 디자인: react-toastify `8.0.3`
+
+
 
 <br/>
 
-## 💦 현단계 src 디렉토리 구조 (Update: 21.08.20)
+## 💦 src 디렉토리 구조, Ducks 패턴 적용 (Update: 21.10.23)
 
 - src  
-   |-- api : 비동기 처리를 위한 api(문항, 결과 요청 등)  
-   |-- components  
-   | &nbsp; &nbsp; |-- common : 공통으로 사용할 컴포넌트들을 정의  
-   | &nbsp; &nbsp; |-- complete : 검사 완료 페이지를 구성하는 컴포넌트들을 정의  
-   | &nbsp; &nbsp; |-- result : 검사 결과 페이지를 구성하는 컴포넌트들을 정의  
-   | &nbsp; &nbsp; |-- test : 검사 진행 페이지를 구성하는 컴포넌트들을 정의  
-   |-- constants : 검사 예시 문항, 결과 예시 등 App 전역에서 사용할 상수를 정의  
-  |-- store : 검사 결과 요청에 필요한 데이터를 저장할 store를 정의  
-  | &nbsp; &nbsp; |-- reducer : 검사 진행 페이지에서 사용할 state에 대한 action과 reducer를 정의  
-  | &nbsp; &nbsp; |-- saga : api 요청이나 사용자 이름 등 비동기적 state를 처리하기 위한 saga를 정의(도입 예정중...)  
-  | &nbsp; &nbsp; |-- selector : 검사 진행에 필요한 state를 처리해서 가져오기 위한 selector를 정의  
-  |-- utils : 사용할 함수 등을 정의
+ㅤ|-- api : 심리검사 API와 HTTP 통신을 위한 api 구현(문항, 결과 요청 등)  
+ㅤ|-- assets : 프로젝트 리소스 관리  
+ㅤ|ㅤㅤ|-- images : 이미지 리소스  
+ㅤ|-- components  
+ㅤ|ㅤㅤ|-- common : 공용 컴포넌트 구현  
+ㅤ|ㅤㅤ|-- complete : 검사 완료 페이지에 대한 컴포넌트 구현  
+ㅤ|ㅤㅤ|-- main : 초기 메인 페이지에 대한 컴포넌트 구현  
+ㅤ|ㅤㅤ|-- result : 검사 결과 페이지에 대한 컴포넌트 구현  
+ㅤ|ㅤㅤ|-- test : 검사 페이지에 대한 컴포넌트 구현  
+ㅤ|-- constants : 어플리케이션에서 사용할 상수 정의  
+ㅤ|-- store : 검사, 결과 데이터에 대한 state 관리  
+ㅤ|ㅤㅤ|-- modules : 각 페이지에 대한 action, reducer, selector, middleware 등을 구현  
+ㅤ|-- utils : 사용할 유틸리티 함수 구현  
 
 <br/>
 
-## ⚙ 리펙토링 진행(21.10.18 - 21.10.29)
+## ⚙ 리펙토링 진행 현황
 
-2차 프로젝트를 시작하면서 1차 프로젝트를 리펙토링하려던 일정이 조금 미뤄지게 되었지만, 오늘부터 기존에 세워둔 계획서를 바탕으로 리펙토링을 진행해보려고 합니다.
-(2차 프로젝트도 리펙토링 해야지...) 관련된 학습 내용이나 계획 등은 wiki를 이용해서 작성할 예정이고 구현 사항은 이슈로 등록 후 진행할 예정입니다.
+### 1차 리펙토링 완료
+개선 사항: 
+- 전반적인 코드 구조 리펙토링
+- 메인, 검사 페이지 디자인 개선
+- 로딩 및 에러 처리를 위해 React-toastify 적용
+- 비동기 비즈니스 로직을 컴포넌트에서 분리하기 위해 Redux-Saga 적용
+- 새로고침 시에도 기존 상태를 유지하기 위해 Redux-Persist 적용
+
+향후 수정해야할 남은 이슈(현재 프로젝트 마무리 후 진행 예정):
+- 완료, 결과 페이지 디자인 개선
+- 화면 애니메이션 전환시 반짝임 이슈

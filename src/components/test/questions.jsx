@@ -30,7 +30,7 @@ const Questions = ({ section }) => {
       {questionNumbers.map((number) => (
         <Question key={`question-${number}`} number={number} />
       ))}
-    </StyledQuestions>
+    </fieldset>
   );
 };
 
