@@ -13,13 +13,6 @@ const Questions = ({ section }) => {
       if (e.target.nodeName !== 'INPUT') {
         return;
       }
-      // TODO: 문항 클릭 시 다음 문항으로 스크롤 기능
-      // const width = ref.current.clientWidth;
-      // const height = ref.current.clientHeight;
-      // console.log(ref);
-      // console.log(width, height, height / 5);
-      // ref.current.scrollIntoView(); // (0, 1000);
-      // window.scrollTo(0, height); // (0, 1000);
       ref.current.scrollTop = '0px';
     },
     [ref],
@@ -30,7 +23,7 @@ const Questions = ({ section }) => {
       {questionNumbers.map((number) => (
         <Question key={`question-${number}`} number={number} />
       ))}
-    </fieldset>
+    </StyledQuestions>
   );
 };
 

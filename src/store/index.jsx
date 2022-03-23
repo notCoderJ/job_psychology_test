@@ -2,7 +2,7 @@ import { createBrowserHistory } from 'history';
 import { configureStore } from '@reduxjs/toolkit';
 import reduxReset from 'redux-reset';
 import createSagaMiddleware from 'redux-saga';
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 import { persistStore } from 'redux-persist';
 import persistedReducer, { rootSaga } from './modules';
 
@@ -13,7 +13,7 @@ const sagaMiddleware = createSagaMiddleware({
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: [sagaMiddleware, logger],
+  middleware: [sagaMiddleware],
   enhancers: [reduxReset()],
 });
 

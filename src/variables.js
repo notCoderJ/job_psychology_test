@@ -8,7 +8,6 @@ export const COLOR_DARKSET = {
   HIGHLIGHT_TITLE: '#837adb',
   HIGHLIGHT_TEXT: '#2ba5bb',
 
-  // CHECKBOX: '#5d5bc0',
   CHECKBOX: '#ffedfe',
   CHECKBOX_BORDER: '#ccc',
   QUESTION_DESCRIPTION: '#6454f739',
@@ -35,6 +34,3 @@ export const COLOR_DARKSET = {
     DATA: [138, 84, 247],
   },
 };
-// #4a58d3;
-// pink : #dfa9e0fb
-// green : #a9dce0fa

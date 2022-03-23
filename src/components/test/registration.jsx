@@ -10,7 +10,6 @@ const UserRegister = () => {
   const dispatch = useDispatch();
   const userName = useSelector(selector.getUserName);
   const userGender = useSelector(selector.getUserGender);
-  // const isUserNameValid = useSelector(selector.isUserNameValid);
 
   const saveName = useCallback(
     (e) => dispatch(actions.saveName(e.target.value)),

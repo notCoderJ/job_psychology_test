@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { COLOR_DARKSET } from '../../variables';
 import { backgroundImg, logo } from '../../assets/images';
 
@@ -30,21 +30,19 @@ const ADDITIONAL_INFO = Object.freeze({
   ),
 });
 
-const PageLayout = React.forwardRef(
-  ({ background, header, main, footerHide }, ref) => (
-    <Container ref={ref} background={background}>
-      <Header>{header}</Header>
-      <Main role="main">{main}</Main>
-      <Footer hidden={footerHide}>
-        <StyledRights>{ADDITIONAL_INFO.rights}</StyledRights>
-        <StyledContact>
-          Contact
-          {ADDITIONAL_INFO.contact}
-        </StyledContact>
-      </Footer>
-    </Container>
-  ),
-);
+const PageLayout = React.forwardRef(({ header, main, footerHide }, ref) => (
+  <Container ref={ref}>
+    <Header>{header}</Header>
+    <Main role="main">{main}</Main>
+    <Footer hidden={footerHide}>
+      <StyledRights>{ADDITIONAL_INFO.rights}</StyledRights>
+      <StyledContact>
+        Contact
+        {ADDITIONAL_INFO.contact}
+      </StyledContact>
+    </Footer>
+  </Container>
+));
 
 const Container = styled.div`
   display: grid;
@@ -65,32 +63,8 @@ const Container = styled.div`
   overflow-y: auto;
   scroll-behavior: smooth;
 
-  ${(props) =>
-    props.background &&
-    css`
-      background-attachment: fixed;
-      background: no-repeat center / cover url(${backgroundImg[0]});
-
-      // TODO: 화면 전환 시 하얗게 반짝임 이슈
-      /* animation: 30s ease-in-out infinite fadein;
-      @keyframes fadein {
-        0% {
-          background: no-repeat center / cover url(${backgroundImg[0]});
-        }
-        25% {
-          background: no-repeat center / cover url(${backgroundImg[1]});
-        }
-        50% {
-          background: no-repeat center / cover url(${backgroundImg[2]});
-        }
-        75% {
-          background: no-repeat center / cover url(${backgroundImg[3]});
-        }
-        100% {
-          background: no-repeat center / cover url(${backgroundImg[0]});
-        }
-      } */
-    `};
+  background-attachment: fixed;
+  background: no-repeat center / cover url(${backgroundImg});
 
   @media screen and (min-width: 480px) {
     ::-webkit-scrollbar {

@@ -28,10 +28,7 @@ const PsychologyTestComplete = () => {
   );
 };
 
-// TODO: 디자인 보정 작업
 const StyledCompleteTitle = styled.h1`
-  /* height: 15vh; */
-  /* margin-top: 5vh; */
   font-size: 3rem;
   color: ${COLOR_DARKSET.HIGHLIGHT_TITLE};
   @media screen and (max-width: 480px) {
@@ -41,15 +38,12 @@ const StyledCompleteTitle = styled.h1`
 `;
 
 const StyledCompleteContainer = styled.div`
-  /* height: 40vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
   > p:first-child {
-    /* margin-top: 25vh; */
-
     @media screen and (max-width: 480px) {
       margin-top: 1rem;
     }
