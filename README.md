@@ -25,6 +25,19 @@
 
 <br/>
 
+## ✨ 구현 화면
+
+### 사용자 등록
+![main_page](https://user-images.githubusercontent.com/21259498/159661880-480288bc-fa70-4805-b066-fcbc79a71f7e.gif)
+
+### 검사 진행
+![test_page](https://user-images.githubusercontent.com/21259498/159661975-544331be-5ed4-4b77-b077-eb3f9792f3c0.gif)
+
+### 검사 결과
+![result_page](https://user-images.githubusercontent.com/21259498/159662051-74e87470-1641-4100-86db-1cf2db313de9.gif)
+
+<br/>
+
 ## 💦 src 디렉토리 구조, Ducks 패턴 적용 (Update: 21.10.23)
 
 - src  
