@@ -18,16 +18,8 @@ const StyledLoadingContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #00000052;
   font-size: 2rem;
   z-index: 99999;
-
-  ::before {
-    content: 'Loading';
-    padding: 0 0.5rem;
-    font-weight: bold;
-    transform: translateY(-15%);
-  }
 
   @media screen and (max-width: 480px) {
     font-size: 1.7rem;

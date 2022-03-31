@@ -1,4 +1,2 @@
-import Button from './button';
-import PageLayout from './pageLayout';
-
-export { PageLayout, Button };
+export { default as Button } from './Button';
+export { default as PageLayout } from './PageLayout';

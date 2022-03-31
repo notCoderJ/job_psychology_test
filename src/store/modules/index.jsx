@@ -1,5 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage/session';
 import { persistReducer } from 'redux-persist';
 import { all } from 'redux-saga/effects';
 import psychologyTestReducer, {
@@ -36,7 +36,6 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['result'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

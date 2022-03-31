@@ -20,7 +20,6 @@ const store = configureStore({
 sagaMiddleware.run(rootSaga);
 
 const persistor = persistStore(store);
-persistor.pause();
 
 export { persistor, customHistory };
 export default store;
