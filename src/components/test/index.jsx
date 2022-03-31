@@ -1,81 +1,80 @@
-import React, { useMemo, useCallback, useEffect, useRef } from 'react';
+import React, { useMemo, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import Questions from './questions';
 import { PageLayout, Button } from '../common';
 import { actions, selector } from '../../store/modules';
-import ProgressBar from './progressBar';
-import SampleQuestion from './sampleQuestion';
+import ProgressBar from './ProgressBar';
+import SampleQuestion from './SampleQuestion';
 import { reducerState } from '../../utils/reducer';
 import Loading from '../common/Loading';
+import Question from './Question';
 
 const TestPage = () => {
   const ref = useRef(null);
   const dispatch = useDispatch();
-  const sectionCount = useSelector(selector.getSectionCount);
-  const currentSection = useSelector(selector.getCurrentSection);
-  const lastPageIndex = useMemo(() => sectionCount - 1, [sectionCount]);
-  const isSectionAnswered = useSelector(
-    selector.isSectionAnswered(currentSection),
-  );
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageCount = useSelector(selector.getPageCount);
+  const lastPage = useMemo(() => pageCount - 1, [pageCount]);
+  const questionNumbers = useSelector(selector.getQuestionNumbers(currentPage));
+  const isPageAnswered = useSelector(selector.isPageAnswered(questionNumbers));
   const isResultLoading = useSelector(selector.isResultLoading);
 
-  useEffect(() => ref.current.scrollTo(0, 0), [ref, currentSection]);
+  useEffect(() => ref.current.scrollTo(0, 0), [currentPage]);
 
-  const handleMovePrev = useCallback(
-    () => dispatch(actions.movePrev()),
-    [dispatch],
-  );
-  const handleMoveNext = useCallback(
-    () => dispatch(actions.moveNext(currentSection === lastPageIndex)),
-    [currentSection, lastPageIndex, dispatch],
-  );
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(actions.reqResult(reducerState.loading()));
+  };
 
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      dispatch(actions.reqResult(reducerState.loading()));
-    },
-    [dispatch],
-  );
+  if (isResultLoading) {
+    return <Loading />;
+  }
 
   return (
     <PageLayout
       ref={ref}
-      background="true"
       header={
         <StyledProgressBarContainer>
           <ProgressBar height="100%" />
         </StyledProgressBarContainer>
       }
       main={
-        <>
-          {isResultLoading && <Loading />}
-          <StyledQuestionContainer
-            isSample={currentSection === 0}
-            onSubmit={handleSubmit}
-          >
-            {currentSection === 0 ? (
-              <SampleQuestion />
-            ) : (
-              <Questions section={currentSection} />
-            )}
-            <StyledButtonContainer isSample={currentSection === 0}>
-              {currentSection > 0 && (
-                <Button type="button" onClick={handleMovePrev}>
-                  이전
-                </Button>
-              )}
+        <StyledForm isSample={currentPage === 0} onSubmit={handleSubmit}>
+          {currentPage === 0 ? (
+            <SampleQuestion />
+          ) : (
+            <StyledQuestions>
+              {questionNumbers.map((number) => (
+                <Question key={`question-${number}`} number={number} />
+              ))}
+            </StyledQuestions>
+          )}
+          <StyledButtonContainer isSample={currentPage === 0}>
+            {currentPage > 0 && (
               <Button
-                type={currentSection === lastPageIndex && 'submit'}
-                disabled={!isSectionAnswered}
-                onClick={handleMoveNext}
+                type="button"
+                onClick={() => {
+                  setCurrentPage((current) =>
+                    current === 0 ? current : current - 1,
+                  );
+                }}
               >
-                {currentSection !== lastPageIndex ? '다음' : '제출'}
+                이전
               </Button>
-            </StyledButtonContainer>
-          </StyledQuestionContainer>
-        </>
+            )}
+            <Button
+              type={currentPage === lastPage ? 'submit' : 'button'}
+              disabled={!isPageAnswered}
+              onClick={() => {
+                setCurrentPage((current) =>
+                  current === lastPage ? current : current + 1,
+                );
+              }}
+            >
+              {currentPage !== lastPage ? '다음' : '제출'}
+            </Button>
+          </StyledButtonContainer>
+        </StyledForm>
       }
     />
   );
@@ -101,7 +100,7 @@ const StyledProgressBarContainer = styled.div`
   }
 `;
 
-const StyledQuestionContainer = styled.form`
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -123,6 +122,14 @@ const StyledButtonContainer = styled.div`
       justify-content: center;
     `};
   margin-top: 5vh;
+`;
+
+const StyledQuestions = styled.div`
+  width: 100%;
+
+  & > fieldset + fieldset {
+    margin-top: 5vh;
+  }
 `;
 
 export default TestPage;

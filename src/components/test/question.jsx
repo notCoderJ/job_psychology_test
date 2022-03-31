@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selector } from '../../store/modules';
@@ -12,58 +12,47 @@ const Question = ({ number }) => {
   );
   const answer = useSelector(selector.getAnswer(number));
 
-  const saveAnswer = useCallback(
-    (questionNumber, answerScore) =>
-      dispatch(
-        actions.saveAnswer({
-          questionNumber,
-          answerScore,
-        }),
-      ),
-    [dispatch],
-  );
+  const handleCheckAnswer = (e) => {
+    const answerScore = e.target.value;
+    if (answerScore === answer) {
+      return;
+    }
 
-  const handleCheckAnswer = useCallback(
-    (e) => {
-      if (e.target.value === answer) {
-        return;
-      }
-      saveAnswer(number, e.target.value);
-    },
-    [answer, saveAnswer, number],
-  );
+    dispatch(actions.saveAnswer({ questionNumber: number, answerScore }));
+  };
 
   return (
-    <StyledQuestion answered={!!answer}>
+    <StyledFieldset answered={!!answer}>
       <legend>{description}</legend>
-      <StyledAnswerContainer>
+      <StyledAnswer>
         {defaultAnswerOptions.map(({ option, score, optionDesc }, index) => {
           const name = `question${getFixedDigits(number)}-answer-option`;
           const id = `${name}${getFixedDigits(index + 1)}`;
+
           return (
             <React.Fragment key={id}>
-              <StyledAnswerOption htmlFor={id} checked={answer === score}>
+              <StyledOption htmlFor={id} checked={answer === score}>
                 {option}
                 <input
-                  id={id}
                   key={id}
+                  id={id}
                   name={name}
                   type="radio"
                   value={score}
                   onClick={handleCheckAnswer}
                   aria-describedby={`${id}-desc`}
                 />
-              </StyledAnswerOption>
+              </StyledOption>
               <span id={`${id}-desc`}>{optionDesc}</span>
             </React.Fragment>
           );
         })}
-      </StyledAnswerContainer>
-    </StyledQuestion>
+      </StyledAnswer>
+    </StyledFieldset>
   );
 };
 
-const StyledQuestion = styled.fieldset`
+const StyledFieldset = styled.fieldset`
   position: relative;
   border: solid 2px ${COLOR_DARKSET.BORDER};
   border-radius: 5px;
@@ -117,7 +106,7 @@ const StyledQuestion = styled.fieldset`
   }
 `;
 
-const StyledAnswerContainer = styled.div`
+const StyledAnswer = styled.div`
   display: grid;
   grid-template:
     'opt1 opt2' 1fr
@@ -148,7 +137,7 @@ const StyledAnswerContainer = styled.div`
   }
 `;
 
-const StyledAnswerOption = styled.label`
+const StyledOption = styled.label`
   place-self: center center;
   width: fit-content;
   padding: 0.8rem 1.5rem;
@@ -202,4 +191,4 @@ const StyledAnswerOption = styled.label`
   }
 `;
 
-export default Question;
+export default React.memo(Question);

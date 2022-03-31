@@ -1,22 +1,24 @@
 import { toast } from 'react-toastify';
-import { put, retry, takeEvery, getContext } from 'redux-saga/effects';
+import { put, call, takeEvery, getContext } from 'redux-saga/effects';
 import api from '../../api';
 import { reducerState } from '../../utils/reducer';
-import { questionActions } from './question';
+import { testActions } from './test';
 
-const REQ_QUESTIONS = 'question/reqQuestions';
-const SECOND = 1000;
+const REQ_QUESTIONS = 'test/reqQuestions';
 
 function* reqQuestions() {
   try {
-    const questions = yield retry(3, 2 * SECOND, api.getQuestions);
+    const questions = yield call(api.getQuestions);
+
     const data = questions.RESULT;
     if (!Array.isArray(data) || data.length === 0) {
       throw new Error('검사 문항을 불러오는데 실패했습니다.');
     }
+
     yield put(
-      questionActions.loadQuestions(reducerState.success(questions.RESULT)),
+      testActions.loadQuestions(reducerState.success(questions.RESULT)),
     );
+
     const history = yield getContext('history');
     history.push('/test');
   } catch (err) {
@@ -26,12 +28,13 @@ function* reqQuestions() {
       hideProgressBar: true,
       draggable: true,
     });
-    yield put(questionActions.loadQuestions(reducerState.failure(err.message)));
+
+    yield put(testActions.loadQuestions(reducerState.failure(err.message)));
   }
 }
 
-function* questionSaga() {
+function* testSaga() {
   yield takeEvery(REQ_QUESTIONS, reqQuestions);
 }
 
-export default questionSaga;
+export default testSaga;

@@ -1,14 +1,12 @@
-import psychologyAPI, { createBaseURL } from './common';
-
-const BASE_URL = createBaseURL('result');
+import psychologyAPI, { createURL } from './common';
 
 const resultAPI = {
-  getResultData: psychologyAPI.get(BASE_URL)('/report')(),
-  getValuesDescription: psychologyAPI.get(BASE_URL)('/intrprts')(),
+  getResultData: psychologyAPI.get(createURL('result', 'report')),
+  getValuesDescription: psychologyAPI.get(createURL('result', 'intrprts')),
   getAverageJobInfoByType: (type) => {
     const urlBytype = { grade: '/jobs', major: '/majors' };
     return (highValues) =>
-      psychologyAPI.get(BASE_URL)(`/value${urlBytype[type]}`)()({
+      psychologyAPI.get(createURL('result', `/value${urlBytype[type]}`), {
         no1: highValues[0],
         no2: highValues[1],
       });

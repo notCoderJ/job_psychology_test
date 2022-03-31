@@ -13,11 +13,11 @@ import {
   TARGET_NORMAL,
 } from '../../constants/test';
 import { reducerState } from '../../utils/reducer';
-import { answerSelector } from './answer';
+import { testSelector } from './test';
 import { resultActions, resultSelector } from './result';
 import { userSelector } from './user';
+import { delay } from '../../utils';
 
-const SECOND = 1000;
 const REQ_RESULT_DATA = 'result/reqResult';
 const REQ_VALUES_DESCRIPTION = 'result/reqValueDescriptions';
 const REQ_JOB_INFO = 'result/reqJobData';
@@ -35,7 +35,7 @@ const getResultRequestFormAnswer = (rawAnswers) => {
 function* getRequestForm() {
   const [userData, rawAnswers] = yield all([
     select(userSelector.getUserData),
-    select(answerSelector.getAnswers),
+    select(testSelector.getAnswers),
   ]);
   const answers = getResultRequestFormAnswer(rawAnswers.slice(1));
 
@@ -53,13 +53,13 @@ function* getResultData() {
   const sendData = yield getRequestForm();
   try {
     // Get Result API URL
-    const response = yield retry(3, 2 * SECOND, api.getResultURL, sendData);
+    const response = yield retry(3, delay(2), api.getResultURL, sendData);
     const paramsString = new URL(response.RESULT.url).search;
     const params = new URLSearchParams(paramsString);
     const seq = params.get('seq');
 
     // Get Result Data
-    const resultData = yield retry(3, 2 * SECOND, api.getResultData, { seq });
+    const resultData = yield retry(3, delay(2), api.getResultData, { seq });
     yield put(resultActions.loadResult(reducerState.success(resultData)));
 
     // Get Values Description & Job Info
@@ -76,7 +76,7 @@ function* getValuesDescription() {
   try {
     const valuesDescription = yield retry(
       3,
-      2 * SECOND,
+      delay(2),
       api.getValuesDescription,
       { qestnrseq: QUESTION_SEQ },
     );
@@ -95,18 +95,8 @@ function* getAverageJobInfo() {
   const highLevelValues = yield select(resultSelector.getTwoHighLevelValues);
   try {
     const jobInfo = yield all([
-      retry(
-        3,
-        2 * SECOND,
-        api.getAverageJobInfoByType('grade'),
-        highLevelValues,
-      ),
-      retry(
-        3,
-        2 * SECOND,
-        api.getAverageJobInfoByType('major'),
-        highLevelValues,
-      ),
+      retry(3, delay(2), api.getAverageJobInfoByType('grade'), highLevelValues),
+      retry(3, delay(2), api.getAverageJobInfoByType('major'), highLevelValues),
     ]);
     yield put(resultActions.loadJobData(reducerState.success(jobInfo)));
 

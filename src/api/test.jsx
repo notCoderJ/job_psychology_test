@@ -1,17 +1,14 @@
 import { QUESTION_SEQ } from '../constants/test';
-import psychologyAPI, { createBaseURL } from './common';
+import psychologyAPI, { createURL } from './common';
 
-const API_KEY = process.env.REACT_APP_API_KEY;
-const BASE_URL = createBaseURL('test');
+const apikey = process.env.REACT_APP_API_KEY;
 
 const testAPI = {
-  getQuestions: psychologyAPI.get(BASE_URL)('/questions')({
-    apikey: API_KEY,
+  getQuestions: psychologyAPI.get(createURL('test', 'questions'), {
+    apikey,
     q: QUESTION_SEQ,
   }),
-  getResultURL: psychologyAPI.post(BASE_URL)('/report')({
-    apikey: API_KEY,
-  }),
+  getResultURL: psychologyAPI.post(createURL('test', 'report'), { apikey }),
 };
 
 export default testAPI;
