@@ -6,9 +6,8 @@ import { PageLayout, Button } from '../common';
 import { actions, selector } from '../../store/modules';
 import ProgressBar from './progressBar';
 import SampleQuestion from './sampleQuestion';
-import { persistor } from '../../store';
 import { reducerState } from '../../utils/reducer';
-import Loading from '../common/loading';
+import Loading from '../common/Loading';
 
 const TestPage = () => {
   const ref = useRef(null);
@@ -21,7 +20,6 @@ const TestPage = () => {
   );
   const isResultLoading = useSelector(selector.isResultLoading);
 
-  useEffect(() => persistor.persist(), []);
   useEffect(() => ref.current.scrollTo(0, 0), [ref, currentSection]);
 
   const handleMovePrev = useCallback(

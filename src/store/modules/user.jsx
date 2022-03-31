@@ -1,4 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { missingItems } from '../../constants/user';
 
 const initialState = {
   name: '',
@@ -34,11 +35,24 @@ const getUserData = createSelector(
   [getUserName, getUserGender],
   (name, gender) => ({ name, gender }),
 );
+const getMissingItem = createSelector(
+  [getUserName, getUserGender],
+  (name, gender) => {
+    if (!name) {
+      return missingItems.name;
+    }
+    if (!gender) {
+      return missingItems.gender;
+    }
+    return missingItems.not;
+  },
+);
 
 export const userActions = userSlice.actions;
 export const userSelector = {
   getUserName,
   getUserGender,
   getUserData,
+  getMissingItem,
 };
 export default userSlice.reducer;
