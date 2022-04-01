@@ -1,30 +1,17 @@
-import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { RESULT_DESCRIPTION } from '../../constants/result';
 import { COLOR_DARKSET } from '../../variables';
 import { Button, PageLayout } from '../common';
-import AverageJobsByTypes from './averageJobsByTypes';
-import JobValuesResult from './jobValuesResult';
-import UserInfo from './userInfo';
-import ResultItemLayout from './resultItemLayout';
+import AverageJobsByTypes from './AverageJobsByTypes';
+import JobValuesResult from './JobValuesResult';
+import UserInfo from './UserInfo';
+import ResultItemLayout from './ResultItemLayout';
 import { persistor } from '../../store';
 
 const PsychologyTestResult = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
-
-  // Init LocalStorage & Pause
-  useEffect(() => {
-    persistor.purge();
-    persistor.pause();
-  }, []);
-
-  const handleReplay = useCallback(() => {
-    dispatch({ type: 'RESET' });
-    history.replace('/');
-  }, [dispatch, history]);
 
   return (
     <PageLayout
@@ -51,7 +38,14 @@ const PsychologyTestResult = () => {
             contents={<AverageJobsByTypes />}
           />
           <StyledButtonContainer>
-            <Button onClick={handleReplay}>다시 검사하기</Button>
+            <Button
+              onClick={() => {
+                persistor.purge();
+                dispatch({ type: 'RESET' });
+              }}
+            >
+              다시 검사하기
+            </Button>
           </StyledButtonContainer>
         </StyledPsychologyTestResult>
       }

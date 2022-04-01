@@ -1,22 +1,19 @@
-import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import styled from 'styled-components';
-import { selector } from '../../store/modules';
-import ResultChart from './chart';
+import ResultChart from './ResultChart';
 import { VIEW_OF_VALUES } from '../../constants';
-import ValueDescription from './valueDescriptions';
+import ValueDescription from './ValueDescriptions';
 import { COLOR_DARKSET } from '../../variables';
+import { ResultDescription } from '../common';
 
 const JobValuesResult = () => {
-  const psychologyTestReulstText = useSelector(
-    selector.getPsychologyTestReulstText,
-  );
-
-  const valueNames = useMemo(() => Object.keys(VIEW_OF_VALUES), []);
+  const valueNames = Object.keys(VIEW_OF_VALUES);
 
   return (
     <StyledJobValuesResult>
-      <StyledResultSummary>{psychologyTestReulstText}</StyledResultSummary>
+      <StyledResultSummary>
+        <ResultDescription />
+      </StyledResultSummary>
       <StyledResultAnalysisContainer>
         <StyledResultChartContainer>
           <ResultChart labels={valueNames} />

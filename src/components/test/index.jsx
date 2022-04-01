@@ -5,7 +5,6 @@ import { PageLayout, Button } from '../common';
 import { actions, selector } from '../../store/modules';
 import ProgressBar from './ProgressBar';
 import SampleQuestion from './SampleQuestion';
-import { reducerState } from '../../utils/reducer';
 import Loading from '../common/Loading';
 import Question from './Question';
 
@@ -23,7 +22,7 @@ const TestPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(actions.reqResult(reducerState.loading()));
+    dispatch(actions.reqResult());
   };
 
   if (isResultLoading) {

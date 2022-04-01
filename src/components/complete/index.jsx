@@ -1,32 +1,26 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { COMPLETE_DESCRIPTION } from '../../constants/complete';
-import { selector } from '../../store/modules';
 import { COLOR_DARKSET } from '../../variables';
-import { PageLayout, Button } from '../common';
+import { PageLayout, Button, ResultDescription } from '../common';
 
-const PsychologyTestComplete = () => {
-  const psychologyTestReulstText = useSelector(
-    selector.getPsychologyTestReulstText,
-  );
-
-  return (
-    <PageLayout
-      header={<StyledCompleteTitle>검사가 완료되었습니다.</StyledCompleteTitle>}
-      main={
-        <StyledCompleteContainer>
-          <p>{COMPLETE_DESCRIPTION}</p>
-          <p>{psychologyTestReulstText}</p>
-          <Link to="/result" replace>
-            <Button>결과 보기</Button>
-          </Link>
-        </StyledCompleteContainer>
-      }
-    />
-  );
-};
+const CompletePage = () => (
+  <PageLayout
+    header={<StyledCompleteTitle>검사가 완료되었습니다.</StyledCompleteTitle>}
+    main={
+      <StyledCompleteContainer>
+        <p>{COMPLETE_DESCRIPTION}</p>
+        <p>
+          <ResultDescription />
+        </p>
+        <Link to="/result">
+          <Button>결과 보기</Button>
+        </Link>
+      </StyledCompleteContainer>
+    }
+  />
+);
 
 const StyledCompleteTitle = styled.h1`
   font-size: 3rem;
@@ -55,4 +49,4 @@ const StyledCompleteContainer = styled.div`
   }
 `;
 
-export default PsychologyTestComplete;
+export default CompletePage;

@@ -4,14 +4,14 @@ import { toast, ToastContainer } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selector } from '../../store/modules';
-import { reducerState } from '../../utils/reducer';
+import { reducerState } from '../../utils';
 import { PageLayout, Button } from '../common';
 import Loading from '../common/Loading';
 import UserName from './UserName';
 import UserGender from './UserGender';
 import { missingItems } from '../../constants/user';
 
-const MainPage = () => {
+const UserPage = () => {
   const dispatch = useDispatch();
   const nameRef = useRef(null);
   const genderRef = useRef(null);
@@ -99,4 +99,4 @@ const StyledFieldset = styled.fieldset`
   }
 `;
 
-export default MainPage;
+export default UserPage;

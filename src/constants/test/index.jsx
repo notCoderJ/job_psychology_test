@@ -19,17 +19,6 @@ export const SAMPLE_QUESTION = {
   ],
 };
 
-// 검사 결과 요청 시 검사 번호별 답변 형식
-const FORM_TYPE = Object.freeze({
-  A: { prefix: 'A', infix: '=', postfix: ' ' },
-  B: { prefix: 'B', infix: '=', postfix: ' ' },
-  NORMAL: { prefix: '', infix: '=', postfix: ' ' },
-  NONE: { prefix: '', infix: '', postfix: ',' },
-});
-export const RESULT_ANSWER_FORM = {
-  6: FORM_TYPE.B,
-};
-
 // TEST DUMMY
 export const DUMMY = {
   qestrnSeq: 6,
