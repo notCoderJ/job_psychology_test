@@ -1,7 +1,5 @@
 export const TARGET_NORMAL = 100209;
 export const QUESTION_SEQ = 6;
-export const MAX_PAGE_QUESTION_COUNT = 5;
-
 export const SAMPLE_DESCRIPTION =
   '직업과 관련된 두개의 가치 중에서 자기에게 더 중요한 가치에 표시하세요. 가치의 뜻을 잘모르겠다면 문항 아래에 있는 가치의 설명을 확인해보세요.';
 export const SAMPLE_QUESTION = {
@@ -19,17 +17,6 @@ export const SAMPLE_QUESTION = {
       optionDesc: '내가 한 일을 다른 사람에게 인정받는 것입니다.',
     },
   ],
-};
-
-// 검사 결과 요청 시 검사 번호별 답변 형식
-const FORM_TYPE = Object.freeze({
-  A: { prefix: 'A', infix: '=', postfix: ' ' },
-  B: { prefix: 'B', infix: '=', postfix: ' ' },
-  NORMAL: { prefix: '', infix: '=', postfix: ' ' },
-  NONE: { prefix: '', infix: '', postfix: ',' },
-});
-export const RESULT_ANSWER_FORM = {
-  6: FORM_TYPE.B,
 };
 
 // TEST DUMMY

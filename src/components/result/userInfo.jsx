@@ -1,19 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selector } from '../../store/modules';
-import TableLayout from './tableLayout';
+import TableLayout from './TableLayout';
 
 const UserInfo = () => {
-  const { name, gender, type, inspect } = useSelector(selector.getUserInfo);
+  const { type, date, user } = useSelector(selector.getInspectInfo);
 
   return (
     <TableLayout
-      border={{
-        borderStyle: 'none',
-      }}
+      border={{ style: 'none' }}
       contents={{
         head: ['이름', '성별', '구분', '검사 종류', '검사일'],
-        body: [name, gender, type, inspect.type, inspect.date],
+        body: [user.name, user.gender, user.type, type, date],
       }}
     />
   );

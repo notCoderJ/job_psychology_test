@@ -1,4 +1,4 @@
-export const reducerState = Object.freeze({
+export default Object.freeze({
   initial: (data = null) => ({
     loading: false,
     data,

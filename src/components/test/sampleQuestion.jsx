@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SAMPLE_DESCRIPTION } from '../../constants/test';
-import Question from './question';
+import Question from './Question';
 
 const SampleQuestion = () => (
   <div>

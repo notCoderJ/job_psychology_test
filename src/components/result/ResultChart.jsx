@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { PolarArea } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -8,26 +8,18 @@ import { COLOR_DARKSET } from '../../variables';
 const colorOpaqueScale = 1;
 const convertColor = (scale, value) => {
   const [r, g, b] = COLOR_DARKSET.CHART.DATA;
-  return `rgba(${r}, ${g}, ${b}, ${value * (colorOpaqueScale / scale)})`;
+  return `rgba(${r}, ${g}, ${b}, ${
+    !scale ? 1 : value * (colorOpaqueScale / scale)
+  })`;
 };
 
 const ResultChart = ({ labels }) => {
   const dispatch = useDispatch();
-  const { allValues: values } = useSelector(selector.getResultData);
-  const valuesScale = useSelector(selector.getValueScoreScale);
-
-  const handleClickValue = useCallback(
-    (e, legendItem) => {
-      if (
-        legendItem[0]?.index === undefined ||
-        legendItem[0].index >= labels.length
-      ) {
-        return;
-      }
-
-      dispatch(actions.setCurrentValueDescription(legendItem[0]?.index));
-    },
-    [dispatch, labels],
+  const scores = useSelector(selector.getScores);
+  const highestScoreIndex = useSelector(selector.getHighestScoreIndex);
+  const maxScale = useMemo(
+    () => scores && highestScoreIndex && scores[highestScoreIndex],
+    [scores, highestScoreIndex],
   );
 
   return (
@@ -37,9 +29,9 @@ const ResultChart = ({ labels }) => {
           labels,
           datasets: [
             {
-              data: values,
-              backgroundColor: values.map((score) =>
-                convertColor(valuesScale, score),
+              data: scores,
+              backgroundColor: scores.map((score) =>
+                convertColor(maxScale, score),
               ),
               borderWidth: 1,
             },
@@ -54,7 +46,15 @@ const ResultChart = ({ labels }) => {
               bottom: 10,
             },
           },
-          onClick: handleClickValue,
+          onClick: (_, item) => {
+            if (
+              item[0]?.index === undefined ||
+              item[0].index >= labels.length
+            ) {
+              return;
+            }
+            dispatch(actions.setCurrentValueDescription(item[0]?.index));
+          },
           maintainAspectRatio: false,
           plugins: {
             legend: {

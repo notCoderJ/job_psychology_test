@@ -3,9 +3,9 @@ import './app.css';
 import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import MainPage from './components/main';
+import UserPage from './components/user';
 import TestPage from './components/test';
-import PsychologyTestComplete from './components/complete';
+import CompletePage from './components/complete';
 import PsychologyTestResult from './components/result';
 import store, { persistor, customHistory } from './store';
 
@@ -16,13 +16,13 @@ function App() {
         <PersistGate loading={null} persistor={persistor}>
           <Switch>
             <Route exact path="/">
-              <MainPage />
+              <UserPage />
             </Route>
             <Route exact path="/test">
               <TestPage />
             </Route>
             <Route path="/complete">
-              <PsychologyTestComplete />
+              <CompletePage />
             </Route>
             <Route path="/result">
               <PsychologyTestResult />

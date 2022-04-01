@@ -1,64 +1,51 @@
-import React, { useMemo, useCallback } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { JOB_INFO_URL, GRADE_NAMES, MAJOR_NAMES } from '../../constants/result';
 import { selector } from '../../store/modules';
 import { COLOR_DARKSET } from '../../variables';
-import TableLayout from './tableLayout';
+import TableLayout from './TableLayout';
+
+const averageJobs = (typeName, jobs) => {
+  const divisionByType = {};
+  const typeOffset = { grade: -1, major: 0 };
+
+  jobs.forEach(([seq, job, type]) => {
+    const typeIndex = type + typeOffset[typeName];
+    divisionByType[typeIndex] = divisionByType[typeIndex]
+      ? [...divisionByType[typeIndex], [seq, job]]
+      : [[seq, job]];
+  });
+
+  return divisionByType;
+};
+
+const changeJobInfoLink = (jobInfo, typeNames) =>
+  Object.keys(jobInfo).map((index) => [
+    typeNames[index],
+    [
+      jobInfo[index].map(([seq, job]) => (
+        <StyledJobInfoLink
+          key={`${job}-${seq}`}
+          href={`${JOB_INFO_URL}${seq}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {job}
+        </StyledJobInfoLink>
+      )),
+    ],
+  ]);
 
 const AverageJobsByTypes = () => {
-  const { firstHighLevelValueName, secondHighLevelValueName } = useSelector(
-    selector.getTwoHighLevelValueNames,
-  );
-
-  const [jobsByGrade, jobsByMajor] = useSelector(selector.getJobData);
-
-  const averageJobs = useCallback((typeName, jobs) => {
-    const divisionByType = {};
-    const typeOffset = { grade: -1, major: 0 };
-
-    jobs.forEach(([seq, job, type]) => {
-      const typeIndex = type + typeOffset[typeName];
-      divisionByType[typeIndex] = divisionByType[typeIndex]
-        ? [...divisionByType[typeIndex], [seq, job]]
-        : [[seq, job]];
-    });
-
-    return divisionByType;
-  }, []);
-
-  const averageJobsByGrade = useMemo(
-    () => averageJobs('grade', jobsByGrade),
-    [jobsByGrade, averageJobs],
-  );
-  const averageJobsByMajor = useMemo(
-    () => averageJobs('major', jobsByMajor),
-    [jobsByMajor, averageJobs],
-  );
-
-  const changeJobInfoLink = useCallback(
-    (jobInfo, typeNames) =>
-      Object.keys(jobInfo).map((index) => [
-        typeNames[index],
-        [
-          jobInfo[index].map(([seq, job]) => (
-            <StyledJobInfoLink
-              key={`${job}-${seq}`}
-              href={`${JOB_INFO_URL}${seq}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {job}
-            </StyledJobInfoLink>
-          )),
-        ],
-      ]),
-    [],
+  const [jobsByGrade, jobsByMajor] = useSelector(selector.getJobInfo);
+  const [highestScoreName, nextHighestScoreName] = useSelector(
+    selector.getTwoHighestScoreNames,
   );
 
   return (
     <StyledAverageJobsByTypes>
-      <p>{`내가 중요하게 생각하는 ${firstHighLevelValueName}과(와) ${secondHighLevelValueName}을(를) 만족시킬 수 있는 직업은 다음과 같습니다.`}</p>
+      <p>{`내가 중요하게 생각하는 ${highestScoreName}과(와) ${nextHighestScoreName}을(를) 만족시킬 수 있는 직업은 다음과 같습니다.`}</p>
       <StyledAverageJobsByGrade>
         <StyledAverageJobsSubTitle>
           종사자 평균 학력별
@@ -66,12 +53,13 @@ const AverageJobsByTypes = () => {
         <TableLayout
           textAlign="left"
           highlight="1"
-          border={{
-            borderStyle: 'none',
-          }}
+          border={{ style: 'none' }}
           contents={{
             head: ['분야', '직업명'],
-            body: changeJobInfoLink(averageJobsByGrade, GRADE_NAMES),
+            body: changeJobInfoLink(
+              averageJobs('grade', jobsByGrade),
+              GRADE_NAMES,
+            ),
           }}
         />
         <StyledAdditionalNotice>
@@ -86,12 +74,13 @@ const AverageJobsByTypes = () => {
         <TableLayout
           textAlign="left"
           highlight="1"
-          border={{
-            borderStyle: 'none',
-          }}
+          border={{ style: 'none' }}
           contents={{
             head: ['분야', '직업명'],
-            body: changeJobInfoLink(averageJobsByMajor, MAJOR_NAMES),
+            body: changeJobInfoLink(
+              averageJobs('major', jobsByMajor),
+              MAJOR_NAMES,
+            ),
           }}
         />
         <StyledAdditionalNotice>
