@@ -1,6 +1,6 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { SAMPLE_QUESTION } from '../../constants/test';
-import { reducerState } from '../../utils/reducer';
+import { reducerState } from '../../utils';
 
 const MAX_PAGE_QUESTION_COUNT = 5;
 const EXAMPLE_COUNT = 1;
@@ -27,33 +27,22 @@ const testSlice = createSlice({
 
       state.questionCount = data.length;
       state.questions.data = [SAMPLE_QUESTION].concat(
-        data.map(
-          ({
-            question,
-            qitemNo,
-            answer01,
-            answer02,
-            answer03,
-            answer04,
-            answerScore01,
-            answerScore02,
-          }) => ({
-            questionNumber: qitemNo,
-            description: question,
-            defaultAnswerOptions: [
-              {
-                option: answer01,
-                score: answerScore01,
-                optionDesc: answer03,
-              },
-              {
-                option: answer02,
-                score: answerScore02,
-                optionDesc: answer04,
-              },
-            ],
-          }),
-        ),
+        data.map((question) => ({
+          questionNumber: question.qitemNo,
+          description: question.question,
+          defaultAnswerOptions: [
+            {
+              option: question.answer01,
+              score: question.answerScore01,
+              optionDesc: question.answer03,
+            },
+            {
+              option: question.answer02,
+              score: question.answerScore02,
+              optionDesc: question.answer04,
+            },
+          ],
+        })),
       );
     },
     saveAnswer(state, action) {

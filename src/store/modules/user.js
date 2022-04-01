@@ -31,10 +31,7 @@ const userSlice = createSlice({
 // Define Selectors
 const getUserName = (state) => state.user.name;
 const getUserGender = (state) => state.user.gender;
-const getUserData = createSelector(
-  [getUserName, getUserGender],
-  (name, gender) => ({ name, gender }),
-);
+
 const getMissingItem = createSelector(
   [getUserName, getUserGender],
   (name, gender) => {
@@ -52,7 +49,6 @@ export const userActions = userSlice.actions;
 export const userSelector = {
   getUserName,
   getUserGender,
-  getUserData,
   getMissingItem,
 };
 export default userSlice.reducer;

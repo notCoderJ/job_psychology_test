@@ -69,5 +69,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolve": {
+    "extensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx"
+    ]
   }
 }

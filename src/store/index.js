@@ -4,7 +4,8 @@ import reduxReset from 'redux-reset';
 import createSagaMiddleware from 'redux-saga';
 // import logger from 'redux-logger';
 import { persistStore } from 'redux-persist';
-import persistedReducer, { rootSaga } from './modules';
+import persistedReducer from './modules';
+import rootSaga from './saga';
 
 const customHistory = createBrowserHistory();
 const sagaMiddleware = createSagaMiddleware({

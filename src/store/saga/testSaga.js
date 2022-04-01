@@ -1,8 +1,8 @@
 import { toast } from 'react-toastify';
 import { put, call, takeEvery, getContext } from 'redux-saga/effects';
 import api from '../../api';
-import { reducerState } from '../../utils/reducer';
-import { testActions } from './test';
+import { actions } from '../modules';
+import { reducerState } from '../../utils';
 
 const REQ_QUESTIONS = 'test/reqQuestions';
 
@@ -15,9 +15,7 @@ function* reqQuestions() {
       throw new Error('검사 문항을 불러오는데 실패했습니다.');
     }
 
-    yield put(
-      testActions.loadQuestions(reducerState.success(questions.RESULT)),
-    );
+    yield put(actions.loadQuestions(reducerState.success(questions.RESULT)));
 
     const history = yield getContext('history');
     history.push('/test');
@@ -29,7 +27,7 @@ function* reqQuestions() {
       draggable: true,
     });
 
-    yield put(testActions.loadQuestions(reducerState.failure(err.message)));
+    yield put(actions.loadQuestions(reducerState.failure(err.message)));
   }
 }
 
