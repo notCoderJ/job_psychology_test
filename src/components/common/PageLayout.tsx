@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -30,19 +30,32 @@ const ADDITIONAL_INFO = Object.freeze({
   ),
 });
 
-const PageLayout = React.forwardRef(({ header, main, footerHide }, ref) => (
-  <Container ref={ref}>
-    <Header>{header}</Header>
-    <Main role="main">{main}</Main>
-    <Footer hidden={footerHide}>
-      <StyledRights>{ADDITIONAL_INFO.rights}</StyledRights>
-      <StyledContact>
-        Contact
-        {ADDITIONAL_INFO.contact}
-      </StyledContact>
-    </Footer>
-  </Container>
-));
+// TODO: 임시 타입 아직 수정 X
+type PageLayOutProps = {
+  header?: ReactNode;
+  main: ReactNode;
+  footerHide?: boolean;
+};
+const PageLayout = React.forwardRef<unknown, PageLayOutProps>(
+  ({ header, main, footerHide }: PageLayOutProps, ref) => (
+    <Container ref={ref as React.ForwardedRef<HTMLDivElement>}>
+      <Header>{header}</Header>
+      <Main role="main">{main}</Main>
+      <Footer hidden={footerHide}>
+        <StyledRights>{ADDITIONAL_INFO.rights}</StyledRights>
+        <StyledContact>
+          Contact
+          {ADDITIONAL_INFO.contact}
+        </StyledContact>
+      </Footer>
+    </Container>
+  ),
+);
+
+PageLayout.defaultProps = {
+  header: null,
+  footerHide: false,
+};
 
 const Container = styled.div`
   display: grid;
