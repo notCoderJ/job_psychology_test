@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import * as palette from '../../variables';
 
-const Button = ({ type, disabled, onClick, children }) => (
-  <StyledButton
-    type={type ? `${type}` : 'button'}
-    disabled={disabled}
-    onClick={typeof onClick === 'function' ? onClick : null}
-  >
-    {children}
-  </StyledButton>
-);
+type ButtonProps = {
+  type: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  onClick?: () => void;
+  children?: ReactNode;
+};
 
-const StyledButton = styled.button`
+type StyledButtonProps = Omit<ButtonProps, 'children'>;
+
+const StyledButton = styled.button<StyledButtonProps>`
   cursor: pointer;
 
   ${(props) =>
@@ -55,5 +54,17 @@ const StyledButton = styled.button`
     }
   }
 `;
+
+const Button = ({ type, disabled, onClick, children }: ButtonProps) => (
+  <StyledButton type={type || 'button'} disabled={disabled} onClick={onClick}>
+    {children}
+  </StyledButton>
+);
+
+Button.defaultProps = {
+  disabled: false,
+  onClick: null,
+  children: null,
+};
 
 export default Button;
