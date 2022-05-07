@@ -2,7 +2,6 @@ import { createBrowserHistory } from 'history';
 import { configureStore } from '@reduxjs/toolkit';
 import reduxReset from 'redux-reset';
 import createSagaMiddleware from 'redux-saga';
-// import logger from 'redux-logger';
 import { persistStore } from 'redux-persist';
 import persistedReducer from './modules';
 import rootSaga from './saga';
