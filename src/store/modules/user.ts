@@ -1,7 +1,13 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { missingItems } from '../../constants/user';
+import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '@/store';
+import { missingItems } from '@/constants/user';
 
-const initialState = {
+interface UserState {
+  name: string;
+  gender: string;
+}
+
+const initialState: UserState = {
   name: '',
   gender: '',
 };
@@ -11,8 +17,8 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    saveName(state, action) {
-      const userName = action.payload;
+    saveName(state, action: PayloadAction<string>) {
+      const userName: string = action.payload;
       const isValid = /^[가-힣]{2,15}$/;
 
       if (userName.search(isValid) === -1) {
@@ -22,19 +28,19 @@ const userSlice = createSlice({
 
       state.name = userName;
     },
-    saveGender(state, action) {
+    saveGender(state, action: PayloadAction<string>) {
       state.gender = action.payload;
     },
   },
 });
 
 // Define Selectors
-const getUserName = (state) => state.user.name;
-const getUserGender = (state) => state.user.gender;
+const getUserName = (state: RootState): string => state.user.name;
+const getUserGender = (state: RootState): string => state.user.gender;
 
 const getMissingItem = createSelector(
   [getUserName, getUserGender],
-  (name, gender) => {
+  (name: string, gender: string): number => {
     if (!name) {
       return missingItems.name;
     }

@@ -21,5 +21,8 @@ sagaMiddleware.run(rootSaga);
 
 const persistor = persistStore(store);
 
+export type RootState = ReturnType<typeof store.getState>;
+export type TypedDispatch = typeof store.dispatch;
+
 export { persistor, customHistory };
 export default store;

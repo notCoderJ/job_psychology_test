@@ -3,11 +3,11 @@ import './app.css';
 import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import UserPage from './pages/UserPage';
-import TestPage from './components/test';
-import CompletePage from './components/complete';
-import PsychologyTestResult from './components/result';
-import store, { persistor, customHistory } from './store';
+import store, { persistor, customHistory } from '@/store';
+import UserPage from '@/pages/UserPage';
+import TestPage from '@/components/test';
+import CompletePage from '@/components/complete';
+import PsychologyTestResult from '@/components/result';
 
 function App() {
   return (

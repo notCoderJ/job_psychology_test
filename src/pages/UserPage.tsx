@@ -2,18 +2,18 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { toast, ToastContainer } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
-import { useDispatch, useSelector } from 'react-redux';
-import { actions, selector } from '../store/modules';
-import { reducerState } from '../utils';
-import { PageLayout, Button } from '../components/common';
-import Loading from '../components/common/Loading';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/redux';
 import {
   UserName,
   UserGender,
   UserNameInputRef,
   UserGenderInputRef,
-} from '../components/user';
-import { missingItems } from '../constants/user';
+} from '@/components/user';
+import { actions, selector } from '@/store/modules';
+import { reducerState } from '@/utils';
+import { PageLayout, Button } from '@/components/common';
+import Loading from '@/components/common/Loading';
+import { missingItems } from '@/constants/user';
 
 const StyledTitle = styled.h1`
   color: white;
@@ -42,11 +42,12 @@ const StyledFieldset = styled.fieldset`
 `;
 
 const UserPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useTypedDispatch();
   const nameRef = useRef<UserNameInputRef>(null);
   const genderRef = useRef<UserGenderInputRef>(null);
-  const isQuestionLoading = useSelector(selector.isQuestionLoading);
-  const missingItem = useSelector(selector.getMissingItem);
+  // TODO: isQuestionLoading -> test redux 변경 시 수정
+  const isQuestionLoading = useTypedSelector(selector.isQuestionLoading);
+  const missingItem: number = useTypedSelector(selector.getMissingItem);
 
   useEffect(() => injectStyle(), []);
 
