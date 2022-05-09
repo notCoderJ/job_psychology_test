@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "es2016",
     "module": "esnext",
@@ -13,15 +14,15 @@
     ],
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "allowJs": true
   },
-  "extends": "./tsconfig.path.json",
   "include": [
-    "src"
+    "src/**/*",
+    "craco.config.js"
   ]
 }

@@ -1,9 +1,9 @@
 import React, { useImperativeHandle, useRef } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { actions, selector } from '../../store/modules';
-import { GENDER } from '../../constants';
-import { COLOR_DARKSET } from '../../variables';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/redux';
+import { actions, selector } from '@/store/modules';
+import { GENDER } from '@/constants';
+import { COLOR_DARKSET } from '@/variables';
 
 const StyledFieldset = styled.fieldset`
   display: flex;
@@ -75,8 +75,8 @@ const UserGender: React.ForwardRefRenderFunction<UserGenderInputRef> = (
   ref,
 ) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch();
-  const userGender = useSelector(selector.getUserGender);
+  const dispatch = useTypedDispatch();
+  const userGender: string = useTypedSelector(selector.getUserGender);
 
   useImperativeHandle(ref, () => ({
     focus: () => {

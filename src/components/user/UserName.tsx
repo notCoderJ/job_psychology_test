@@ -1,8 +1,8 @@
 import React, { useImperativeHandle, useRef } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { actions, selector } from '../../store/modules';
-import { COLOR_DARKSET } from '../../variables';
+import { actions, selector } from '@/store/modules';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/redux';
+import { COLOR_DARKSET } from '@/variables';
 
 const StyledLabel = styled.label`
   > input {
@@ -34,10 +34,12 @@ export interface UserNameInputRef {
   focus: () => void;
 }
 
+type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
+
 const UserName: React.ForwardRefRenderFunction<UserNameInputRef> = (_, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch();
-  const userName = useSelector(selector.getUserName);
+  const dispatch = useTypedDispatch();
+  const userName: string = useTypedSelector(selector.getUserName);
 
   useImperativeHandle(ref, () => ({
     focus: () => {
@@ -54,7 +56,7 @@ const UserName: React.ForwardRefRenderFunction<UserNameInputRef> = (_, ref) => {
         defaultValue={userName}
         placeholder="이름을 입력해주세요."
         type="text"
-        onChange={(e) => {
+        onChange={(e: ChangeEvent) => {
           const name = e.target.value;
           dispatch(actions.saveName(name));
         }}
