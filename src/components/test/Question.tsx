@@ -1,19 +1,34 @@
-import React from 'react';
+import React, { MouseEventHandler, MouseEvent } from 'react';
 import styled, { css } from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { actions, selector } from '../../store/modules';
-import { getFixedDigits } from '../../utils';
-import { COLOR_DARKSET } from '../../variables';
+import { NullableOne } from 'job-test';
+import { actions, Answer, Questions, selector } from '@/store/modules';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/redux';
+import { getFixedDigits } from '@/utils';
+import { COLOR_DARKSET } from '@/variables';
 
-const Question = ({ number }) => {
-  const dispatch = useDispatch();
-  const { description, defaultAnswerOptions } = useSelector(
+interface QuestionProps {
+  number: number;
+}
+
+interface SQuestionProps {
+  answered: boolean;
+}
+
+interface SOptionProps {
+  checked: boolean;
+}
+
+const Question = ({ number }: QuestionProps) => {
+  const dispatch = useTypedDispatch();
+  const question: NullableOne<Questions> = useTypedSelector(
     selector.getQuestion(Number(number)),
   );
-  const answer = useSelector(selector.getAnswer(number));
+  const answer: Answer = useTypedSelector(selector.getAnswer(number));
 
-  const handleCheckAnswer = (e) => {
-    const answerScore = e.target.value;
+  const handleCheckAnswer: MouseEventHandler<HTMLInputElement> = (
+    e: MouseEvent<HTMLInputElement>,
+  ) => {
+    const answerScore: string = (e.target as HTMLInputElement).value;
     if (answerScore === answer) {
       return;
     }
@@ -22,37 +37,40 @@ const Question = ({ number }) => {
   };
 
   return (
-    <StyledFieldset answered={!!answer}>
-      <legend>{description}</legend>
-      <StyledAnswer>
-        {defaultAnswerOptions.map(({ option, score, optionDesc }, index) => {
-          const name = `question${getFixedDigits(number)}-answer-option`;
-          const id = `${name}${getFixedDigits(index + 1)}`;
+    <SQuestion answered={!!answer}>
+      <legend>{question && question.description}</legend>
+      <SAnswer>
+        {question &&
+          question.defaultAnswerOptions.map(
+            ({ option, score, optionDesc }, index) => {
+              const name = `question${getFixedDigits(number)}-answer-option`;
+              const id = `${name}${getFixedDigits(index + 1)}`;
 
-          return (
-            <React.Fragment key={id}>
-              <StyledOption htmlFor={id} checked={answer === score}>
-                {option}
-                <input
-                  key={id}
-                  id={id}
-                  name={name}
-                  type="radio"
-                  value={score}
-                  onClick={handleCheckAnswer}
-                  aria-describedby={`${id}-desc`}
-                />
-              </StyledOption>
-              <span id={`${id}-desc`}>{optionDesc}</span>
-            </React.Fragment>
-          );
-        })}
-      </StyledAnswer>
-    </StyledFieldset>
+              return (
+                <React.Fragment key={id}>
+                  <SOption htmlFor={id} checked={answer === score}>
+                    {option}
+                    <input
+                      key={id}
+                      id={id}
+                      name={name}
+                      type="radio"
+                      value={score}
+                      onClick={handleCheckAnswer}
+                      aria-describedby={`${id}-desc`}
+                    />
+                  </SOption>
+                  <span id={`${id}-desc`}>{optionDesc}</span>
+                </React.Fragment>
+              );
+            },
+          )}
+      </SAnswer>
+    </SQuestion>
   );
 };
 
-const StyledFieldset = styled.fieldset`
+const SQuestion = styled.fieldset<SQuestionProps>`
   position: relative;
   border: solid 2px ${COLOR_DARKSET.BORDER};
   border-radius: 5px;
@@ -106,7 +124,7 @@ const StyledFieldset = styled.fieldset`
   }
 `;
 
-const StyledAnswer = styled.div`
+const SAnswer = styled.div`
   display: grid;
   grid-template:
     'opt1 opt2' 1fr
@@ -137,7 +155,7 @@ const StyledAnswer = styled.div`
   }
 `;
 
-const StyledOption = styled.label`
+const SOption = styled.label<SOptionProps>`
   place-self: center center;
   width: fit-content;
   padding: 0.8rem 1.5rem;

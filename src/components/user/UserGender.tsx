@@ -1,11 +1,80 @@
-import React, { useImperativeHandle, useRef } from 'react';
+import React, {
+  useImperativeHandle,
+  useRef,
+  MouseEventHandler,
+  MouseEvent,
+} from 'react';
 import styled from 'styled-components';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/redux';
 import { actions, selector } from '@/store/modules';
 import { GENDER } from '@/constants';
 import { COLOR_DARKSET } from '@/variables';
 
-const StyledFieldset = styled.fieldset`
+export interface UserGenderInputRef {
+  focus: () => void;
+}
+
+const UserGender: React.ForwardRefRenderFunction<UserGenderInputRef> = (
+  _,
+  ref,
+) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useTypedDispatch();
+  const userGender: string = useTypedSelector(selector.getUserGender);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current?.focus();
+    },
+  }));
+
+  const handleGender: MouseEventHandler<HTMLInputElement> = (
+    e: MouseEvent<HTMLInputElement>,
+  ) => {
+    const gender: string = (e.target as HTMLInputElement).value;
+    if (gender === userGender) {
+      return;
+    }
+    dispatch(actions.saveGender(gender));
+  };
+
+  return (
+    <SFieldset>
+      <legend>성별</legend>
+      <ul>
+        <li>
+          <SLabel htmlFor="genderMale">
+            <input
+              ref={inputRef}
+              id="genderMale"
+              name="userGender"
+              value={GENDER['남성']}
+              type="radio"
+              onClick={handleGender}
+              defaultChecked={userGender === GENDER['남성']}
+            />
+            남성
+          </SLabel>
+        </li>
+        <li>
+          <SLabel htmlFor="genderFemale">
+            <input
+              id="genderFemale"
+              name="userGender"
+              value={GENDER['여성']}
+              type="radio"
+              onClick={handleGender}
+              defaultChecked={userGender === GENDER['여성']}
+            />
+            여성
+          </SLabel>
+        </li>
+      </ul>
+    </SFieldset>
+  );
+};
+
+const SFieldset = styled.fieldset`
   display: flex;
   justify-content: center;
   margin-top: 1rem;
@@ -30,7 +99,7 @@ const StyledFieldset = styled.fieldset`
   }
 `;
 
-const StyledLabel = styled.label`
+const SLabel = styled.label`
   cursor: pointer;
 
   > input {
@@ -62,70 +131,5 @@ const StyledLabel = styled.label`
     }
   }
 `;
-
-export interface UserGenderInputRef {
-  focus: () => void;
-}
-
-type ClickHandler = React.MouseEventHandler<HTMLInputElement>;
-type ClickEvent = React.MouseEvent<HTMLInputElement>;
-
-const UserGender: React.ForwardRefRenderFunction<UserGenderInputRef> = (
-  _,
-  ref,
-) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useTypedDispatch();
-  const userGender: string = useTypedSelector(selector.getUserGender);
-
-  useImperativeHandle(ref, () => ({
-    focus: () => {
-      inputRef.current?.focus();
-    },
-  }));
-
-  const handleGender: ClickHandler = (e: ClickEvent) => {
-    const gender = (e.target as HTMLInputElement).value;
-    if (gender === userGender) {
-      return;
-    }
-    dispatch(actions.saveGender(gender));
-  };
-
-  return (
-    <StyledFieldset>
-      <legend>성별</legend>
-      <ul>
-        <li>
-          <StyledLabel htmlFor="genderMale">
-            <input
-              ref={inputRef}
-              id="genderMale"
-              name="userGender"
-              value={GENDER['남성']}
-              type="radio"
-              onClick={handleGender}
-              defaultChecked={userGender === GENDER['남성']}
-            />
-            남성
-          </StyledLabel>
-        </li>
-        <li>
-          <StyledLabel htmlFor="genderFemale">
-            <input
-              id="genderFemale"
-              name="userGender"
-              value={GENDER['여성']}
-              type="radio"
-              onClick={handleGender}
-              defaultChecked={userGender === GENDER['여성']}
-            />
-            여성
-          </StyledLabel>
-        </li>
-      </ul>
-    </StyledFieldset>
-  );
-};
 
 export default React.forwardRef<UserGenderInputRef>(UserGender);

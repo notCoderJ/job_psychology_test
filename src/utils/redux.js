@@ -1,9 +1,4 @@
-export default Object.freeze({
-  initial: (data = null) => ({
-    loading: false,
-    data,
-    error: null,
-  }),
+export const requestState = Object.freeze({
   loading: (data = null) => ({
     loading: true,
     data,

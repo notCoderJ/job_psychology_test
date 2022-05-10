@@ -5,6 +5,8 @@ import userReducer, { userActions, userSelector } from './user';
 import testReducer, { testActions, testSelector } from './test';
 import resultReducer, { resultActions, resultSelector } from './result';
 
+export * from './test';
+
 export const actions = { ...userActions, ...testActions, ...resultActions };
 
 const rootReducer = combineReducers({

@@ -1,10 +1,43 @@
-import React, { useImperativeHandle, useRef } from 'react';
+import React, { useImperativeHandle, useRef, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { actions, selector } from '@/store/modules';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/redux';
 import { COLOR_DARKSET } from '@/variables';
 
-const StyledLabel = styled.label`
+export interface UserNameInputRef {
+  focus: () => void;
+}
+
+const UserName: React.ForwardRefRenderFunction<UserNameInputRef> = (_, ref) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useTypedDispatch();
+  const userName: string = useTypedSelector(selector.getUserName);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current?.focus();
+    },
+  }));
+
+  return (
+    <SLabel htmlFor="userName">
+      <input hidden type="text" />
+      <input
+        ref={inputRef}
+        id="userName"
+        defaultValue={userName}
+        placeholder="이름을 입력해주세요."
+        type="text"
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          const name: string = e.target.value;
+          dispatch(actions.saveName(name));
+        }}
+      />
+    </SLabel>
+  );
+};
+
+const SLabel = styled.label`
   > input {
     width: 12rem;
     padding: 0.5rem 0;
@@ -29,40 +62,5 @@ const StyledLabel = styled.label`
     }
   }
 `;
-
-export interface UserNameInputRef {
-  focus: () => void;
-}
-
-type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
-
-const UserName: React.ForwardRefRenderFunction<UserNameInputRef> = (_, ref) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useTypedDispatch();
-  const userName: string = useTypedSelector(selector.getUserName);
-
-  useImperativeHandle(ref, () => ({
-    focus: () => {
-      inputRef.current?.focus();
-    },
-  }));
-
-  return (
-    <StyledLabel htmlFor="userName">
-      <input hidden type="text" />
-      <input
-        ref={inputRef}
-        id="userName"
-        defaultValue={userName}
-        placeholder="이름을 입력해주세요."
-        type="text"
-        onChange={(e: ChangeEvent) => {
-          const name = e.target.value;
-          dispatch(actions.saveName(name));
-        }}
-      />
-    </StyledLabel>
-  );
-};
 
 export default React.forwardRef<UserNameInputRef>(UserName);

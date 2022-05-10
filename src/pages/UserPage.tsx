@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, FormEventHandler, FormEvent } from 'react';
 import styled from 'styled-components';
 import { toast, ToastContainer } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
@@ -10,48 +10,24 @@ import {
   UserGenderInputRef,
 } from '@/components/user';
 import { actions, selector } from '@/store/modules';
-import { reducerState } from '@/utils';
 import { PageLayout, Button } from '@/components/common';
 import Loading from '@/components/common/Loading';
 import { missingItems } from '@/constants/user';
-
-const StyledTitle = styled.h1`
-  color: white;
-  font-size: 2.2rem;
-  margin-bottom: 2vh;
-
-  @media screen and (max-width: 480px) {
-    font-size: 2rem;
-  }
-`;
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StyledFieldset = styled.fieldset`
-  border: none;
-  margin-bottom: 2vh;
-
-  > legend {
-    font-size: 0;
-  }
-`;
 
 const UserPage = () => {
   const dispatch = useTypedDispatch();
   const nameRef = useRef<UserNameInputRef>(null);
   const genderRef = useRef<UserGenderInputRef>(null);
-  // TODO: isQuestionLoading -> test redux 변경 시 수정
-  const isQuestionLoading = useTypedSelector(selector.isQuestionLoading);
+  const isQuestionLoading: boolean = useTypedSelector(
+    selector.isQuestionLoading,
+  );
   const missingItem: number = useTypedSelector(selector.getMissingItem);
 
   useEffect(() => injectStyle(), []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (
+    e: FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
 
     if (missingItem === missingItems.name) {
@@ -70,7 +46,7 @@ const UserPage = () => {
       return;
     }
 
-    dispatch(actions.reqQuestions(reducerState.loading()));
+    dispatch(actions.reqQuestions());
   };
 
   if (isQuestionLoading) {
@@ -81,13 +57,13 @@ const UserPage = () => {
     <PageLayout
       main={
         <section>
-          <StyledTitle>직업가치관검사</StyledTitle>
-          <StyledForm onSubmit={handleSubmit}>
-            <StyledFieldset>
+          <STitle>직업가치관검사</STitle>
+          <SForm onSubmit={handleSubmit}>
+            <SFieldset>
               <legend>사용자 등록</legend>
               <UserName ref={nameRef} />
               <UserGender ref={genderRef} />
-            </StyledFieldset>
+            </SFieldset>
             <Button type="submit">검사 시작</Button>
             <ToastContainer
               position="top-center"
@@ -97,11 +73,37 @@ const UserPage = () => {
               draggable={false}
               theme="dark"
             />
-          </StyledForm>
+          </SForm>
         </section>
       }
     />
   );
 };
+
+const STitle = styled.h1`
+  color: white;
+  font-size: 2.2rem;
+  margin-bottom: 2vh;
+
+  @media screen and (max-width: 480px) {
+    font-size: 2rem;
+  }
+`;
+
+const SForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SFieldset = styled.fieldset`
+  border: none;
+  margin-bottom: 2vh;
+
+  > legend {
+    font-size: 0;
+  }
+`;
 
 export default UserPage;
