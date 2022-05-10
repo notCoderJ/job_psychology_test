@@ -30,7 +30,7 @@ const ADDITIONAL_INFO = Object.freeze({
   ),
 });
 
-// TODO: 임시 타입 아직 수정 X
+//
 type PageLayOutProps = {
   header?: ReactNode;
   main: ReactNode;

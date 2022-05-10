@@ -1,28 +1,42 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useTypedSelector } from '@/hooks/redux';
 import styled from 'styled-components';
-import { selector } from '../../store/modules';
-import { COLOR_DARKSET } from '../../variables';
+import { selector } from '@/store/modules';
+import { COLOR_DARKSET } from '@/variables';
 
-const ProgressBar = ({ height, width }) => {
-  const percentage = useSelector(selector.getCurrentPercentage);
+interface ProgressBarProps {
+  height?: string;
+  width?: string;
+}
+
+interface SProgressBarGageProps {
+  percentage: number;
+}
+
+const ProgressBar = ({ height, width }: ProgressBarProps) => {
+  const percentage: number = useTypedSelector(selector.getCurrentPercentage);
 
   return (
-    <StyledProgressBarContainer height={height} width={width}>
-      <StyledPercentageBoard>
+    <SProgressBarContainer height={height} width={width}>
+      <SPercentageBoard>
         <span>검사 진행률</span>
         <span>{percentage}%</span>
-      </StyledPercentageBoard>
-      <StyledProgressBar>
-        <ProgressBarGage percentage={percentage} />
-      </StyledProgressBar>
-    </StyledProgressBarContainer>
+      </SPercentageBoard>
+      <SProgressBar>
+        <SProgressBarGage percentage={percentage} />
+      </SProgressBar>
+    </SProgressBarContainer>
   );
 };
 
-const StyledProgressBarContainer = styled.div`
-  width: ${(props) => (props.width ? `${props.width}` : '100%')};
-  height: ${(props) => (props.height ? `${props.height}` : '15vh')};
+ProgressBar.defaultProps = {
+  height: undefined,
+  width: undefined,
+};
+
+const SProgressBarContainer = styled.div<ProgressBarProps>`
+  width: ${(props) => props.width || '100%'};
+  height: ${(props) => props.height || '15vh'};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -30,11 +44,11 @@ const StyledProgressBarContainer = styled.div`
   align-items: center;
 
   @media screen and (max-width: 480px) {
-    height: ${(props) => (props.height ? `${props.height}` : '13vh')};
+    height: ${(props) => props.height || '13vh'};
   }
 `;
 
-const StyledPercentageBoard = styled.div`
+const SPercentageBoard = styled.div`
   align-self: flex-end;
   display: flex;
   font-size: 1.8rem;
@@ -55,7 +69,7 @@ const StyledPercentageBoard = styled.div`
   }
 `;
 
-const StyledProgressBar = styled.div`
+const SProgressBar = styled.div`
   width: 100%;
   height: 12%;
   border-radius: 10px;
@@ -68,7 +82,7 @@ const StyledProgressBar = styled.div`
   }
 `;
 
-const ProgressBarGage = styled.div`
+const SProgressBarGage = styled.div<SProgressBarGageProps>`
   width: ${(props) => props.percentage}%;
   height: 100%;
   border-radius: 10px;
